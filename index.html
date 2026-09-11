@@ -4607,7 +4607,7 @@
                     const mSkuStore = mNode.aso > 0 ? mNode.aso_skus / mNode.aso : 0;
 
                     let mRow = '<tr class="bg-purple-100/70 font-bold border-t border-purple-200">';
-                    mRow += '<td><span class="tree-toggle bg-purple-700 text-white" onclick="toggleTreeNode('' + mId + '')">' + (mOpen ? '−' : '+') + '</span><span class="text-purple-950 font-black">' + m + '</span></td>';
+                    mRow += '<td><span class="tree-toggle bg-purple-700 text-white" onclick="toggleTreeNode(\'' + mId + '\')">' + (mOpen ? '−' : '+') + '</span><span class="text-purple-950 font-black">' + m + '</span></td>';
                     mRow += '<td class="text-right font-mono-num font-bold text-sky-800">' + formatBn(mSi) + ' B</td>';
                     mRow += '<td class="text-right font-mono-num font-bold text-slate-700">' + (mTargetSi > 0 ? formatBn(mTargetSi) + ' B' : '-') + '</td>';
                     mRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(mSi, mTargetSi) + '</td>';
@@ -4644,7 +4644,7 @@
                             const vSkuStore = vNode.aso > 0 ? vNode.aso_skus / vNode.aso : 0;
 
                             let vRow = '<tr class="bg-slate-100 font-bold border-b border-slate-200">';
-                            vRow += '<td style="padding-left: 18px;"><span class="tree-toggle bg-slate-600 text-white" onclick="toggleTreeNode('' + vId + '')">' + (vOpen ? '−' : '+') + '</span><span class="text-slate-900">' + v + '</span></td>';
+                            vRow += '<td style="padding-left: 18px;"><span class="tree-toggle bg-slate-600 text-white" onclick="toggleTreeNode(\'' + vId + '\')">' + (vOpen ? '−' : '+') + '</span><span class="text-slate-900">' + v + '</span></td>';
                             vRow += '<td class="text-right font-mono-num font-semibold text-sky-700">' + formatBn(vSi) + ' B</td>';
                             vRow += '<td class="text-right font-mono-num font-bold text-slate-700">' + (vTargetSi > 0 ? formatBn(vTargetSi) + ' B' : '-') + '</td>';
                             vRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(vSi, vTargetSi) + '</td>';
@@ -4681,7 +4681,7 @@
                                     const gSkuStore = gsbhNode.aso > 0 ? gsbhNode.aso_skus / gsbhNode.aso : 0;
 
                                     let gRow = '<tr class="bg-sky-50/60 font-semibold text-sky-950 border-b border-sky-100">';
-                                    gRow += '<td style="padding-left: 36px;"><span class="tree-toggle bg-sky-600 text-white" onclick="toggleTreeNode('' + gsbhId + '')">' + (gsbhOpen ? '−' : '+') + '</span><span class="text-sky-900 font-bold">' + gsbh + '</span></td>';
+                                    gRow += '<td style="padding-left: 36px;"><span class="tree-toggle bg-sky-600 text-white" onclick="toggleTreeNode(\'' + gsbhId + '\')">' + (gsbhOpen ? '−' : '+') + '</span><span class="text-sky-900 font-bold">' + gsbh + '</span></td>';
                                     gRow += '<td class="text-right font-mono-num text-slate-700">' + formatBn(gSi) + ' B</td>';
                                     gRow += '<td class="text-right font-mono-num font-bold text-slate-700">' + (gTargetSi > 0 ? formatBn(gTargetSi) + ' B' : '-') + '</td>';
                                     gRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(gSi, gTargetSi) + '</td>';
@@ -4719,7 +4719,7 @@
                                             const nppSkuStore = nppNode.aso > 0 ? nppNode.aso_skus / nppNode.aso : 0;
 
                                             let nppRow = '<tr class="bg-amber-50/50 text-xs border-b border-amber-100">';
-                                            nppRow += '<td style="padding-left: 54px;"><span class="tree-toggle bg-amber-500 text-white" onclick="toggleTreeNode('' + nppId + '')">' + (nppOpen ? '−' : '+') + '</span><strong class="text-amber-950 font-bold">' + npp + '</strong></td>';
+                                            nppRow += '<td style="padding-left: 54px;"><span class="tree-toggle bg-amber-500 text-white" onclick="toggleTreeNode(\'' + nppId + '\')">' + (nppOpen ? '−' : '+') + '</span><strong class="text-amber-950 font-bold">' + npp + '</strong></td>';
                                             nppRow += '<td class="text-right font-mono-num text-sky-800 font-semibold" title="' + formatExactVND(nppSi) + '">' + formatVND(nppSi) + '</td>';
                                             nppRow += '<td class="text-right font-mono-num font-semibold text-slate-700" title="' + formatExactVND(nppTargetSi) + '">' + (nppTargetSi > 0 ? formatVND(nppTargetSi) : '-') + '</td>';
                                             nppRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(nppSi, nppTargetSi) + '</td>';
