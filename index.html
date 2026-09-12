@@ -915,10 +915,10 @@
 </head>
 <body class="flex min-h-screen bg-[#F0F2F5]">
         <!-- LOGIN MODAL (EXACT MATCH OF USER SCREENSHOT media_1788600533788.png) -->
-    <div id="login-overlay" style="display: none;" class="cj-modal-backdrop" onclick="if(event.target === this) closeLoginModal();">
+    <div id="login-overlay" style="display: none;" class="cj-modal-backdrop" onclick="if(event.target === this && currentUser) closeLoginModal();">
         <div class="cj-modal-window relative max-w-md w-full rounded-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation();" style="max-width: 440px;">
-            <!-- Close Button (X) -->
-            <button onclick="closeLoginModal()" type="button" class="absolute top-3 right-3 text-white/80 hover:text-white hover:bg-white/20 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold z-20 transition-all cursor-pointer" title="Đóng bảng đăng nhập">
+            <!-- Close Button (X) - ONLY VISIBLE WHEN USER IS LOGGED IN -->
+            <button id="login-modal-close-btn" onclick="closeLoginModal()" type="button" class="absolute top-3 right-3 text-white/80 hover:text-white hover:bg-white/20 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold z-20 transition-all cursor-pointer hidden" title="Đóng bảng đăng nhập">
                 ✕
             </button>
 
@@ -944,25 +944,6 @@
                     <span>⚠️</span> <span id="login-error-text">Mật khẩu không chính xác!</span>
                 </div>
 
-                <!-- Fast Demo Selector -->
-                <div class="mb-4">
-                    <label class="block text-[11px] font-bold text-slate-700 mb-1">🚀 Chọn nhanh tài khoản mẫu để trải nghiệm:</label>
-                    <select id="quick-login-select" onchange="onQuickLoginSelect()" class="w-full text-xs font-medium border border-blue-300 rounded-xl p-2.5 bg-blue-50/50 text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
-                        <option value="">-- Chọn tài khoản mẫu --</option>
-                        <option value="admin">👑 admin - Quản Trị Viên (Toàn quyền / Toàn quốc)</option>
-                        <option value="bod_director">🏢 bod_director - Ban Giám Đốc (BOD)</option>
-                        <option value="rsm_north">🧭 rsm_north - Giám đốc Miền Bắc (GT)</option>
-                        <option value="rsm_south">🧭 rsm_south - Giám đốc Miền Nam (GT)</option>
-                        <option value="asm_hcm">📍 asm_hcm - ASM Vùng HCM (GT)</option>
-                        <option value="asm_danang">📍 asm_danang - ASM Vùng Đà Nẵng (GT)</option>
-                        <option value="gsbh_dn1">👤 gsbh_dn1 - Giám Sát Bán Hàng Đà Nẵng 1</option>
-                        <option value="npp_phuoctai">🏪 npp_phuoctai - NPP Phước Tài</option>
-                        <option value="kam_coopmart">🏬 kam_coopmart - KAM Chuỗi Co.opmart (MT)</option>
-                        <option value="kam_winmart">🏬 kam_winmart - KAM Chuỗi WinMart (MT)</option>
-                        <option value="lead_b2b">🍽️ lead_b2b - Phụ trách Kênh B2B</option>
-                        <option value="lead_kr">🏪 lead_kr - Phụ trách Kênh KR (Key Retailer)</option>
-                    </select>
-                </div>
 
                 <!-- Input Fields matching user screenshot -->
                 <form onsubmit="submitLogin(event)" class="space-y-4">
@@ -6881,27 +6862,55 @@
             localStorage.setItem('cj_app_users', JSON.stringify(users));
         }
 
+        function applyUnauthenticatedState() {
+            const nameEl = document.getElementById('user-display-name');
+            const subEl = document.getElementById('user-display-sub');
+            const adminBtn = document.getElementById('btn-user-admin');
+            const pwdBtn = document.getElementById('btn-change-password');
+            const logoutBtn = document.getElementById('btn-logout');
+
+            const mNameEl = document.getElementById('mobile-drawer-user-name');
+            const mRoleEl = document.getElementById('mobile-drawer-user-role');
+            const mAdminBtn = document.getElementById('m-btn-admin');
+
+            if (nameEl) nameEl.textContent = "Chưa đăng nhập";
+            if (subEl) subEl.textContent = "Vui lòng đăng nhập";
+            if (adminBtn) adminBtn.style.setProperty('display', 'none', 'important');
+            if (pwdBtn) pwdBtn.style.setProperty('display', 'none', 'important');
+            if (logoutBtn) logoutBtn.style.setProperty('display', 'none', 'important');
+
+            if (mNameEl) mNameEl.textContent = "Chưa đăng nhập";
+            if (mRoleEl) mRoleEl.textContent = "Vui lòng đăng nhập";
+            if (mAdminBtn) mAdminBtn.classList.add('hidden');
+        }
+
         function initAuth() {
             const users = getAppUsers();
-            let savedUserJson = localStorage.getItem('cj_current_user');
+            // Clear any legacy auto-saved admin session to force explicit login
+            if (localStorage.getItem('cj_auth_version') !== 'v2') {
+                localStorage.removeItem('cj_current_user');
+                sessionStorage.removeItem('cj_current_user');
+            }
+
+            let savedUserJson = localStorage.getItem('cj_current_user') || sessionStorage.getItem('cj_current_user');
             let user = null;
             if (savedUserJson) {
                 try {
                     const parsed = JSON.parse(savedUserJson);
-                    user = users.find(u => u.username === parsed.username) || null;
+                    user = users.find(u => u.username.toLowerCase() === (parsed.username || '').toLowerCase()) || null;
                 } catch(e) {
                     user = null;
                 }
             }
-            if (!user) {
-                // Default: log in as admin
-                user = users.find(u => u.username === 'admin') || users[0];
-                if (user) {
-                    localStorage.setItem('cj_current_user', JSON.stringify(user));
-                }
+
+            if (user) {
+                currentUser = user;
+                applyUserScope(currentUser);
+            } else {
+                currentUser = null;
+                applyUnauthenticatedState();
+                showLoginModal();
             }
-            currentUser = user;
-            applyUserScope(currentUser);
         }
 
         // =========================================================================
@@ -7000,6 +7009,7 @@
 
         function applyUserScope(user) {
             if (!user) {
+                applyUnauthenticatedState();
                 showLoginModal();
                 return;
             }
@@ -7008,10 +7018,15 @@
             const nameEl = document.getElementById('user-display-name');
             const subEl = document.getElementById('user-display-sub');
             const adminBtn = document.getElementById('btn-user-admin');
+            const pwdBtn = document.getElementById('btn-change-password');
+            const logoutBtn = document.getElementById('btn-logout');
 
             const mNameEl = document.getElementById('mobile-drawer-user-name');
             const mRoleEl = document.getElementById('mobile-drawer-user-role');
             const mAdminBtn = document.getElementById('m-btn-admin');
+
+            if (pwdBtn) pwdBtn.style.setProperty('display', 'inline-flex', 'important');
+            if (logoutBtn) logoutBtn.style.setProperty('display', 'inline-flex', 'important');
 
             const displayName = user.full_name || user.username;
             const roleUpper = (user.role || 'USER').toUpperCase();
@@ -7159,10 +7174,21 @@
                 modal.classList.add('active');
                 modal.style.display = 'flex';
                 document.getElementById('login-error-msg')?.classList.add('hidden');
+
+                // Close button ONLY shown when user is already logged in
+                const closeBtn = document.getElementById('login-modal-close-btn');
+                if (closeBtn) {
+                    if (currentUser) {
+                        closeBtn.classList.remove('hidden');
+                    } else {
+                        closeBtn.classList.add('hidden');
+                    }
+                }
             }
         }
 
         function closeLoginModal() {
+            if (!currentUser) return; // Strict lock: cannot dismiss without logging in!
             const modal = document.getElementById('login-overlay');
             if (modal) {
                 modal.classList.remove('active');
@@ -7172,17 +7198,10 @@
 
         function logout() {
             localStorage.removeItem('cj_current_user');
+            sessionStorage.removeItem('cj_current_user');
             currentUser = null;
+            applyUnauthenticatedState();
             showLoginModal();
-        }
-
-        function onQuickLoginSelect() {
-            const sel = document.getElementById('quick-login-select');
-            const val = sel.value;
-            if (!val) return;
-            document.getElementById('login-username').value = val;
-            // The master standard password from Master_Users.xlsx is cj@2026
-            document.getElementById('login-password').value = 'cj@2026';
         }
 
         function submitLogin(e) {
@@ -7204,8 +7223,8 @@
             }
 
             const hash = sha256(pass);
-            // Flexible authentication: matches stored hash OR matches standard master password cj@2026 or 123456
-            const isMatch = (user.password_hash === hash) || (pass === 'cj@2026') || (pass === '123456') || (pass === 'admin123');
+            // Flexible authentication: matches stored hash OR matches standard master passwords
+            const isMatch = (user.password_hash === hash) || (pass === 'cj@2026') || (pass === '123456') || (pass === 'admin123') || (pass === user.raw_password);
 
             if (!isMatch) {
                 if (errEl && errTxt) {
@@ -7217,7 +7236,15 @@
 
             // Login successful
             currentUser = user;
-            localStorage.setItem('cj_current_user', JSON.stringify(user));
+            localStorage.setItem('cj_auth_version', 'v2');
+            const remember = document.getElementById('login-remember')?.checked;
+            if (remember) {
+                localStorage.setItem('cj_current_user', JSON.stringify(user));
+                sessionStorage.removeItem('cj_current_user');
+            } else {
+                sessionStorage.setItem('cj_current_user', JSON.stringify(user));
+                localStorage.removeItem('cj_current_user');
+            }
             closeLoginModal();
             applyUserScope(currentUser);
         }
