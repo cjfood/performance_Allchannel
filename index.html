@@ -1964,33 +1964,9 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- ROW 2: 3 SUB-CHANNEL CONTRIBUTION CARDS -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-                    <!-- Card 6: HYPERMARKET -->
-                    <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
-                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">HYPERMARKET (ĐẠI SIÊU THỊ)</span>
-                        <span class="text-2xl font-black font-mono-num text-blue-600 my-0.5" id="mt-kpi-sub-hyper">0,0 B</span>
-                        <span class="text-[11px] text-slate-500 font-medium" id="mt-kpi-sub-hyper-share">Tỷ trọng: 0.0%</span>
-                    </div>
-
-                    <!-- Card 7: SUPERMARKET -->
-                    <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
-                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">SUPERMARKET (SIÊU THỊ TRUNG BÌNH)</span>
-                        <span class="text-2xl font-black font-mono-num text-amber-500 my-0.5" id="mt-kpi-sub-super">0,0 B</span>
-                        <span class="text-[11px] text-slate-500 font-medium" id="mt-kpi-sub-super-share">Tỷ trọng: 0.0%</span>
-                    </div>
-
-                    <!-- Card 8: CVS / MINIMART -->
-                    <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
-                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">CVS & MINIMART (TIỆN LỢI)</span>
-                        <span class="text-2xl font-black font-mono-num text-slate-800 my-0.5" id="mt-kpi-sub-cvs">0,0 B</span>
-                        <span class="text-[11px] text-slate-500 font-medium" id="mt-kpi-sub-cvs-share">Tỷ trọng: 0.0%</span>
-                    </div>
-                </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
                 <div class="material-card p-4 pt-0 flex flex-col">
                     <div class="floating-chart-header grad-blue">
                         <div id="chart-mt-chains" style="height: 250px; width: 100%;"></div>
@@ -2007,7 +1983,23 @@
                     </div>
                     <div class="px-2 pt-3">
                         <h4 class="text-sm font-bold text-slate-800">Cơ Cấu Phân Khúc Kênh MT</h4>
-                        <p class="text-xs text-slate-400 mt-0.5">Hypermarket vs Supermarket (Middle) vs CVS/Minimart</p>
+                        <p class="text-xs text-slate-400 mt-0.5">Sub-channel: Hyper, CS, CVS và Others</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MT DAILY SELL-IN TREND -->
+            <div class="material-card p-4 pt-0 flex flex-col mb-5">
+                <div class="floating-chart-header grad-green">
+                    <div id="chart-mt-daily" style="height: 250px; width: 100%;"></div>
+                </div>
+                <div class="px-2 pt-3 flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-800">Tiến Độ &amp; Nhịp Độ Xuất Hàng Kênh MT Hàng Ngày</h4>
+                        <p class="text-xs text-slate-400 mt-0.5" id="lbl-mt-daily-scope">Theo dõi giá trị xuất hàng SAP thực tế kênh MT từng ngày trong tháng</p>
+                    </div>
+                    <div class="mt-2 md:mt-0 flex items-center space-x-2">
+                        <span class="badge-pill badge-pill-green">SAP Sell-in MT</span>
                     </div>
                 </div>
             </div>
@@ -4981,6 +4973,7 @@
 
                 renderMtChainsChart(data);
                 renderMtSubchanChart(data);
+                renderMtDailyChart();
                 renderMtTree();
             } catch (e) {
                 console.error("Error in renderTabMt:", e);
@@ -5047,18 +5040,23 @@
                 const myChart = getOrInitChart('chart-mt-subchan');
                 if (!myChart) return;
 
-                const scMap = { 'MT)Hyper': 0, 'MT)Middle': 0, 'MT)CVS': 0, 'MT)Other': 0 };
+                const scMap = { 'Hyper': 0, 'CS': 0, 'CVS': 0, 'Others': 0 };
                 data.forEach(d => {
-                    const sc = d.sub_channel || 'MT)Other';
-                    scMap[sc] = (scMap[sc] || 0) + (Number(d.sellin_val) || 0);
+                    const scRaw = String(d.sub_channel || '').toUpperCase();
+                    let k = 'Others';
+                    if (scRaw.includes('HYPER')) k = 'Hyper';
+                    else if (scRaw.includes('CS') || scRaw.includes('SUPER') || scRaw.includes('MIDDLE')) k = 'CS';
+                    else if (scRaw.includes('CVS') || scRaw.includes('MINI')) k = 'CVS';
+                    scMap[k] = (scMap[k] || 0) + (Number(d.sellin_val) || 0);
                 });
 
                 const barData = [
-                    { name: 'Hypermarket', val: ((scMap['MT)Hyper']||0)/1e9).toFixed(1) },
-                    { name: 'Supermarket (Middle)', val: ((scMap['MT)Middle']||0)/1e9).toFixed(1) },
-                    { name: 'CVS / Minimart', val: ((scMap['MT)CVS']||0)/1e9).toFixed(1) },
-                    { name: 'Other MT', val: ((scMap['MT)Other']||0)/1e9).toFixed(1) }
+                    { name: 'CS', val: parseFloat(((scMap['CS']||0)/1e9).toFixed(2)) },
+                    { name: 'Hyper', val: parseFloat(((scMap['Hyper']||0)/1e9).toFixed(2)) },
+                    { name: 'Others', val: parseFloat(((scMap['Others']||0)/1e9).toFixed(2)) },
+                    { name: 'CVS', val: parseFloat(((scMap['CVS']||0)/1e9).toFixed(2)) }
                 ];
+                barData.sort((a, b) => b.val - a.val);
 
                 const option = {
                     legend: {
@@ -5066,7 +5064,7 @@
                         top: 0,
                         textStyle: { color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }
                     },
-                    grid: { top: 28, right: 45, bottom: 15, left: 135 },
+                    grid: { top: 28, right: 55, bottom: 15, left: 75 },
                     xAxis: {
                         type: 'value',
                         splitLine: { lineStyle: { color: 'rgba(255,255,255,0.18)', type: 'dashed' } },
@@ -5077,13 +5075,13 @@
                         data: barData.map(d => d.name).reverse(),
                         axisLine: { show: false },
                         axisTick: { show: false },
-                        axisLabel: { color: '#FFFFFF', fontSize: 10, fontWeight: 'bold' }
+                        axisLabel: { color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }
                     },
                     series: [{
                         name: 'Doanh số phân khúc (Tỷ ₫)',
                         data: barData.map(d => d.val).reverse(),
                         type: 'bar',
-                        barMaxWidth: 13,
+                        barMaxWidth: 15,
                         itemStyle: { color: '#C084FC', borderRadius: [0, 4, 4, 0] },
                         label: {
                             show: true,
@@ -5100,6 +5098,88 @@
                 myChart.setOption(option);
                 myChart.resize();
             } catch (e) { console.error("Error in renderMtSubchanChart:", e); }
+        }
+
+        function renderMtDailyChart() {
+            try {
+                const myChart = getOrInitChart('chart-mt-daily');
+                if (!myChart) return;
+
+                const daysMap = {};
+                DAILY_DATA.filter(d => {
+                    const dtStr = String(d.date_val || '');
+                    if (!dtStr.startsWith(state.year)) return false;
+                    const m = dtStr.substring(5, 7);
+                    if (!state.selectedMonths.includes(m)) return false;
+                    if (d.channel !== 'MT') return false;
+                    if (state.prodStorage !== 'ALL' && d.storage !== state.prodStorage) return false;
+                    return true;
+                }).forEach(d => {
+                    const dt = String(d.date_val);
+                    daysMap[dt] = (daysMap[dt] || 0) + (Number(d.daily_sellin) || 0);
+                });
+
+                const sortedDays = Object.keys(daysMap).sort();
+                const dayLabels = sortedDays.map(d => d.substring(5));
+                const vals = sortedDays.map(d => parseFloat(((daysMap[d] || 0) / 1e9).toFixed(2)));
+
+                const option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: { type: 'line', lineStyle: { color: 'rgba(255,255,255,0.4)', width: 1, type: 'dashed' } },
+                        formatter: function(params) {
+                            if (!params || !params.length) return '';
+                            const p = params[0];
+                            return '<div class="font-sans text-xs p-1"><b>Ngày ' + p.name + '</b><br/>' +
+                                   '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#34D399;margin-right:5px;"></span>' +
+                                   'Sell-in MT: <b>' + p.value + ' Tỷ ₫</b></div>';
+                        }
+                    },
+                    legend: {
+                        data: ['Doanh số xuất hàng MT (Tỷ ₫)'],
+                        top: 4,
+                        textStyle: { color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }
+                    },
+                    grid: { top: 35, right: 30, bottom: 25, left: 45 },
+                    xAxis: {
+                        type: 'category',
+                        data: dayLabels,
+                        axisLine: { lineStyle: { color: 'rgba(255,255,255,0.25)' } },
+                        axisLabel: { color: '#E2E8F0', fontSize: 10, fontWeight: '500' }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        splitLine: { lineStyle: { color: 'rgba(255,255,255,0.12)', type: 'dashed' } },
+                        axisLabel: { color: '#E2E8F0', fontSize: 9.5, formatter: '{value}B' }
+                    },
+                    series: [{
+                        name: 'Doanh số xuất hàng MT (Tỷ ₫)',
+                        data: vals,
+                        type: 'line',
+                        smooth: 0.35,
+                        showSymbol: true,
+                        symbolSize: 6,
+                        itemStyle: { color: '#34D399', borderColor: '#FFFFFF', borderWidth: 1.5 },
+                        lineStyle: { width: 2.5, color: '#34D399' },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(52, 211, 153, 0.45)' },
+                                { offset: 1, color: 'rgba(52, 211, 153, 0.02)' }
+                            ])
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+                            color: '#FFFFFF',
+                            fontSize: 9.5,
+                            fontWeight: 'bold',
+                            formatter: '{c}'
+                        }
+                    }]
+                };
+                myChart.setOption(option);
+                myChart.resize();
+            } catch (e) { console.error("Error in renderMtDailyChart:", e); }
         }
 
         function renderMtTree() {
