@@ -1356,7 +1356,7 @@
                         </div>
                         <div>
                             <div class="text-xs sm:text-sm font-black text-slate-800 flex flex-wrap items-center gap-1.5">
-                                <span>Xuất File PDF (.pdf)</span>
+                                <span data-i18n="export_opt2_title">Xuất File PDF (.pdf)</span>
                                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide" style="background-color: #FFE4E6; color: #BE123C;">
                                     Màn Hình Trực Quan
                                 </span>
@@ -1383,7 +1383,7 @@
                         </div>
                         <div>
                             <div class="text-xs sm:text-sm font-black text-slate-800 flex flex-wrap items-center gap-1.5">
-                                <span>In Báo Cáo / Lưu PDF A4 Vector</span>
+                                <span data-i18n="export_opt3_title">In Báo Cáo / Lưu PDF A4 Vector</span>
                                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide" style="background-color: #E0E7FF; color: #3730A3;">
                                     Vector Sắc Nét
                                 </span>
@@ -1424,19 +1424,19 @@
 
         <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
             <a onclick="switchTab('tab-overview')" id="nav-tab-overview" class="nav-item active">
-                <span>📊</span> 1. Dashboard
+                <span>📊</span> <span data-i18n="nav_dashboard">1. Dashboard</span>
             </a>
             <a onclick="switchTab('tab-gt')" id="nav-tab-gt" class="nav-item">
-                <span>📍</span> 2. Kênh GT
+                <span>📍</span> <span data-i18n="nav_gt">2. Kênh GT</span>
             </a>
             <a onclick="switchTab('tab-mt')" id="nav-tab-mt" class="nav-item">
-                <span>🏬</span> 3. Kênh MT
+                <span>🏬</span> <span data-i18n="nav_mt">3. Kênh MT</span>
             </a>
             <a onclick="switchTab('tab-b2b')" id="nav-tab-b2b" class="nav-item">
-                <span>🍽️</span> 4. Kênh B2B
+                <span>🍽️</span> <span data-i18n="nav_b2b">4. Kênh B2B</span>
             </a>
             <a onclick="switchTab('tab-kr')" id="nav-tab-kr" class="nav-item">
-                <span>🏪</span> 5. Kênh KR
+                <span>🏪</span> <span data-i18n="nav_kr">5. Kênh KR</span>
             </a>
         </nav>
 
@@ -1488,27 +1488,40 @@
 
             <!-- Nút 'Quản Trị User' (BẮT BUỘC CHỈ HIỂN THỊ KHI currentUser.role === 'admin') -->
             <button id="btn-user-admin" onclick="openAdminModal()" class="cj-btn-admin" style="display: none !important;">
-                <span>⚙️</span> <span>Quản Trị User</span>
+                <span>⚙️</span> <span data-i18n="btn_user_admin">Quản Trị User</span>
             </button>
 
             <!-- Nút 'Đổi Mật Khẩu' (hiển thị cho TẤT CẢ User đã đăng nhập) -->
             <button id="btn-change-password" onclick="openChangePasswordModal()" class="cj-btn-password">
-                <span>🔑</span> <span>Đổi Mật Khẩu</span>
+                <span>🔑</span> <span data-i18n="btn_change_password">Đổi Mật Khẩu</span>
             </button>
 
             <!-- Nút 'Đăng Xuất' -->
             <button id="btn-logout" onclick="logout()" class="cj-btn-logout">
-                <span>🚪</span> <span>Đăng Xuất</span>
+                <span>🚪</span> <span data-i18n="btn_logout">Đăng Xuất</span>
             </button>
 
+            <!-- BỘ CHỌN NGÔN NGỮ (LANGUAGE SELECTOR: VI | EN | KO) -->
+            <div class="flex items-center gap-1 bg-white/15 hover:bg-white/25 rounded-lg p-0.5 border border-white/30 transition-all ml-auto mr-2" id="lang-switcher-container">
+                <button type="button" onclick="setLanguage('vi')" id="lang-btn-vi" class="px-2 py-0.5 rounded text-xs font-black transition-all flex items-center gap-1 bg-white text-blue-900 shadow" title="Tiếng Việt">
+                    <span>🇻🇳</span> <span class="hidden sm:inline">VIE</span>
+                </button>
+                <button type="button" onclick="setLanguage('en')" id="lang-btn-en" class="px-2 py-0.5 rounded text-xs font-black transition-all flex items-center gap-1 text-white hover:bg-white/20" title="English">
+                    <span>🇬🇧</span> <span class="hidden sm:inline">ENG</span>
+                </button>
+                <button type="button" onclick="setLanguage('ko')" id="lang-btn-ko" class="px-2 py-0.5 rounded text-xs font-black transition-all flex items-center gap-1 text-white hover:bg-white/20" title="한국어">
+                    <span>🇰🇷</span> <span class="hidden sm:inline">KOR</span>
+                </button>
+            </div>
+
             <!-- Nút chuyển đổi giao diện Mobile / Desktop thủ công -->
-            <button id="btn-toggle-viewmode" type="button" onclick="toggleViewMode()" class="px-2.5 py-1 rounded-lg bg-white/20 hover:bg-white/30 text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 border border-white/30 ml-auto mr-2" title="Chuyển chế độ hiển thị">
-                <span>📱</span> <span>Xem Giao Diện Mobile</span>
+            <button id="btn-toggle-viewmode" type="button" onclick="toggleViewMode()" class="px-2.5 py-1 rounded-lg bg-white/20 hover:bg-white/30 text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 border border-white/30 mr-2" title="Chuyển chế độ hiển thị">
+                <span>📱</span> <span data-i18n="btn_mobile">Xem Giao Diện Mobile</span>
             </button>
 
             <!-- Ngày xuất dữ liệu -->
             <span class="text-blue-300 font-light mx-1">|</span>
-            <span class="text-xs text-white font-medium">Ngày xuất dữ liệu: <strong class="text-yellow-300 font-bold">14/09/2026</strong></span>
+            <span class="text-xs text-white font-medium"><span data-i18n="data_refresh_prefix">Ngày xuất dữ liệu: </span><strong class="text-yellow-300 font-bold">14/09/2026</strong></span>
         </div>
 
         <!-- TOP NAVBAR WITH MULTI-MONTH SELECTOR & FULL DYNAMIC FILTERS PER TAB -->
@@ -1519,7 +1532,7 @@
                 <div class="flex-1 min-w-[200px]">
                     <div class="flex items-center gap-1.5 mb-1">
                         <span class="hidden sm:inline-block text-[9.5px] font-extrabold uppercase px-2 py-0.5 rounded bg-sky-100 text-sky-800 border border-sky-200" id="top-breadcrumb">Pages / Dashboard</span>
-                        <span class="text-[10px] text-emerald-600 font-bold hidden sm:inline">● Trực Tuyến</span>
+                        <span class="text-[10px] text-emerald-600 font-bold hidden sm:inline" data-i18n="online_status">● Trực Tuyến</span>
                     </div>
                     <h2 class="text-sm md:text-base font-black text-slate-900 tracking-tight leading-snug" id="top-title">Commercial Overview (Sell-in 4 Kênh: GT, MT, B2B, KR)</h2>
                 </div>
@@ -1531,7 +1544,7 @@
                     </select>
 
                     <button onclick="openExportModal()" class="px-3 py-1.5 rounded-lg text-white text-xs font-black shadow-sm transition-all flex items-center gap-1.5 shrink-0" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important; color: #FFFFFF !important;" title="Xuất báo cáo Excel (.xlsx) hoặc PDF (.pdf)">
-                        <span>📥</span> <span>Xuất Báo Cáo</span>
+                        <span>📥</span> <span data-i18n="btn_export_rep">Xuất Báo Cáo</span>
                     </button>
                 </div>
             </div>
@@ -1549,7 +1562,7 @@
                 
                 <!-- [TAB 1 DYNAMIC]: KÊNH & KHÁCH HÀNG (Dashboard Toàn Công Ty) -->
                 <div id="filter-cluster-tab1" class="flex flex-wrap items-center gap-1.5 border-r border-slate-200 pr-3">
-                    <span class="text-[10px] font-black text-sky-800 uppercase">🏷️ KÊNH & KH:</span>
+                    <span class="text-[10px] font-black text-sky-800 uppercase" data-i18n="lbl_filter_channel">🏷️ KÊNH & KH:</span>
                     <select id="sel-dash-channel" class="header-dropdown font-bold text-sky-700" onchange="onDashChannelChange()">
                         <option value="ALL">Tất cả Kênh (4 Kênh)</option>
                         <option value="GT">Kênh GT</option>
@@ -1567,7 +1580,7 @@
 
                 <!-- [TAB 2 DYNAMIC]: ĐỊA LÝ GT (RTM Field Force Chuyên Sâu) -->
                 <div id="filter-cluster-tab2" class="hidden flex flex-wrap items-center gap-1.5 border-r border-slate-200 pr-3">
-                    <span class="text-[10px] font-black text-purple-800 uppercase">📍 ĐỊA LÝ GT:</span>
+                    <span class="text-[10px] font-black text-purple-800 uppercase" data-i18n="lbl_filter_gt">📍 ĐỊA LÝ GT:</span>
                     <select id="sel-geo-mien" class="header-dropdown" onchange="onGeoMienChange()">
                         <option value="ALL">Tất cả Miền</option>
                     </select>
@@ -1584,7 +1597,7 @@
 
                 <!-- [TAB 3 DYNAMIC]: TÀI KHOẢN MT (Key Accounts) -->
                 <div id="filter-cluster-tab3" class="hidden flex flex-wrap items-center gap-1.5 border-r border-slate-200 pr-3">
-                    <span class="text-[10px] font-black text-sky-800 uppercase">🏬 TÀI KHOẢN MT:</span>
+                    <span class="text-[10px] font-black text-sky-800 uppercase" data-i18n="lbl_filter_mt">🏬 TÀI KHOẢN MT:</span>
                     <select id="sel-mt-subchan" class="header-dropdown" onchange="onMtSubchanChange()">
                         <option value="ALL">Tất cả Phân Khúc</option>
                     </select>
@@ -1598,7 +1611,7 @@
 
                 <!-- [TAB 4 DYNAMIC]: KHÁCH HÀNG B2B (Food Service) -->
                 <div id="filter-cluster-tab4" class="hidden flex flex-wrap items-center gap-1.5 border-r border-slate-200 pr-3">
-                    <span class="text-[10px] font-black text-purple-800 uppercase">🍽️ KHÁCH HÀNG B2B:</span>
+                    <span class="text-[10px] font-black text-purple-800 uppercase" data-i18n="lbl_filter_b2b">🍽️ KHÁCH HÀNG B2B:</span>
                     <select id="sel-b2b-acc" class="header-dropdown font-bold text-purple-800" onchange="onB2bAccChange()">
                         <option value="ALL">Tất cả Phân Nhóm</option>
                     </select>
@@ -1609,7 +1622,7 @@
 
                 <!-- [TAB 5 DYNAMIC]: TÀI KHOẢN KR (Key Retailer) -->
                 <div id="filter-cluster-tab5" class="hidden flex flex-wrap items-center gap-1.5 border-r border-slate-200 pr-3">
-                    <span class="text-[10px] font-black text-amber-800 uppercase">🏪 TÀI KHOẢN KR:</span>
+                    <span class="text-[10px] font-black text-amber-800 uppercase" data-i18n="lbl_filter_kr">🏪 TÀI KHOẢN KR:</span>
                     <select id="sel-kr-subchan" class="header-dropdown" onchange="onKrSubchanChange()">
                         <option value="ALL">Tất cả Phân Khúc</option>
                     </select>
@@ -1620,7 +1633,7 @@
 
                 <!-- [TAB 6 DYNAMIC]: BÁO CÁO & DỮ LIỆU -->
                 <div id="filter-cluster-tab6" class="hidden flex flex-wrap items-center gap-1.5 border-r border-slate-200 pr-3">
-                    <span class="text-[10px] font-black text-slate-600 uppercase">📑 BÁO CÁO KÊNH:</span>
+                    <span class="text-[10px] font-black text-slate-600 uppercase" data-i18n="lbl_filter_report">📑 BÁO CÁO KÊNH:</span>
                     <select id="sel-rep-channel" class="header-dropdown" onchange="onFilterChange()">
                         <option value="ALL">Tất cả Kênh (4 Kênh)</option>
                         <option value="GT">Kênh GT</option>
@@ -1632,7 +1645,7 @@
 
                 <!-- PERSISTENT PRODUCT CLUSTER: Storage -> Cate -> PH1 -> PH2 -->
                 <div class="flex flex-wrap items-center gap-1.5">
-                    <span class="text-[10px] font-black text-slate-500 uppercase">📦 Sản Phẩm:</span>
+                    <span class="text-[10px] font-black text-slate-500 uppercase" data-i18n="lbl_filter_prod">📦 Sản Phẩm:</span>
                     <select id="sel-prod-storage" class="header-dropdown" onchange="onProdStorageChange()">
                         <option value="ALL">Tất cả Storage</option>
                     </select>
@@ -1651,7 +1664,7 @@
             <!-- Row 3: Multi-Month Strip (Redesigned with Smooth Horizontal Scroll & High Contrast for Mobile) -->
             <div class="flex flex-col gap-1.5 pt-2 border-t border-slate-200/80">
                 <div class="month-strip-wrapper" id="month-strip">
-                    <div class="flex items-center gap-1 shrink-0 px-2 py-1 bg-slate-100 rounded-lg text-[10px] font-black text-slate-700 tracking-wider shadow-sm"><span>📅</span><span>THÁNG:</span></div>
+                    <div class="flex items-center gap-1 shrink-0 px-2 py-1 bg-slate-100 rounded-lg text-[10px] font-black text-slate-700 tracking-wider shadow-sm"><span>📅</span><span data-i18n="lbl_filter_month">THÁNG:</span></div>
                     <button class="month-chip" onclick="toggleMonth('01')" id="mbtn-01">T1</button>
                     <button class="month-chip" onclick="toggleMonth('02')" id="mbtn-02">T2</button>
                     <button class="month-chip" onclick="toggleMonth('03')" id="mbtn-03">T3</button>
@@ -1666,7 +1679,7 @@
                     <button class="month-chip" onclick="toggleMonth('12')" id="mbtn-12">T12</button>
 
                     <div class="h-5 w-px bg-slate-200 shrink-0 mx-1"></div>
-                    <button class="month-action-btn btn-all-months" onclick="selectAllMonths()" title="Chọn toàn bộ 12 tháng">Tất Cả 12T</button>
+                    <button class="month-action-btn btn-all-months" onclick="selectAllMonths()" data-i18n="btn_all_12m" title="Chọn toàn bộ 12 tháng">Tất Cả 12T</button>
                     <button class="month-action-btn btn-reset-month" onclick="resetMonthSelection()" id="btn-reset-month" title="Đặt lại về tháng hiện tại">Reset (T9)</button>
                 </div>
 
@@ -1689,7 +1702,7 @@
                     <!-- Card 1: DOANH SỐ SELL-IN -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #2563eb !important;">
                         <div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">DOANH SỐ SELL-IN</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_sellin_rev">DOANH SỐ SELL-IN</div>
                             <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="dash-kpi-sellin">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
@@ -1713,7 +1726,7 @@
                     <!-- Card 3: TỶ LỆ ĐẠT CHỈ TIÊU (% TARGET) -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #10b981 !important;">
                         <div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">TỶ LỆ ĐẠT CHỈ TIÊU (% TARGET)</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_achv_rate">TỶ LỆ ĐẠT CHỈ TIÊU (% TARGET)</div>
                             <div class="text-2xl font-black font-mono-num text-emerald-600 mt-1 mb-1 tracking-tight" id="dash-kpi-achieve">0.0%</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
@@ -1724,7 +1737,7 @@
                     <!-- Card 4: CÙNG KỲ NĂM TRƯỚC (LY SELL-IN) -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #f59e0b !important;">
                         <div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">CÙNG KỲ NĂM TRƯỚC (LY)</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_same_period_ly">CÙNG KỲ NĂM TRƯỚC (LY)</div>
                             <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="dash-kpi-ly">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
@@ -1740,7 +1753,7 @@
                     <!-- Card 5: KÊNH GT -->
                     <div class="bg-white border border-slate-200/80 rounded-xl p-3.5 flex flex-col justify-between shadow-sm transition-all hover:shadow-md" style="border-left: 4px solid #2563eb !important;">
                         <div class="flex justify-between items-center">
-                            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">KÊNH GT</span>
+                            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="nav_gt">KÊNH GT</span>
                             <span id="dash-kpi-chan-gt-share" class="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">Tỷ trọng: 0.0%</span>
                         </div>
                         <div class="text-2xl font-black font-mono-num text-blue-600 my-1" id="dash-kpi-chan-gt">0,0 B</div>
@@ -1754,7 +1767,7 @@
                     <!-- Card 6: KÊNH MT -->
                     <div class="bg-white border border-slate-200/80 rounded-xl p-3.5 flex flex-col justify-between shadow-sm transition-all hover:shadow-md" style="border-left: 4px solid #f59e0b !important;">
                         <div class="flex justify-between items-center">
-                            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">KÊNH MT</span>
+                            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="nav_mt">KÊNH MT</span>
                             <span id="dash-kpi-chan-mt-share" class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">Tỷ trọng: 0.0%</span>
                         </div>
                         <div class="text-2xl font-black font-mono-num text-amber-500 my-1" id="dash-kpi-chan-mt">0,0 B</div>
@@ -1768,7 +1781,7 @@
                     <!-- Card 7: KÊNH B2B -->
                     <div class="bg-white border border-slate-200/80 rounded-xl p-3.5 flex flex-col justify-between shadow-sm transition-all hover:shadow-md" style="border-left: 4px solid #10b981 !important;">
                         <div class="flex justify-between items-center">
-                            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">KÊNH B2B</span>
+                            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="nav_b2b">KÊNH B2B</span>
                             <span id="dash-kpi-chan-b2b-share" class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Tỷ trọng: 0.0%</span>
                         </div>
                         <div class="text-2xl font-black font-mono-num text-emerald-600 my-1" id="dash-kpi-chan-b2b">0,0 B</div>
@@ -1782,7 +1795,7 @@
                     <!-- Card 8: KÊNH KR -->
                     <div class="bg-white border border-slate-200/80 rounded-xl p-3.5 flex flex-col justify-between shadow-sm transition-all hover:shadow-md" style="border-left: 4px solid #8b5cf6 !important;">
                         <div class="flex justify-between items-center">
-                            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">KÊNH KR</span>
+                            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="nav_kr">KÊNH KR</span>
                             <span id="dash-kpi-chan-kr-share" class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">Tỷ trọng: 0.0%</span>
                         </div>
                         <div class="text-2xl font-black font-mono-num text-purple-600 my-1" id="dash-kpi-chan-kr">0,0 B</div>
@@ -1803,8 +1816,8 @@
                     </div>
                     <div class="px-2 pt-3 flex justify-between items-start">
                         <div>
-                            <h4 class="text-sm font-bold text-slate-800">Daily Sell-in Trend & Nhịp Độ Hàng Ngày</h4>
-                            <p class="text-xs text-slate-400 mt-0.5">Tiến độ xuất hóa đơn SAP thực tế theo bộ lọc đang chọn</p>
+                            <h4 class="text-sm font-bold text-slate-800" data-i18n="chart_daily_sellin_title">Daily Sell-in Trend & Nhịp Độ Hàng Ngày</h4>
+                            <p class="text-xs text-slate-400 mt-0.5" data-i18n="chart_daily_sellin_sub">Tiến độ xuất hóa đơn SAP thực tế theo bộ lọc đang chọn</p>
                         </div>
                         <span class="badge-pill badge-pill-green">SAP Sell-in</span>
                     </div>
@@ -1816,8 +1829,8 @@
                     </div>
                     <div class="px-2 pt-3 flex justify-between items-start">
                         <div>
-                            <h4 class="text-sm font-bold text-slate-800">Đối Sánh 12 Tháng 2026 vs 2025 (YoY Comparison)</h4>
-                            <p class="text-xs text-slate-400 mt-0.5">Doanh số thực tế 2026 vs cùng kỳ 2025 theo bộ lọc đang chọn</p>
+                            <h4 class="text-sm font-bold text-slate-800" data-i18n="chart_yoy_title">Đối Sánh 12 Tháng 2026 vs 2025 (YoY Comparison)</h4>
+                            <p class="text-xs text-slate-400 mt-0.5" data-i18n="chart_yoy_sub">Doanh số thực tế 2026 vs cùng kỳ 2025 theo bộ lọc đang chọn</p>
                         </div>
                         <span class="badge-pill badge-pill-orange">YoY Trend</span>
                     </div>
@@ -1829,19 +1842,19 @@
                 <div class="material-card p-4">
                     <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
                         <div>
-                            <h3 class="text-sm font-bold text-slate-800">Phân Cấp Sản Phẩm (Storage ➔ Cate ➔ PH1 ➔ PH2)</h3>
-                            <p class="text-xs text-slate-400">Bung mở từng cấp danh mục</p>
+                            <h3 class="text-sm font-bold text-slate-800" data-i18n="table_prod_title">Phân Cấp Sản Phẩm (Storage ➔ Cate ➔ PH1 ➔ PH2)</h3>
+                            <p class="text-xs text-slate-400" data-i18n="table_prod_sub">Bung mở từng cấp danh mục</p>
                         </div>
-                        <span class="text-xs font-bold text-sky-600 hover:text-sky-800 cursor-pointer" onclick="toggleAllProductNodes()">Bung / Đóng Hết</span>
+                        <span class="text-xs font-bold text-sky-600 hover:text-sky-800 cursor-pointer" onclick="toggleAllProductNodes()" data-i18n="btn_toggle_all">Bung / Đóng Hết</span>
                     </div>
                     <div class="overflow-x-auto max-h-96">
                         <table class="mat-table text-[11px]" id="table-tree-prod">
                             <thead>
                                 <tr>
-                                    <th>Cơ Cấu Sản Phẩm</th>
-                                    <th class="text-right">Doanh Số Sell-in (Bil/Mil)</th>
-                                    <th class="text-right">Tỷ Trọng %</th>
-                                    <th class="text-right">Tăng Trưởng YoY</th>
+                                    <th data-i18n="th_prod_struct">Cơ Cấu Sản Phẩm</th>
+                                    <th class="text-right" data-i18n="th_si_bil_mil">Doanh Số Sell-in (Bil/Mil)</th>
+                                    <th class="text-right" data-i18n="th_share_pct">Tỷ Trọng %</th>
+                                    <th class="text-right" data-i18n="th_growth_yoy">Tăng Trưởng YoY</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody-tree-prod"></tbody>
@@ -1852,21 +1865,21 @@
                 <div class="material-card p-4">
                     <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
                         <div>
-                            <h3 class="text-sm font-bold text-slate-800">Phân Cấp Kênh (Channel ➔ Sub-channel ➔ Account/NPP)</h3>
-                            <p class="text-xs text-slate-400">Doanh số thương mại chi tiết</p>
+                            <h3 class="text-sm font-bold text-slate-800" data-i18n="table_chan_title">Phân Cấp Kênh (Channel ➔ Sub-channel ➔ Account/NPP)</h3>
+                            <p class="text-xs text-slate-400" data-i18n="table_chan_sub">Doanh số thương mại chi tiết</p>
                         </div>
-                        <span class="text-xs font-bold text-sky-600 hover:text-sky-800 cursor-pointer" onclick="toggleAllChannelNodes()">Bung / Đóng Hết</span>
+                        <span class="text-xs font-bold text-sky-600 hover:text-sky-800 cursor-pointer" onclick="toggleAllChannelNodes()" data-i18n="btn_toggle_all">Bung / Đóng Hết</span>
                     </div>
                     <div class="overflow-x-auto max-h-96">
                         <table class="mat-table text-[11px]" id="table-tree-chan">
                             <thead>
                                 <tr>
-                                    <th>Kênh / Khách Hàng</th>
-                                    <th class="text-right">Doanh Số Sell-in</th>
-                                    <th class="text-right">Target</th>
-                                    <th class="text-center">% Đạt</th>
-                                    <th class="text-right">Tỷ Trọng %</th>
-                                    <th class="text-right">Tăng Trưởng YoY</th>
+                                    <th data-i18n="th_chan_cust">Kênh / Khách Hàng</th>
+                                    <th class="text-right" data-i18n="th_si_bil_mil">Doanh Số Sell-in</th>
+                                    <th class="text-right" data-i18n="th_target">Target</th>
+                                    <th class="text-center" data-i18n="th_pct_achv">% Đạt</th>
+                                    <th class="text-right" data-i18n="th_share_pct">Tỷ Trọng %</th>
+                                    <th class="text-right" data-i18n="th_growth_yoy">Tăng Trưởng YoY</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody-tree-chan"></tbody>
@@ -1887,7 +1900,7 @@
                     <!-- Card 1: DOANH SỐ SELL-OUT -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #f43f5e !important;">
                         <div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">DOANH SỐ SELL-OUT</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_gt_sellout">DOANH SỐ SELL-OUT</div>
                             <div class="flex items-center justify-between gap-2 mt-1 mb-1">
                                 <div class="text-2xl font-black font-mono-num text-slate-900 tracking-tight" id="gt-kpi-sellout">0,0 B</div>
                                 <div class="text-right flex flex-col items-end">
@@ -1905,7 +1918,7 @@
                     <!-- Card 2: DOANH SỐ SELL-IN GT -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #2563eb !important;">
                         <div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">DOANH SỐ SELL-IN GT</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_gt_sellin">DOANH SỐ SELL-IN GT</div>
                             <div class="flex items-center justify-between gap-2 mt-1 mb-1">
                                 <div class="text-2xl font-black font-mono-num text-slate-900 tracking-tight" id="gt-kpi-sellin">0,0 B</div>
                                 <div class="text-right flex flex-col items-end">
@@ -1923,7 +1936,7 @@
                     <!-- Card 3: SỐ THỰC HIỆN ASO/MCP -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #f59e0b !important;">
                         <div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">SỐ THỰC HIỆN ASO/MCP</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_gt_aso_mcp">SỐ THỰC HIỆN ASO/MCP</div>
                             <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="gt-kpi-aso-mcp">0 / 0</div>
                         </div>
                         <div class="text-[11px] font-semibold pt-1.5 border-t border-slate-100/80">
@@ -1934,7 +1947,7 @@
                     <!-- Card 4: KHÁCH HÀNG ASO 3 THÁNG -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #10b981 !important;">
                         <div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">KHÁCH HÀNG ASO 3 THÁNG</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_gt_l3m">KHÁCH HÀNG ASO 3 THÁNG</div>
                             <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="gt-kpi-l3m-aso">0</div>
                         </div>
                         <div class="text-[11px] font-semibold pt-1.5 border-t border-slate-100/80">
@@ -1959,23 +1972,23 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
                     <!-- Card 6: TẦN SUẤT MUA HÀNG -->
                     <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
-                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">TẦN SUẤT MUA HÀNG (FREQUENCY)</span>
+                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="kpi_gt_frequency">TẦN SUẤT MUA HÀNG (FREQUENCY)</span>
                         <span class="text-2xl font-black font-mono-num text-blue-600 my-0.5" id="gt-kpi-frequency">0.00</span>
-                        <span class="text-[11px] text-slate-400 font-medium">Đơn / cửa hàng / tháng</span>
+                        <span class="text-[11px] text-slate-400 font-medium" data-i18n="lbl_order_store_m">Đơn / cửa hàng / tháng</span>
                     </div>
 
                     <!-- Card 7: BÌNH QUÂN SKU / ĐƠN -->
                     <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
-                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">BÌNH QUÂN SKU / ĐƠN</span>
+                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="kpi_gt_avg_sku_order">BÌNH QUÂN SKU / ĐƠN</span>
                         <span class="text-2xl font-black font-mono-num text-amber-500 my-0.5" id="gt-kpi-lppc">0.00</span>
-                        <span class="text-[11px] text-slate-400 font-medium">Số sản phẩm bình quân trên đơn</span>
+                        <span class="text-[11px] text-slate-400 font-medium" data-i18n="lbl_prod_per_order">Số sản phẩm bình quân trên đơn</span>
                     </div>
 
                     <!-- Card 8: BÌNH QUÂN SKU / CỬA HÀNG -->
                     <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
-                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">BÌNH QUÂN SKU / CỬA HÀNG</span>
+                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="kpi_gt_avg_sku_outlet">BÌNH QUÂN SKU / CỬA HÀNG</span>
                         <span class="text-2xl font-black font-mono-num text-slate-800 my-0.5" id="gt-kpi-sku-store">0.00</span>
-                        <span class="text-[11px] text-slate-400 font-medium">Số sản phẩm bình quân trên cửa hàng</span>
+                        <span class="text-[11px] text-slate-400 font-medium" data-i18n="lbl_prod_per_outlet">Số sản phẩm bình quân trên cửa hàng</span>
                     </div>
                 </div>
             </div>
@@ -1988,7 +2001,7 @@
                     </div>
                     <div class="px-2 pt-3 flex justify-between items-start">
                         <div>
-                            <h4 class="text-sm font-bold text-slate-800">Cân Bằng Dòng Hàng Sell-in, Sell-out & DOI GT</h4>
+                            <h4 class="text-sm font-bold text-slate-800" data-i18n="chart_gt_siso_title">Cân Bằng Dòng Hàng Sell-in, Sell-out & DOI GT</h4>
                             <p class="text-xs text-slate-400 mt-0.5">Tương quan xuất xưởng SAP vs tiêu thụ DMS & số ngày tồn kho</p>
                         </div>
                         <span class="badge-pill badge-pill-green">Power BI DAX</span>
@@ -2027,13 +2040,13 @@
             <div class="material-card p-4 pt-0 flex flex-col">
                 <div class="floating-chart-header grad-purple px-5 py-3 flex flex-wrap justify-between items-center gap-3 mb-4">
                     <div>
-                        <h3 class="text-sm font-bold text-white tracking-wide">Phân Cấp Kênh GT (Miền ➔ Vùng ➔ GSBH ➔ NPP ➔ NVBH)</h3>
-                        <p class="text-[11px] text-white/80">Nhấp [+] / [−] để bung mở chi tiết từng cấp theo cấu trúc tổ chức</p>
+                        <h3 class="text-sm font-bold text-white tracking-wide" data-i18n="table_gt_title">Phân Cấp Kênh GT (Miền ➔ Vùng ➔ GSBH ➔ NPP ➔ NVBH)</h3>
+                        <p class="text-[11px] text-white/80" data-i18n="table_gt_sub">Nhấp [+] / [−] để bung mở chi tiết từng cấp theo cấu trúc tổ chức</p>
                     </div>
                     <div class="flex items-center gap-2">
-                        <input type="text" id="gt-tree-search" placeholder="🔍 Tìm kiếm GSBH / NPP / NVBH..." class="text-xs px-3 py-1.5 rounded-lg text-slate-800 bg-white/95 focus:outline-none placeholder:text-slate-400 shadow-inner" oninput="renderGtTree()">
+                        <input type="text" id="gt-tree-search" placeholder="🔍 Tìm kiếm GSBH / NPP / NVBH..." data-i18n="search_gt_placeholder" class="text-xs px-3 py-1.5 rounded-lg text-slate-800 bg-white/95 focus:outline-none placeholder:text-slate-400 shadow-inner" oninput="renderGtTree()">
                         <button onclick="exportGtMatrixCSV()" class="px-3 py-1.5 rounded-lg bg-white text-purple-800 text-xs font-bold shadow hover:bg-slate-50 transition-all flex items-center gap-1">
-                            <span>📥</span> Export GT Matrix
+                            <span>📥</span> <span data-i18n="btn_export_gt_matrix">Export GT Matrix</span>
                         </button>
                     </div>
                 </div>
@@ -2041,21 +2054,21 @@
                     <table class="mat-table text-[11px]" id="table-tree-gt">
                         <thead>
                             <tr class="bg-slate-100 text-slate-700">
-                                <th style="min-width: 240px;">Cơ Cấu Tổ Chức</th>
-                                <th class="text-right" style="min-width: 95px;">Sell-in Gross</th>
-                                <th class="text-right" style="min-width: 95px;">Target (SI)</th>
-                                <th class="text-center" style="min-width: 75px;">% Đạt (SI)</th>
-                                <th class="text-right" style="min-width: 95px;">Sell-out</th>
-                                <th class="text-right" style="min-width: 95px;">Target (SO)</th>
-                                <th class="text-center" style="min-width: 75px;">% Đạt (SO)</th>
-                                <th class="text-right" style="min-width: 90px;">Tồn Kho</th>
-                                <th class="text-center" style="min-width: 75px;">DOI</th>
-                                <th class="text-right" style="min-width: 75px;">ASO</th>
-                                <th class="text-right" style="min-width: 75px;">MCP</th>
-                                <th class="text-right" style="min-width: 75px;">Strike Rate</th>
-                                <th class="text-right" style="min-width: 85px;">Drop Size</th>
-                                <th class="text-right" style="min-width: 75px;">SKU/Đơn</th>
-                                <th class="text-right" style="min-width: 75px;">SKU/CH</th>
+                                <th style="min-width: 240px;" data-i18n="th_org_struct">Cơ Cấu Tổ Chức</th>
+                                <th class="text-right" style="min-width: 95px;" data-i18n="th_si_gross">Sell-in Gross</th>
+                                <th class="text-right" style="min-width: 95px;" data-i18n="th_si_target">Target (SI)</th>
+                                <th class="text-center" style="min-width: 75px;" data-i18n="th_si_achv">% Đạt (SI)</th>
+                                <th class="text-right" style="min-width: 95px;" data-i18n="th_sellout">Sell-out</th>
+                                <th class="text-right" style="min-width: 95px;" data-i18n="th_so_target">Target (SO)</th>
+                                <th class="text-center" style="min-width: 75px;" data-i18n="th_so_achv">% Đạt (SO)</th>
+                                <th class="text-right" style="min-width: 90px;" data-i18n="th_inventory">Tồn Kho</th>
+                                <th class="text-center" style="min-width: 75px;" data-i18n="th_doi">DOI</th>
+                                <th class="text-right" style="min-width: 75px;" data-i18n="th_aso">ASO</th>
+                                <th class="text-right" style="min-width: 75px;" data-i18n="th_mcp">MCP</th>
+                                <th class="text-right" style="min-width: 75px;" data-i18n="th_strike_rate">Strike Rate</th>
+                                <th class="text-right" style="min-width: 85px;" data-i18n="th_drop_size">Drop Size</th>
+                                <th class="text-right" style="min-width: 75px;" data-i18n="th_sku_order">SKU/Đơn</th>
+                                <th class="text-right" style="min-width: 75px;" data-i18n="th_sku_outlet">SKU/CH</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-tree-gt"></tbody>
@@ -2074,7 +2087,7 @@
                     <!-- Card 1: DOANH SỐ SELL-IN MT -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #2563eb !important;">
                         <div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">DOANH SỐ SELL-IN MT</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_mt_sellin">DOANH SỐ SELL-IN MT</div>
                             <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="mt-kpi-sellin">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
@@ -2110,7 +2123,7 @@
                     <!-- Card 4: CÙNG KỲ NĂM TRƯỚC MT (LY) -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #f59e0b !important;">
                         <div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">CÙNG KỲ NĂM TRƯỚC (LY)</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_same_period_ly">CÙNG KỲ NĂM TRƯỚC (LY)</div>
                             <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="mt-kpi-ly">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
@@ -2172,17 +2185,17 @@
             </div>
 
             <div class="material-card p-4">
-                <h3 class="text-sm font-bold text-slate-800 mb-3">Phân Cấp Kênh MT (Sub-channel ➔ Chuỗi ➔ Vùng)</h3>
+                <h3 class="text-sm font-bold text-slate-800 mb-3" data-i18n="table_mt_title">Phân Cấp Kênh MT (Sub-channel ➔ Chuỗi ➔ Vùng)</h3>
                 <div class="overflow-x-auto max-h-96">
                     <table class="mat-table text-[11px]">
                         <thead>
                             <tr>
-                                <th>Cơ Cấu MT</th>
-                                <th class="text-right">Sell-in (VND)</th>
-                                <th class="text-right">Target</th>
-                                <th class="text-center">% Đạt</th>
-                                <th class="text-right">Tỷ Trọng %</th>
-                                <th class="text-right">Tăng Trưởng YoY</th>
+                                <th data-i18n="th_mt_struct">Cơ Cấu MT</th>
+                                <th class="text-right" data-i18n="th_sellin_vnd">Sell-in (VND)</th>
+                                <th class="text-right" data-i18n="th_target">Target</th>
+                                <th class="text-center" data-i18n="th_pct_achv">% Đạt</th>
+                                <th class="text-right" data-i18n="th_share_pct">Tỷ Trọng %</th>
+                                <th class="text-right" data-i18n="th_growth_yoy">Tăng Trưởng YoY</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-tree-mt"></tbody>
@@ -2237,7 +2250,7 @@
                     <!-- Card 4: CÙNG KỲ NĂM TRƯỚC B2B (LY) -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #f59e0b !important;">
                         <div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">CÙNG KỲ NĂM TRƯỚC (LY)</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_same_period_ly">CÙNG KỲ NĂM TRƯỚC (LY)</div>
                             <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="b2b-kpi-ly">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
@@ -2280,17 +2293,17 @@
             </div>
 
             <div class="material-card p-4">
-                <h3 class="text-sm font-bold text-slate-800 mb-3">Phân Cấp Khách Hàng B2B</h3>
+                <h3 class="text-sm font-bold text-slate-800 mb-3" data-i18n="table_b2b_title">Phân Cấp Khách Hàng B2B</h3>
                 <div class="overflow-x-auto max-h-96">
                     <table class="mat-table text-[11px]">
                         <thead>
                             <tr>
-                                <th>Khách Hàng B2B</th>
-                                <th class="text-right">Doanh Số (VND)</th>
-                                <th class="text-right">Target</th>
-                                <th class="text-center">% Đạt</th>
-                                <th class="text-right">Tỷ Trọng %</th>
-                                <th class="text-right">Tăng Trưởng YoY</th>
+                                <th data-i18n="th_cust_b2b">Khách Hàng B2B</th>
+                                <th class="text-right" data-i18n="th_rev_vnd">Doanh Số (VND)</th>
+                                <th class="text-right" data-i18n="th_target">Target</th>
+                                <th class="text-center" data-i18n="th_pct_achv">% Đạt</th>
+                                <th class="text-right" data-i18n="th_share_pct">Tỷ Trọng %</th>
+                                <th class="text-right" data-i18n="th_growth_yoy">Tăng Trưởng YoY</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-tree-b2b"></tbody>
@@ -2345,7 +2358,7 @@
                     <!-- Card 4: CÙNG KỲ NĂM TRƯỚC KR (LY) -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #f59e0b !important;">
                         <div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">CÙNG KỲ NĂM TRƯỚC (LY)</div>
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_same_period_ly">CÙNG KỲ NĂM TRƯỚC (LY)</div>
                             <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="kr-kpi-ly">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
@@ -2388,17 +2401,17 @@
             </div>
 
             <div class="material-card p-4">
-                <h3 class="text-sm font-bold text-slate-800 mb-3">Phân Cấp Khách Hàng KR</h3>
+                <h3 class="text-sm font-bold text-slate-800 mb-3" data-i18n="table_kr_title">Phân Cấp Khách Hàng KR</h3>
                 <div class="overflow-x-auto max-h-96">
                     <table class="mat-table text-[11px]">
                         <thead>
                             <tr>
-                                <th>Khách Hàng KR</th>
-                                <th class="text-right">Doanh Số (VND)</th>
-                                <th class="text-right">Target</th>
-                                <th class="text-center">% Đạt</th>
-                                <th class="text-right">Tỷ Trọng %</th>
-                                <th class="text-right">Tăng Trưởng YoY</th>
+                                <th data-i18n="th_cust_kr">Khách Hàng KR</th>
+                                <th class="text-right" data-i18n="th_rev_vnd">Doanh Số (VND)</th>
+                                <th class="text-right" data-i18n="th_target">Target</th>
+                                <th class="text-center" data-i18n="th_pct_achv">% Đạt</th>
+                                <th class="text-right" data-i18n="th_share_pct">Tỷ Trọng %</th>
+                                <th class="text-right" data-i18n="th_growth_yoy">Tăng Trưởng YoY</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-tree-kr"></tbody>
@@ -2536,7 +2549,731 @@
             return currM;
         }
 
+
+        // =========================================================================
+        // INTERNATIONALIZATION (i18n) ENGINE: VIETNAMESE | ENGLISH | KOREAN
+        // =========================================================================
+        const I18N = {
+            vi: {
+                nav_dashboard: "1. Dashboard",
+                nav_gt: "2. Kênh GT",
+                nav_mt: "3. Kênh MT",
+                nav_b2b: "4. Kênh B2B",
+                nav_kr: "5. Kênh KR",
+                bnav_overview: "Tổng Quan",
+                bnav_gt: "Kênh GT",
+                bnav_mt: "Kênh MT",
+                bnav_b2b: "Kênh B2B",
+                bnav_kr: "Kênh KR",
+                
+                user_admin: "Quản Trị Viên (Admin)",
+                btn_user_admin: "Quản Trị User",
+                btn_change_password: "Đổi Mật Khẩu",
+                btn_logout: "Đăng Xuất",
+                btn_mobile: "Xem Giao Diện Mobile",
+                btn_desktop: "Xem Giao Diện Desktop",
+                data_refresh_prefix: "Ngày xuất dữ liệu: ",
+                online_status: "● Trực Tuyến",
+                btn_export_rep: "Xuất Báo Cáo",
+                lbl_language: "Ngôn Ngữ / Language",
+                lbl_sys_function: "Chức Năng Hệ Thống",
+
+                title_tab_overview: "Commercial Overview (Sell-in 4 Kênh: GT, MT, B2B, KR)",
+                title_tab_gt: "Kênh GT (RTM Field Force Chuyên Sâu)",
+                title_tab_mt: "Kênh MT (Modern Trade Key Accounts)",
+                title_tab_b2b: "Kênh B2B (Food Service & Nhà Hàng)",
+                title_tab_kr: "Kênh KR (Key Retailer & Đại Lý Lớn)",
+                title_tab_reports: "Báo Cáo & Xuất Bản Dữ Liệu",
+
+                short_tab_overview: "1. Tổng Quan",
+                short_tab_gt: "2. Kênh GT",
+                short_tab_mt: "3. Kênh MT",
+                short_tab_b2b: "4. Kênh B2B",
+                short_tab_kr: "5. Kênh KR",
+                short_tab_reports: "6. Báo Cáo",
+
+                lbl_filter_channel: "🏷️ KÊNH & KH:",
+                lbl_filter_gt: "📍 ĐỊA LÝ GT:",
+                lbl_filter_mt: "🏬 TÀI KHOẢN MT:",
+                lbl_filter_b2b: "🍽️ KHÁCH HÀNG B2B:",
+                lbl_filter_kr: "🏪 TÀI KHOẢN KR:",
+                lbl_filter_report: "📑 BÁO CÁO KÊNH:",
+                lbl_filter_prod: "📦 Sản Phẩm:",
+                lbl_filter_month: "THÁNG:",
+                btn_all_12m: "Tất Cả 12T",
+                btn_reset_month: "Reset",
+
+                opt_all_channels: "Tất cả Kênh (4 Kênh)",
+                opt_all_subchannel: "Tất cả Phân Khúc",
+                opt_all_account: "Tất cả Khách Hàng / NPP",
+                opt_all_mien: "Tất cả Miền",
+                opt_all_vung: "Tất cả Vùng",
+                opt_all_gsbh: "Tất cả GSBH",
+                opt_all_npp: "Tất cả NPP",
+                opt_all_chains_mt: "Tất cả Chuỗi MT",
+                opt_all_clusters_mt: "Tất cả Khu Vực",
+                opt_all_subgroup_b2b: "Tất cả Phân Nhóm",
+                opt_all_cust_b2b: "Tất cả Khách Hàng",
+                opt_all_chains_kr: "Tất cả Chuỗi KR",
+                opt_all_storage: "Tất cả Storage",
+                opt_all_cate: "Tất cả Ngành",
+                opt_all_ph1: "Tất cả PH1",
+                opt_all_ph2: "Tất cả PH2",
+                year_2026: "Năm 2026",
+                year_2025: "Năm 2025",
+
+                viewing_prefix: "Đang xem: ",
+                all_12_months: "Toàn bộ 12 Tháng/",
+                month_prefix: "Tháng ",
+
+                kpi_sellin_rev: "DOANH SỐ SELL-IN",
+                kpi_target_sellin: "MỤC TIÊU SELL-IN",
+                kpi_yoy_growth: "TĂNG TRƯỞNG YOY",
+                kpi_ytd_sellin: "SELL-IN LŨY KẾ (YTD)",
+                kpi_achv_rate: "TỶ LỆ ĐẠT CHỈ TIÊU (% TARGET)",
+                kpi_same_period_ly: "CÙNG KỲ NĂM TRƯỚC (LY)",
+                kpi_gt_frequency: "TẦN SUẤT MUA HÀNG (FREQUENCY)",
+                kpi_gt_avg_sku_order: "BÌNH QUÂN SKU / ĐƠN",
+                kpi_gt_avg_sku_outlet: "BÌNH QUÂN SKU / CỬA HÀNG",
+                lbl_order_store_m: "Đơn / cửa hàng / tháng",
+                lbl_prod_per_order: "Số sản phẩm bình quân trên đơn",
+                lbl_prod_per_outlet: "Số sản phẩm bình quân trên cửa hàng",
+                lbl_achv: "Đạt",
+                lbl_tgt: "Tgt",
+                lbl_diff: "Chênh lệch",
+                lbl_same_period: "Cùng kỳ",
+
+                chart_daily_sellin_title: "Daily Sell-in Trend & Nhịp Độ Hàng Ngày",
+                chart_daily_sellin_sub: "Tiến độ xuất hóa đơn SAP thực tế theo bộ lọc đang chọn",
+                chart_yoy_title: "Đối Sánh 12 Tháng 2026 vs 2025 (YoY Comparison)",
+                chart_yoy_sub: "Doanh số thực tế 2026 vs cùng kỳ 2025 theo bộ lọc đang chọn",
+                chart_legend_daily_si: "Doanh số ngày",
+                chart_legend_2025: "Năm 2025 (Cùng kỳ)",
+                chart_legend_2026: "Năm 2026 (Thực tế)",
+
+                table_prod_title: "Phân Cấp Sản Phẩm (Storage ➔ Cate ➔ PH1 ➔ PH2)",
+                table_prod_sub: "Bung mở từng cấp danh mục",
+                table_chan_title: "Phân Cấp Kênh (Channel ➔ Sub-channel ➔ Account/NPP)",
+                table_chan_sub: "Doanh số thương mại chi tiết",
+                btn_toggle_all: "Bung / Đóng Hết",
+
+                th_prod_struct: "Cơ Cấu Sản Phẩm",
+                th_si_bil_mil: "Doanh Số Sell-in (Bil/Mil)",
+                th_share_pct: "Tỷ Trọng %",
+                th_growth_yoy: "Tăng Trưởng YoY",
+                th_chan_cust: "Kênh / Khách Hàng",
+                th_target: "Target",
+                th_pct_achv: "% Đạt",
+
+                kpi_gt_sellout: "DOANH SỐ SELL-OUT",
+                kpi_gt_sellin: "DOANH SỐ SELL-IN GT",
+                kpi_gt_aso_mcp: "SỐ THỰC HIỆN ASO/MCP",
+                kpi_gt_l3m: "KHÁCH HÀNG ASO 3 THÁNG",
+                kpi_gt_performance: "HIỆU SUẤT DROPSIZE / VIẾNG THĂM",
+                lbl_strike_rate: "Strike Rate",
+                lbl_active_l3m: "Active L3M",
+                lbl_l1m_only: "Chỉ Mua T",
+                lbl_dropsize: "Drop Size",
+                lbl_orders: "Đơn",
+                lbl_sku_per_order: "SKU/Đơn",
+                lbl_sku_per_outlet: "SKU/CH",
+
+                chart_gt_siso_title: "Cân Bằng Dòng Hàng Sell-in, Sell-out & DOI GT",
+                chart_gt_siso_sub: "Giám sát sức khỏe tồn kho & nhịp xuất/bán hàng tháng",
+                chart_gt_aso_title: "Xu Hướng 12 Tháng ASO vs MCP Chuẩn",
+                chart_gt_aso_sub: "Độ bao phủ thực tế & kế hoạch viếng thăm năm 2026",
+                chart_gt_daily_title: "Nhịp Độ Hàng Ngày: Daily Sell-in vs Daily Sell-out",
+                chart_gt_daily_sub: "Đối chiếu nhịp xuất hàng SAP vs bán hàng NPP DMS",
+                legend_si_gt: "Sell-in GT (SAP)",
+                legend_so_real: "Sell-out Thực Tế (DMS)",
+                legend_doi_days: "Số Ngày Tồn Kho DOI",
+                legend_aso_active: "ASO (Điểm Bán Active Thực Tế)",
+                legend_mcp_std: "MCP (Tuyến Viếng Thăm Chuẩn)",
+                legend_daily_si_gt: "Daily Sell-in GT (SAP - Tỷ ₫)",
+                legend_daily_so_gt: "Daily Sell-out GT (DMS - Tỷ ₫)",
+
+                table_gt_title: "Phân Cấp Kênh GT (Miền ➔ Vùng ➔ GSBH ➔ NPP ➔ NVBH)",
+                table_gt_sub: "Nhấp [+] / [−] để bung mở chi tiết từng cấp theo cấu trúc tổ chức",
+                search_gt_placeholder: "🔍 Tìm kiếm GSBH / NPP / NVBH...",
+                btn_export_gt_matrix: "Export GT Matrix",
+                th_org_struct: "Cơ Cấu Tổ Chức",
+                th_si_gross: "Sell-in Gross",
+                th_si_target: "Target (SI)",
+                th_si_achv: "% Đạt (SI)",
+                th_sellout: "Sell-out",
+                th_so_target: "Target (SO)",
+                th_so_achv: "% Đạt (SO)",
+                th_inventory: "Tồn Kho",
+                th_doi: "DOI",
+                th_aso: "ASO",
+                th_mcp: "MCP",
+                th_strike_rate: "Strike Rate",
+                th_drop_size: "Drop Size",
+                th_sku_order: "SKU/Đơn",
+                th_sku_outlet: "SKU/CH",
+
+                kpi_mt_sellin: "DOANH SỐ SELL-IN MT",
+                kpi_mt_target: "MỤC TIÊU SELL-IN MT",
+                kpi_mt_yoy: "TĂNG TRƯỞNG YOY",
+                kpi_mt_ytd: "SELL-IN LŨY KẾ (YTD)",
+                kpi_mt_pop: "SO VỚI KỲ TRƯỚC (PoP / MoM)",
+                chart_mt_chains_title: "Top Chuỗi Hiện Đại Trọng Điểm (MT Chains)",
+                chart_mt_subchan_title: "Cơ Cấu Doanh Số Theo Phân Khúc MT",
+                chart_mt_daily_title: "Nhịp Độ Xuất Hàng MT Hàng Ngày (SAP Daily)",
+                table_mt_title: "Phân Cấp Kênh MT (Sub-channel ➔ Chuỗi ➔ Vùng)",
+                th_mt_struct: "Cơ Cấu MT",
+                th_sellin_vnd: "Sell-in (VND)",
+                legend_mt_chain_si: "Doanh số chuỗi (Tỷ ₫)",
+                legend_mt_subchan_si: "Doanh số phân khúc (Tỷ ₫)",
+                legend_mt_daily_si: "Doanh số xuất hàng MT (Tỷ ₫)",
+
+                kpi_b2b_sellin: "DOANH SỐ B2B (FOOD SERVICE)",
+                kpi_b2b_target: "MỤC TIÊU SELL-IN B2B",
+                kpi_b2b_yoy: "TĂNG TRƯỞNG YOY",
+                kpi_b2b_ytd: "SELL-IN LŨY KẾ (YTD)",
+                kpi_b2b_pop: "SO VỚI KỲ TRƯỚC (PoP / MoM)",
+                table_b2b_title: "Phân Cấp Khách Hàng B2B",
+                th_cust_b2b: "Khách Hàng B2B",
+                th_rev_vnd: "Doanh Số (VND)",
+
+                kpi_kr_sellin: "DOANH SỐ KÊNH KR",
+                kpi_kr_target: "MỤC TIÊU SELL-IN KR",
+                kpi_kr_yoy: "TĂNG TRƯỞNG YOY",
+                kpi_kr_ytd: "SELL-IN LŨY KẾ (YTD)",
+                kpi_kr_pop: "SO VỚI KỲ TRƯỚC (PoP / MoM)",
+                table_kr_title: "Phân Cấp Khách Hàng KR",
+                th_cust_kr: "Khách Hàng KR",
+
+                export_modal_title: "Trung Tâm Xuất Báo Cáo Đa Định Dạng",
+                export_modal_sub: "Tùy chọn tải dữ liệu theo nhu cầu phân tích và báo cáo quản trị",
+                export_opt1_title: "Xuất File Dữ Liệu Excel (.xlsx)",
+                export_opt1_badge: "Dữ Liệu Thô Đầy Đủ",
+                export_opt1_desc: "Tải toàn bộ số liệu chi tiết dạng bảng tính nhiều Sheet (Tổng quan, Kênh GT, MT, B2B, KR, Sản phẩm).",
+                export_opt2_title: "Xuất File PDF (.pdf)",
+                export_opt2_badge: "Màn Hình Trực Quan",
+                export_opt2_desc: "Chụp nguyên bản giao diện khổ A4 Landscape với đầy đủ màu sắc gradient, thẻ KPI, biểu đồ và bảng số liệu giống 100% màn hình đang xem.",
+                export_opt3_title: "In Báo Cáo / Lưu PDF A4 Vector",
+                export_opt3_badge: "Vector Sắc Nét",
+                export_opt3_desc: "Mở hộp thoại In của trình duyệt (hỗ trợ lưu PDF khổ A4 Landscape dạng vector, font chữ nét tuyệt đối, không vỡ hạt khi zoom).",
+                btn_close: "Đóng"
+            },
+            en: {
+                nav_dashboard: "1. Overview",
+                nav_gt: "2. GT Channel",
+                nav_mt: "3. MT Channel",
+                nav_b2b: "4. B2B Channel",
+                nav_kr: "5. KR Channel",
+                bnav_overview: "Overview",
+                bnav_gt: "GT Channel",
+                bnav_mt: "MT Channel",
+                bnav_b2b: "B2B Channel",
+                bnav_kr: "KR Channel",
+                
+                user_admin: "Administrator (Admin)",
+                btn_user_admin: "User Admin",
+                btn_change_password: "Change Password",
+                btn_logout: "Logout",
+                btn_mobile: "Switch to Mobile View",
+                btn_desktop: "Switch to Desktop View",
+                data_refresh_prefix: "Data Date: ",
+                online_status: "● Online",
+                btn_export_rep: "Export Report",
+                lbl_language: "Language",
+                lbl_sys_function: "System Functions",
+
+                title_tab_overview: "Commercial Overview (Sell-in 4 Channels: GT, MT, B2B, KR)",
+                title_tab_gt: "GT Channel (Route-to-Market & Field Force)",
+                title_tab_mt: "MT Channel (Modern Trade Key Accounts)",
+                title_tab_b2b: "B2B Channel (Food Service & Catering)",
+                title_tab_kr: "KR Channel (Key Retailers & Wholesalers)",
+                title_tab_reports: "Reports & Data Hub",
+
+                short_tab_overview: "1. Overview",
+                short_tab_gt: "2. GT Channel",
+                short_tab_mt: "3. MT Channel",
+                short_tab_b2b: "4. B2B Channel",
+                short_tab_kr: "5. KR Channel",
+                short_tab_reports: "6. Reports",
+
+                lbl_filter_channel: "🏷️ CHANNEL & ACCT:",
+                lbl_filter_gt: "📍 GT GEOGRAPHY:",
+                lbl_filter_mt: "🏬 MT ACCOUNTS:",
+                lbl_filter_b2b: "🍽️ B2B CUSTOMERS:",
+                lbl_filter_kr: "🏪 KR ACCOUNTS:",
+                lbl_filter_report: "📑 REPORT CHANNEL:",
+                lbl_filter_prod: "📦 Product:",
+                lbl_filter_month: "MONTH:",
+                btn_all_12m: "Full 12M",
+                btn_reset_month: "Reset",
+
+                opt_all_channels: "All Channels (4 Channels)",
+                opt_all_subchannel: "All Sub-channels",
+                opt_all_account: "All Accounts / Distributors",
+                opt_all_mien: "All Regions",
+                opt_all_vung: "All Areas",
+                opt_all_gsbh: "All Sales Supervisors",
+                opt_all_npp: "All Distributors",
+                opt_all_chains_mt: "All MT Chains",
+                opt_all_clusters_mt: "All Clusters",
+                opt_all_subgroup_b2b: "All Subgroups",
+                opt_all_cust_b2b: "All Customers",
+                opt_all_chains_kr: "All KR Chains",
+                opt_all_storage: "All Storage",
+                opt_all_cate: "All Categories",
+                opt_all_ph1: "All PH1",
+                opt_all_ph2: "All PH2",
+                year_2026: "Year 2026",
+                year_2025: "Year 2025",
+
+                viewing_prefix: "Viewing: ",
+                all_12_months: "Full 12 Months/",
+                month_prefix: "Month ",
+
+                kpi_sellin_rev: "SELL-IN REVENUE",
+                kpi_target_sellin: "SELL-IN TARGET",
+                kpi_yoy_growth: "YOY GROWTH",
+                kpi_ytd_sellin: "CUMULATIVE SELL-IN (YTD)",
+                kpi_achv_rate: "TARGET ACHIEVEMENT (% TARGET)",
+                kpi_same_period_ly: "LAST YEAR SAME PERIOD (LY)",
+                kpi_gt_frequency: "PURCHASE FREQUENCY",
+                kpi_gt_avg_sku_order: "AVG SKU / ORDER",
+                kpi_gt_avg_sku_outlet: "AVG SKU / OUTLET",
+                lbl_order_store_m: "Orders / outlet / month",
+                lbl_prod_per_order: "Average products per order",
+                lbl_prod_per_outlet: "Average products per outlet",
+                lbl_achv: "Achv",
+                lbl_tgt: "Tgt",
+                lbl_diff: "Variance",
+                lbl_same_period: "Last Year",
+
+                chart_daily_sellin_title: "Daily Sell-in Trend & Daily Pace",
+                chart_daily_sellin_sub: "Actual SAP billing pace according to selected filters",
+                chart_yoy_title: "12-Month Comparison: 2026 vs 2025 (YoY Trend)",
+                chart_yoy_sub: "Actual 2026 revenue vs same period 2025",
+                chart_legend_daily_si: "Daily Revenue",
+                chart_legend_2025: "Year 2025 (Last Year)",
+                chart_legend_2026: "Year 2026 (Actual)",
+
+                table_prod_title: "Product Hierarchy (Storage ➔ Cate ➔ PH1 ➔ PH2)",
+                table_prod_sub: "Expand / collapse category levels",
+                table_chan_title: "Channel Hierarchy (Channel ➔ Sub-channel ➔ Account/Dist)",
+                table_chan_sub: "Detailed commercial breakdown",
+                btn_toggle_all: "Expand / Collapse All",
+
+                th_prod_struct: "Product Structure",
+                th_si_bil_mil: "Sell-in Revenue (Bil/Mil)",
+                th_share_pct: "Share %",
+                th_growth_yoy: "YoY Growth",
+                th_chan_cust: "Channel / Customer",
+                th_target: "Target",
+                th_pct_achv: "% Achv",
+
+                kpi_gt_sellout: "SELL-OUT REVENUE",
+                kpi_gt_sellin: "SELL-IN REVENUE (GT)",
+                kpi_gt_aso_mcp: "ACTIVE OUTLETS (ASO) / MCP",
+                kpi_gt_l3m: "3-MONTH ACTIVE OUTLETS",
+                kpi_gt_performance: "DROP SIZE / VISIT PERFORMANCE",
+                lbl_strike_rate: "Strike Rate",
+                lbl_active_l3m: "Active L3M",
+                lbl_l1m_only: "Only M",
+                lbl_dropsize: "Drop Size",
+                lbl_orders: "Orders",
+                lbl_sku_per_order: "SKU/Order",
+                lbl_sku_per_outlet: "SKU/Outlet",
+
+                chart_gt_siso_title: "Supply & Demand Balance: Sell-in, Sell-out & DOI GT",
+                chart_gt_siso_sub: "Monitor inventory health & monthly sell-in/out rhythm",
+                chart_gt_aso_title: "12-Month Trend: Active Outlets vs Target MCP",
+                chart_gt_aso_sub: "Actual coverage vs standard visit schedule 2026",
+                chart_gt_daily_title: "Daily Pace: Daily Sell-in vs Daily Sell-out",
+                chart_gt_daily_sub: "SAP daily billing vs DMS distributor sell-out",
+                legend_si_gt: "Sell-in GT (SAP)",
+                legend_so_real: "Actual Sell-out (DMS)",
+                legend_doi_days: "Inventory Days (DOI)",
+                legend_aso_active: "Active Outlets (ASO)",
+                legend_mcp_std: "Coverage Plan (MCP)",
+                legend_daily_si_gt: "Daily Sell-in GT (SAP - Bil ₫)",
+                legend_daily_so_gt: "Daily Sell-out GT (DMS - Bil ₫)",
+
+                table_gt_title: "GT Organization Matrix (Region ➔ Area ➔ SUP ➔ Dist ➔ Sales Rep)",
+                table_gt_sub: "Click [+] / [−] to expand/collapse organizational hierarchy",
+                search_gt_placeholder: "🔍 Search SUP / Distributor / Sales Rep...",
+                btn_export_gt_matrix: "Export GT Matrix",
+                th_org_struct: "Organization Structure",
+                th_si_gross: "Gross Sell-in",
+                th_si_target: "Target (SI)",
+                th_si_achv: "% Achv (SI)",
+                th_sellout: "Sell-out",
+                th_so_target: "Target (SO)",
+                th_so_achv: "% Achv (SO)",
+                th_inventory: "Inventory",
+                th_doi: "DOI",
+                th_aso: "ASO",
+                th_mcp: "MCP",
+                th_strike_rate: "Strike Rate",
+                th_drop_size: "Drop Size",
+                th_sku_order: "SKU/Order",
+                th_sku_outlet: "SKU/Outlet",
+
+                kpi_mt_sellin: "SELL-IN REVENUE (MT)",
+                kpi_mt_target: "MT SELL-IN TARGET",
+                kpi_mt_yoy: "YOY GROWTH",
+                kpi_mt_ytd: "CUMULATIVE SELL-IN (YTD)",
+                kpi_mt_pop: "PERIOD-OVER-PERIOD (PoP / MoM)",
+                chart_mt_chains_title: "Top Key Modern Chains (MT Chains)",
+                chart_mt_subchan_title: "Revenue Breakdown by MT Sub-channel",
+                chart_mt_daily_title: "Daily MT Sell-in Billing Pace (SAP Daily)",
+                table_mt_title: "MT Channel Hierarchy (Sub-channel ➔ Chain ➔ Cluster)",
+                th_mt_struct: "MT Structure",
+                th_sellin_vnd: "Sell-in (VND)",
+                legend_mt_chain_si: "Chain Revenue (Bil ₫)",
+                legend_mt_subchan_si: "Segment Revenue (Bil ₫)",
+                legend_mt_daily_si: "MT Billing Revenue (Bil ₫)",
+
+                kpi_b2b_sellin: "B2B REVENUE (FOOD SERVICE)",
+                kpi_b2b_target: "B2B SELL-IN TARGET",
+                kpi_b2b_yoy: "YOY GROWTH",
+                kpi_b2b_ytd: "CUMULATIVE SELL-IN (YTD)",
+                kpi_b2b_pop: "PERIOD-OVER-PERIOD (PoP / MoM)",
+                table_b2b_title: "B2B Customer Hierarchy",
+                th_cust_b2b: "B2B Customer",
+                th_rev_vnd: "Revenue (VND)",
+
+                kpi_kr_sellin: "KR CHANNEL REVENUE",
+                kpi_kr_target: "KR SELL-IN TARGET",
+                kpi_kr_yoy: "YOY GROWTH",
+                kpi_kr_ytd: "CUMULATIVE SELL-IN (YTD)",
+                kpi_kr_pop: "PERIOD-OVER-PERIOD (PoP / MoM)",
+                table_kr_title: "KR Customer Hierarchy",
+                th_cust_kr: "KR Customer",
+
+                export_modal_title: "Multi-Format Report Export Center",
+                export_modal_sub: "Choose data export options for analytical and management reporting",
+                export_opt1_title: "Export Excel Data File (.xlsx)",
+                export_opt1_badge: "Full Raw Data",
+                export_opt1_desc: "Download complete dataset across multiple sheets (Overview, GT, MT, B2B, KR, Product).",
+                export_opt2_title: "Export Visual PDF File (.pdf)",
+                export_opt2_badge: "Visual Snapshot",
+                export_opt2_desc: "Capture exact A4 landscape view with all colors, KPI cards, charts and tables as shown.",
+                export_opt3_title: "Print Report / Save PDF A4 Vector",
+                export_opt3_badge: "Sharp Vector",
+                export_opt3_desc: "Open browser print dialog (supports crisp vector A4 landscape PDF without quality loss).",
+                btn_close: "Close"
+            },
+            ko: {
+                nav_dashboard: "1. 종합 대시보드",
+                nav_gt: "2. GT 채널 (일반유통)",
+                nav_mt: "3. MT 채널 (현대유통)",
+                nav_b2b: "4. B2B 채널 (외식·식자재)",
+                nav_kr: "5. KR 채널 (한인·특수)",
+                bnav_overview: "종합현황",
+                bnav_gt: "GT채널",
+                bnav_mt: "MT채널",
+                bnav_b2b: "B2B채널",
+                bnav_kr: "KR채널",
+                
+                user_admin: "시스템 관리자 (Admin)",
+                btn_user_admin: "사용자 관리",
+                btn_change_password: "비밀번호 변경",
+                btn_logout: "로그아웃",
+                btn_mobile: "모바일 화면 전환",
+                btn_desktop: "PC 화면 전환",
+                data_refresh_prefix: "데이터 기준일: ",
+                online_status: "● 온라인",
+                btn_export_rep: "보고서 내보내기",
+                lbl_language: "언어 선택 / Language",
+                lbl_sys_function: "시스템 메뉴",
+
+                title_tab_overview: "전사 매출 종합 현황 (Sell-in 4대 채널: GT, MT, B2B, KR)",
+                title_tab_gt: "GT 채널 (영업력 & RTM 심층 현황)",
+                title_tab_mt: "MT 채널 (현대유통 주요 거래처)",
+                title_tab_b2b: "B2B 채널 (외식 및 식자재 공급)",
+                title_tab_kr: "KR 채널 (한인마트 및 특수 대리점)",
+                title_tab_reports: "보고서 및 데이터 센터",
+
+                short_tab_overview: "1. 종합현황",
+                short_tab_gt: "2. GT채널",
+                short_tab_mt: "3. MT채널",
+                short_tab_b2b: "4. B2B채널",
+                short_tab_kr: "5. KR채널",
+                short_tab_reports: "6. 보고서",
+
+                lbl_filter_channel: "🏷️ 채널 및 거래처:",
+                lbl_filter_gt: "📍 GT 지역정보:",
+                lbl_filter_mt: "🏬 MT 거래선:",
+                lbl_filter_b2b: "🍽️ B2B 고객사:",
+                lbl_filter_kr: "🏪 KR 거래선:",
+                lbl_filter_report: "📑 채널 보고서:",
+                lbl_filter_prod: "📦 제품군:",
+                lbl_filter_month: "조회월:",
+                btn_all_12m: "연간 12개월",
+                btn_reset_month: "초기화",
+
+                opt_all_channels: "전체 채널 (4대 채널)",
+                opt_all_subchannel: "전체 세부채널",
+                opt_all_account: "전체 거래처 / 대리점",
+                opt_all_mien: "전체 권역",
+                opt_all_vung: "전체 지역",
+                opt_all_gsbh: "전체 영업소장(SUP)",
+                opt_all_npp: "전체 대리점",
+                opt_all_chains_mt: "전체 MT 체인",
+                opt_all_clusters_mt: "전체 권역/클러스터",
+                opt_all_subgroup_b2b: "전체 세부분류",
+                opt_all_cust_b2b: "전체 고객사",
+                opt_all_chains_kr: "전체 KR 체인",
+                opt_all_storage: "전체 보관형태",
+                opt_all_cate: "전체 카테고리",
+                opt_all_ph1: "전체 PH1",
+                opt_all_ph2: "전체 PH2",
+                year_2026: "2026년",
+                year_2025: "2025년",
+
+                viewing_prefix: "조회 중: ",
+                all_12_months: "연간 12개월 전체/",
+                month_prefix: "월: ",
+
+                kpi_sellin_rev: "출하 매출 (SELL-IN)",
+                kpi_target_sellin: "출하 목표 (TARGET)",
+                kpi_yoy_growth: "전년비 성장률 (YOY)",
+                kpi_ytd_sellin: "누계 출하 실적 (YTD)",
+                kpi_achv_rate: "목표 달성률 (% TARGET)",
+                kpi_same_period_ly: "전년 동기 실적 (LY)",
+                kpi_gt_frequency: "구매 빈도 (FREQUENCY)",
+                kpi_gt_avg_sku_order: "주문당 평균 SKU",
+                kpi_gt_avg_sku_outlet: "점포당 평균 SKU",
+                lbl_order_store_m: "주문건수 / 점포 / 월",
+                lbl_prod_per_order: "주문당 평균 취급 SKU수",
+                lbl_prod_per_outlet: "점포당 평균 취급 SKU수",
+                lbl_achv: "달성률",
+                lbl_tgt: "목표",
+                lbl_diff: "차이",
+                lbl_same_period: "전년동기",
+
+                chart_daily_sellin_title: "일별 출하 추이 및 매출 페이스 (Daily Pace)",
+                chart_daily_sellin_sub: "선택된 조건에 따른 SAP 실시간 세금계산서 발행 진척도",
+                chart_yoy_title: "12개월 전년 대비 비교 (2026 vs 2025 YoY)",
+                chart_yoy_sub: "선택된 조건의 2026년 실적 vs 2025년 동기 실적 비교",
+                chart_legend_daily_si: "일별 출하액",
+                chart_legend_2025: "2025년 (전년 동기)",
+                chart_legend_2026: "2026년 (실제 실적)",
+
+                table_prod_title: "제품 구조별 매출 매트릭스 (보관형태 ➔ 카테고리 ➔ PH1 ➔ PH2)",
+                table_prod_sub: "카테고리별 계층 구조 펼치기/접기",
+                table_chan_title: "채널별 매출 매트릭스 (채널 ➔ 세부채널 ➔ 거래처/대리점)",
+                table_chan_sub: "상세 상업 유통 경로별 실적",
+                btn_toggle_all: "전체 펼치기 / 접기",
+
+                th_prod_struct: "제품 분류 체계",
+                th_si_bil_mil: "출하 매출 (십억/백만 VND)",
+                th_share_pct: "매출 비중 %",
+                th_growth_yoy: "전년비 성장률",
+                th_chan_cust: "채널 / 거래처",
+                th_target: "목표",
+                th_pct_achv: "달성률 %",
+
+                kpi_gt_sellout: "실판 매출 (SELL-OUT)",
+                kpi_gt_sellin: "GT 출하 매출 (SELL-IN)",
+                kpi_gt_aso_mcp: "실거래처(ASO) / 방문계획(MCP)",
+                kpi_gt_l3m: "최근 3개월 누적 실거래처 (L3M)",
+                kpi_gt_performance: "주문규모(Drop Size) 및 방문성과",
+                lbl_strike_rate: "주문성공률",
+                lbl_active_l3m: "3개월 실거래처",
+                lbl_l1m_only: "당월만 구매",
+                lbl_dropsize: "주문규모",
+                lbl_orders: "주문건수",
+                lbl_sku_per_order: "주문당 SKU수",
+                lbl_sku_per_outlet: "점포당 SKU수",
+
+                chart_gt_siso_title: "수급 밸런스: 입고(SI), 출고(SO) 및 재고일수(DOI)",
+                chart_gt_siso_sub: "대리점 재고 건전성 및 월별 입·출고 흐름 모니터링",
+                chart_gt_aso_title: "12개월 추이: 실거래처(ASO) vs 표준 방문계획(MCP)",
+                chart_gt_aso_sub: "2026년 실거래처 커버리지 및 계획 대비 달성률",
+                chart_gt_daily_title: "일별 매출 페이스: 출하(SI) vs 실판(SO)",
+                chart_gt_daily_sub: "본사 SAP 출하 데이터 vs 대리점 DMS 실판 데이터 비교",
+                legend_si_gt: "GT 출하 (SAP 입고)",
+                legend_so_real: "실판매출 (DMS 출고)",
+                legend_doi_days: "재고회전일수 (DOI)",
+                legend_aso_active: "실거래처수 (ASO)",
+                legend_mcp_std: "방문계획처 (MCP)",
+                legend_daily_si_gt: "일별 출하 (SAP - 십억 ₫)",
+                legend_daily_so_gt: "일별 실판 (DMS - 십억 ₫)",
+
+                table_gt_title: "GT 영업조직 실적 매트릭스 (권역 ➔ 지역 ➔ 소장 ➔ 대리점 ➔ 담당)",
+                table_gt_sub: "[+] / [−] 버튼을 클릭하여 영업 조직 단계별 실적 확인",
+                search_gt_placeholder: "🔍 영업소장 / 대리점 / 영업사원 검색...",
+                btn_export_gt_matrix: "GT 매트릭스 다운로드",
+                th_org_struct: "영업 조직 구조",
+                th_si_gross: "총출하액",
+                th_si_target: "출하목표",
+                th_si_achv: "출하달성률",
+                th_sellout: "실판매출",
+                th_so_target: "실판목표",
+                th_so_achv: "실판달성률",
+                th_inventory: "대리점 재고",
+                th_doi: "재고일수",
+                th_aso: "실거래처",
+                th_mcp: "방문계획",
+                th_strike_rate: "주문성공률",
+                th_drop_size: "주문규모",
+                th_sku_order: "SKU/주문",
+                th_sku_outlet: "SKU/점포",
+
+                kpi_mt_sellin: "MT 출하 매출 (SELL-IN)",
+                kpi_mt_target: "MT 출하 목표",
+                kpi_mt_yoy: "전년비 성장률 (YOY)",
+                kpi_mt_ytd: "누계 출하 실적 (YTD)",
+                kpi_mt_pop: "전월 대비 성장률 (PoP / MoM)",
+                chart_mt_chains_title: "핵심 현대유통 체인별 매출 (MT Chains)",
+                chart_mt_subchan_title: "MT 세부채널별 매출 비중",
+                chart_mt_daily_title: "일별 MT 출하 진행률 (SAP Daily)",
+                table_mt_title: "MT 채널 계층별 실적 (세부채널 ➔ 체인 ➔ 지역)",
+                th_mt_struct: "MT 유통 구조",
+                th_sellin_vnd: "출하액 (VND)",
+                legend_mt_chain_si: "체인별 매출 (십억 ₫)",
+                legend_mt_subchan_si: "세부채널별 매출 (십억 ₫)",
+                legend_mt_daily_si: "MT 일별 출하액 (십억 ₫)",
+
+                kpi_b2b_sellin: "B2B 매출 (외식 및 식자재)",
+                kpi_b2b_target: "B2B 출하 목표",
+                kpi_b2b_yoy: "전년비 성장률 (YOY)",
+                kpi_b2b_ytd: "누계 출하 실적 (YTD)",
+                kpi_b2b_pop: "전월 대비 성장률 (PoP / MoM)",
+                table_b2b_title: "B2B 고객사별 실적 매트릭스",
+                th_cust_b2b: "B2B 고객사",
+                th_rev_vnd: "매출액 (VND)",
+
+                kpi_kr_sellin: "KR 채널 매출 (한인 및 특수)",
+                kpi_kr_target: "KR 출하 목표",
+                kpi_kr_yoy: "전년비 성장률 (YOY)",
+                kpi_kr_ytd: "누계 출하 실적 (YTD)",
+                kpi_kr_pop: "전월 대비 성장률 (PoP / MoM)",
+                table_kr_title: "KR 거래처별 실적 매트릭스",
+                th_cust_kr: "KR 거래선",
+
+                export_modal_title: "보고서 다중 내보내기 센터",
+                export_modal_sub: "분석 및 경영 보고 목적에 맞는 데이터 내보내기 형식 선택",
+                export_opt1_title: "엑셀 데이터 파일 다운로드 (.xlsx)",
+                export_opt1_badge: "전체 로우데이터",
+                export_opt1_desc: "모든 시트(종합현황, GT, MT, B2B, KR, 제품)가 포함된 상세 스프레드시트 다운로드.",
+                export_opt2_title: "비주얼 PDF 다운로드 (.pdf)",
+                export_opt2_badge: "화면 캡처",
+                export_opt2_desc: "현재 화면과 100% 동일하게 모든 카드, 차트, 테이블을 A4 가로 규격으로 다운로드.",
+                export_opt3_title: "보고서 인쇄 / A4 벡터 PDF 저장",
+                export_opt3_badge: "고해상도 벡터",
+                export_opt3_desc: "브라우저 인쇄 창을 열어 선명한 A4 가로 벡터 PDF로 저장 (확대 시 깨짐 없음).",
+                btn_close: "닫기"
+            }
+        };
+
+        function t(key) {
+            const lang = (typeof state !== 'undefined' && state && state.currentLang) ? state.currentLang : (localStorage.getItem('cj_lang') || 'vi');
+            if (I18N[lang] && I18N[lang][key] !== undefined) {
+                return I18N[lang][key];
+            }
+            if (I18N['vi'] && I18N['vi'][key] !== undefined) {
+                return I18N['vi'][key];
+            }
+            return key;
+        }
+
+        function setLanguage(lang) {
+            if (!['vi', 'en', 'ko'].includes(lang)) lang = 'vi';
+            if (typeof state !== 'undefined' && state) {
+                state.currentLang = lang;
+            }
+            try {
+                localStorage.setItem('cj_lang', lang);
+            } catch(e) {}
+
+            // 1. Update Desktop buttons
+            ['vi', 'en', 'ko'].forEach(l => {
+                const btn = document.getElementById('lang-btn-' + l);
+                if (btn) {
+                    if (l === lang) {
+                        btn.className = 'px-2 py-0.5 rounded text-xs font-black transition-all flex items-center gap-1 bg-white text-blue-900 shadow';
+                    } else {
+                        btn.className = 'px-2 py-0.5 rounded text-xs font-black transition-all flex items-center gap-1 text-white hover:bg-white/20';
+                    }
+                }
+            });
+
+            // 1b. Update Mobile Drawer buttons
+            ['vi', 'en', 'ko'].forEach(l => {
+                const mBtn = document.getElementById('m-lang-btn-' + l);
+                if (mBtn) {
+                    if (l === lang) {
+                        mBtn.className = 'py-2 px-1 rounded-xl text-xs font-black border flex flex-col items-center gap-1 transition-all bg-sky-50 text-sky-800 border-sky-300 shadow-sm';
+                    } else {
+                        mBtn.className = 'py-2 px-1 rounded-xl text-xs font-black border flex flex-col items-center gap-1 transition-all bg-white text-slate-700 border-slate-200';
+                    }
+                }
+            });
+
+            // 2. Update DOM elements with data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const k = el.getAttribute('data-i18n');
+                if (k) {
+                    const translated = t(k);
+                    if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                        el.placeholder = translated;
+                    } else {
+                        el.innerHTML = translated;
+                    }
+                }
+            });
+
+            // 3. Update titles & breadcrumbs
+            updateHeaderTitles();
+
+            // 4. Update dropdowns default labels
+            if (typeof initDropdowns === 'function') {
+                initDropdowns();
+            }
+
+            // 5. Update month selector UI
+            if (typeof updateMonthChipsUI === 'function') {
+                updateMonthChipsUI();
+            }
+
+            // 6. Update period status note
+            if (typeof updatePeriodNote === 'function') {
+                updatePeriodNote();
+            }
+
+            // 7. Re-render active tab (charts + tree tables)
+            if (typeof renderActiveTab === 'function') {
+                renderActiveTab();
+            }
+        }
+
+        function updateHeaderTitles() {
+            const titles = {
+                'tab-overview': t('title_tab_overview'),
+                'tab-gt': t('title_tab_gt'),
+                'tab-mt': t('title_tab_mt'),
+                'tab-b2b': t('title_tab_b2b'),
+                'tab-kr': t('title_tab_kr'),
+                'tab-reports': t('title_tab_reports')
+            };
+            const shortTitles = {
+                'tab-overview': t('short_tab_overview'),
+                'tab-gt': t('short_tab_gt'),
+                'tab-mt': t('short_tab_mt'),
+                'tab-b2b': t('short_tab_b2b'),
+                'tab-kr': t('short_tab_kr'),
+                'tab-reports': t('short_tab_reports')
+            };
+            const tabId = (typeof state !== 'undefined' && state && state.activeTab) ? state.activeTab : 'tab-overview';
+            const tDom = document.getElementById('top-title');
+            if (tDom) tDom.innerText = titles[tabId] || titles['tab-overview'];
+            const bDom = document.getElementById('top-breadcrumb');
+            if (bDom) bDom.innerText = 'Pages / ' + (shortTitles[tabId] || 'Dashboard');
+            const mobTitle = document.getElementById('mobile-tab-title');
+            if (mobTitle) mobTitle.innerText = shortTitles[tabId] || titles[tabId] || 'Dashboard';
+        }
+
         const state = {
+            currentLang: localStorage.getItem("cj_lang") || "vi",
             activeTab: 'tab-overview',
             year: '2026',
             selectedMonths: [getDefaultCurrentMonth()],
@@ -2703,7 +3440,7 @@
                     if (d.sub_channel && d.sub_channel !== 'Khác') set.add(d.sub_channel);
                 }
             });
-            sel.innerHTML = '<option value="ALL">Tất cả Phân Khúc</option>' + Array.from(set).sort().map(sc => '<option value="' + sc + '">' + sc + '</option>').join('');
+            sel.innerHTML = '<option value="ALL">' + t('opt_all_subchannel') + '</option>' + Array.from(set).sort().map(sc => '<option value="' + sc + '">' + sc + '</option>').join('');
             if (!set.has(state.dashSubChannel)) state.dashSubChannel = 'ALL';
             sel.value = state.dashSubChannel;
         }
@@ -2717,7 +3454,7 @@
                 if (state.dashSubChannel !== 'ALL' && d.sub_channel !== state.dashSubChannel) return;
                 if (d.account_name) set.add(d.account_name);
             });
-            sel.innerHTML = '<option value="ALL">Tất cả Khách Hàng / NPP</option>' + Array.from(set).sort().map(acc => '<option value="' + acc + '">' + acc + '</option>').join('');
+            sel.innerHTML = '<option value="ALL">' + t('opt_all_account') + '</option>' + Array.from(set).sort().map(acc => '<option value="' + acc + '">' + acc + '</option>').join('');
             if (!set.has(state.dashAccount)) state.dashAccount = 'ALL';
             sel.value = state.dashAccount;
         }
@@ -2744,7 +3481,7 @@
             if (!sel) return;
             const set = new Set();
             DIM_GEO_HIER.forEach(d => { if (d.mien) set.add(d.mien); });
-            sel.innerHTML = '<option value="ALL">Tất cả Miền</option>' + Array.from(set).sort().map(m => '<option value="' + m + '">' + m + '</option>').join('');
+            sel.innerHTML = '<option value="ALL">' + t('opt_all_mien') + '</option>' + Array.from(set).sort().map(m => '<option value="' + m + '">' + m + '</option>').join('');
             sel.value = state.geoMien;
         }
 
@@ -2757,7 +3494,7 @@
                     if (d.vung) set.add(d.vung);
                 }
             });
-            sel.innerHTML = '<option value="ALL">Tất cả Vùng</option>' + Array.from(set).sort().map(v => '<option value="' + v + '">' + v + '</option>').join('');
+            sel.innerHTML = '<option value="ALL">' + t('opt_all_vung') + '</option>' + Array.from(set).sort().map(v => '<option value="' + v + '">' + v + '</option>').join('');
             if (!set.has(state.geoVung)) state.geoVung = 'ALL';
             sel.value = state.geoVung;
         }
@@ -2771,7 +3508,7 @@
                 if (state.geoVung !== 'ALL' && d.vung !== state.geoVung) return;
                 if (d.gsbh) set.add(d.gsbh);
             });
-            sel.innerHTML = '<option value="ALL">Tất cả GSBH</option>' + Array.from(set).sort().map(g => '<option value="' + g + '">' + g + '</option>').join('');
+            sel.innerHTML = '<option value="ALL">' + t('opt_all_gsbh') + '</option>' + Array.from(set).sort().map(g => '<option value="' + g + '">' + g + '</option>').join('');
             if (!set.has(state.geoGsbh)) state.geoGsbh = 'ALL';
             sel.value = state.geoGsbh;
         }
@@ -2786,7 +3523,7 @@
                 if (state.geoGsbh !== 'ALL' && d.gsbh !== state.geoGsbh) return;
                 if (d.npp_code) nppMap[d.npp_code] = d.npp_name || d.npp_code;
             });
-            sel.innerHTML = '<option value="ALL">Tất cả NPP</option>' + Object.keys(nppMap).sort((a,b) => (nppMap[a] || '').localeCompare(nppMap[b] || '')).map(code => '<option value="' + code + '">' + nppMap[code] + '</option>').join('');
+            sel.innerHTML = '<option value="ALL">' + t('opt_all_npp') + '</option>' + Object.keys(nppMap).sort((a,b) => (nppMap[a] || '').localeCompare(nppMap[b] || '')).map(code => '<option value="' + code + '">' + nppMap[code] + '</option>').join('');
             if (!nppMap[state.geoNpp]) state.geoNpp = 'ALL';
             sel.value = state.geoNpp;
         }
@@ -2842,10 +3579,10 @@
             selSub.innerHTML = '<option value="ALL">Tất cả Phân Khúc</option>' + Array.from(scSet).sort().map(sc => '<option value="' + sc + '">' + sc + '</option>').join('');
             selSub.value = state.mtSubChan;
 
-            selChain.innerHTML = '<option value="ALL">Tất cả Chuỗi MT</option>' + Array.from(chSet).sort().map(ch => '<option value="' + ch + '">' + ch + '</option>').join('');
+            selChain.innerHTML = '<option value="ALL">' + t('opt_all_chains_mt') + '</option>' + Array.from(chSet).sort().map(ch => '<option value="' + ch + '">' + ch + '</option>').join('');
             selChain.value = state.mtChain;
 
-            selCluster.innerHTML = '<option value="ALL">Tất cả Khu Vực</option>' + Array.from(clSet).sort().map(cl => '<option value="' + cl + '">' + cl + '</option>').join('');
+            selCluster.innerHTML = '<option value="ALL">' + t('opt_all_clusters_mt') + '</option>' + Array.from(clSet).sort().map(cl => '<option value="' + cl + '">' + cl + '</option>').join('');
             selCluster.value = state.mtCluster;
         }
 
@@ -2880,10 +3617,10 @@
                 }
             });
 
-            selAcc.innerHTML = '<option value="ALL">Tất cả Phân Nhóm</option>' + Array.from(accSet).sort().map(a => '<option value="' + a + '">' + a + '</option>').join('');
+            selAcc.innerHTML = '<option value="ALL">' + t('opt_all_subgroup_b2b') + '</option>' + Array.from(accSet).sort().map(a => '<option value="' + a + '">' + a + '</option>').join('');
             selAcc.value = state.b2bAcc;
 
-            selCust.innerHTML = '<option value="ALL">Tất cả Khách Hàng</option>' + Array.from(custSet).sort().map(c => '<option value="' + c + '">' + c + '</option>').join('');
+            selCust.innerHTML = '<option value="ALL">' + t('opt_all_cust_b2b') + '</option>' + Array.from(custSet).sort().map(c => '<option value="' + c + '">' + c + '</option>').join('');
             selCust.value = state.b2bCust;
         }
 
@@ -2912,7 +3649,7 @@
             selSub.innerHTML = '<option value="ALL">Tất cả Phân Khúc</option>' + Array.from(subSet).sort().map(s => '<option value="' + s + '">' + s + '</option>').join('');
             selSub.value = state.krSubChan;
 
-            selChain.innerHTML = '<option value="ALL">Tất cả Chuỗi KR</option>' + Array.from(chainSet).sort().map(c => '<option value="' + c + '">' + c + '</option>').join('');
+            selChain.innerHTML = '<option value="ALL">' + t('opt_all_chains_kr') + '</option>' + Array.from(chainSet).sort().map(c => '<option value="' + c + '">' + c + '</option>').join('');
             selChain.value = state.krChain;
         }
 
@@ -2929,7 +3666,7 @@
             if (!sel) return;
             const set = new Set();
             DIM_PROD_HIER.forEach(d => { if (d.storage) set.add(d.storage); });
-            sel.innerHTML = '<option value="ALL">Tất cả Storage</option>' + Array.from(set).sort().map(s => '<option value="' + s + '">' + s + '</option>').join('');
+            sel.innerHTML = '<option value="ALL">' + t('opt_all_storage') + '</option>' + Array.from(set).sort().map(s => '<option value="' + s + '">' + s + '</option>').join('');
             sel.value = state.prodStorage;
         }
 
@@ -2942,7 +3679,7 @@
                     if (d.cate) set.add(d.cate);
                 }
             });
-            sel.innerHTML = '<option value="ALL">Tất cả Ngành</option>' + Array.from(set).sort().map(c => '<option value="' + c + '">' + c + '</option>').join('');
+            sel.innerHTML = '<option value="ALL">' + t('opt_all_cate') + '</option>' + Array.from(set).sort().map(c => '<option value="' + c + '">' + c + '</option>').join('');
             if (!set.has(state.prodCate)) state.prodCate = 'ALL';
             sel.value = state.prodCate;
         }
@@ -2956,7 +3693,7 @@
                 if (state.prodCate !== 'ALL' && d.cate !== state.prodCate) return;
                 if (d.ph1) set.add(d.ph1);
             });
-            sel.innerHTML = '<option value="ALL">Tất cả PH1</option>' + Array.from(set).sort().map(p => '<option value="' + p + '">' + p + '</option>').join('');
+            sel.innerHTML = '<option value="ALL">' + t('opt_all_ph1') + '</option>' + Array.from(set).sort().map(p => '<option value="' + p + '">' + p + '</option>').join('');
             if (!set.has(state.prodPh1)) state.prodPh1 = 'ALL';
             sel.value = state.prodPh1;
         }
@@ -2971,7 +3708,7 @@
                 if (state.prodPh1 !== 'ALL' && d.ph1 !== state.prodPh1) return;
                 if (d.ph2) set.add(d.ph2);
             });
-            sel.innerHTML = '<option value="ALL">Tất cả PH2</option>' + Array.from(set).sort().map(p => '<option value="' + p + '">' + p + '</option>').join('');
+            sel.innerHTML = '<option value="ALL">' + t('opt_all_ph2') + '</option>' + Array.from(set).sort().map(p => '<option value="' + p + '">' + p + '</option>').join('');
             if (!set.has(state.prodPh2)) state.prodPh2 = 'ALL';
             sel.value = state.prodPh2;
         }
@@ -3052,34 +3789,35 @@
             const defM = getDefaultCurrentMonth();
             const resetBtn = document.getElementById('btn-reset-month');
             if (resetBtn) {
-                resetBtn.innerText = 'Reset (T' + parseInt(defM) + ')';
+                const rText = state.currentLang === 'ko' ? ('초기화 (' + parseInt(defM) + '월)') : (state.currentLang === 'en' ? ('Reset (M' + parseInt(defM) + ')') : ('Reset (T' + parseInt(defM) + ')'));
+                resetBtn.innerText = rText;
             }
             updatePeriodNote();
         }
 
         function updatePeriodNote() {
-            const mLabels = state.selectedMonths.map(m => 'T' + parseInt(m)).join(', ');
+            const mLabels = state.selectedMonths.map(m => (state.currentLang === 'ko' ? (parseInt(m) + '월') : ('T' + parseInt(m)))).join(', ');
             const noteDom = document.getElementById('filter-period-note');
             if (noteDom) {
-                let scopeStr = '4 Kênh (GT, MT, B2B, KR)';
+                let scopeStr = (state.currentLang === 'ko' ? '4대 채널 (GT, MT, B2B, KR)' : (state.currentLang === 'en' ? '4 Channels (GT, MT, B2B, KR)' : '4 Kênh (GT, MT, B2B, KR)'));
                 if (state.activeTab === 'tab-overview' && state.dashChannel !== 'ALL') {
-                    scopeStr = 'Kênh ' + state.dashChannel;
+                    scopeStr = state.dashChannel + ' Channel';
                     if (state.dashAccount !== 'ALL') scopeStr += ' - ' + state.dashAccount;
                 } else if (state.activeTab === 'tab-gt') {
-                    scopeStr = 'Kênh GT RTM';
+                    scopeStr = (state.currentLang === 'ko' ? 'GT 채널 (RTM)' : (state.currentLang === 'en' ? 'GT Channel (RTM)' : 'Kênh GT RTM'));
                 } else if (state.activeTab === 'tab-mt') {
-                    scopeStr = 'Kênh MT' + (state.mtChain !== 'ALL' ? ' (' + state.mtChain + ')' : '');
+                    scopeStr = 'MT Channel' + (state.mtChain !== 'ALL' ? ' (' + state.mtChain + ')' : '');
                 } else if (state.activeTab === 'tab-b2b') {
-                    scopeStr = 'Kênh B2B' + (state.b2bAcc !== 'ALL' ? ' (' + state.b2bAcc + ')' : '');
+                    scopeStr = 'B2B Channel' + (state.b2bAcc !== 'ALL' ? ' (' + state.b2bAcc + ')' : '');
                 } else if (state.activeTab === 'tab-kr') {
-                    scopeStr = 'Kênh KR' + (state.krChain !== 'ALL' ? ' (' + state.krChain + ')' : '');
+                    scopeStr = 'KR Channel' + (state.krChain !== 'ALL' ? ' (' + state.krChain + ')' : '');
                 }
 
                 let textStr = '';
                 if (state.selectedMonths.length === 12) {
-                    textStr = 'Đang xem: Toàn bộ 12 Tháng/' + state.year + ' (' + scopeStr + ')';
+                    textStr = t('viewing_prefix') + t('all_12_months') + state.year + ' (' + scopeStr + ')';
                 } else {
-                    textStr = 'Đang xem: Tháng ' + mLabels + '/' + state.year + ' (' + scopeStr + ')';
+                    textStr = t('viewing_prefix') + t('month_prefix') + mLabels + '/' + state.year + ' (' + scopeStr + ')';
                 }
                 noteDom.innerHTML = '<span>⏱️</span> <span>' + textStr + '</span>';
             }
@@ -3168,28 +3906,7 @@
             else if (tabId === 'tab-kr') document.getElementById('filter-cluster-tab5')?.classList.remove('hidden');
             else if (tabId === 'tab-reports') document.getElementById('filter-cluster-tab6')?.classList.remove('hidden');
 
-            const titles = {
-                'tab-overview': 'Commercial Overview (Sell-in Toàn Công Ty)',
-                'tab-gt': 'Kênh GT (RTM Field Force Chuyên Sâu)',
-                'tab-mt': 'Kênh MT (Modern Trade Key Accounts)',
-                'tab-b2b': 'Kênh B2B (Food Service & Nhà Hàng)',
-                'tab-kr': 'Kênh KR (Key Retailer & Đại Lý Lớn)',
-                'tab-reports': 'Báo Cáo & Xuất Bản Dữ Liệu'
-            };
-            const shortTitles = {
-                'tab-overview': '1. Tổng Quan',
-                'tab-gt': '2. Kênh GT',
-                'tab-mt': '3. Kênh MT',
-                'tab-b2b': '4. Kênh B2B',
-                'tab-kr': '5. Kênh KR',
-                'tab-reports': '6. Báo Cáo'
-            };
-            const tDom = document.getElementById('top-title');
-            if (tDom) tDom.innerText = titles[tabId] || 'Commercial Overview';
-            const bDom = document.getElementById('top-breadcrumb');
-            if (bDom) bDom.innerText = 'Pages / ' + (titles[tabId] || 'Dashboard');
-            const mobTitle = document.getElementById('mobile-tab-title');
-            if (mobTitle) mobTitle.innerText = shortTitles[tabId] || titles[tabId] || 'Dashboard';
+            updateHeaderTitles();
 
             updatePeriodNote();
             renderActiveTab();
@@ -3562,11 +4279,11 @@
                 const dayLabels = sortedDays.map(d => d.substring(5));
                 const vals = sortedDays.map(d => parseFloat(((daysMap[d] || 0) / 1e9).toFixed(2)));
 
-                const channelLabel = state.dashChannel === 'ALL' ? '4 Kênh' : state.dashChannel;
+                const channelLabel = state.dashChannel === 'ALL' ? (state.currentLang === 'ko' ? '4대 채널' : (state.currentLang === 'en' ? '4 Channels' : '4 Kênh')) : state.dashChannel;
 
                 const option = {
                     legend: {
-                        data: ['Doanh số ngày ' + channelLabel + ' (Tỷ ₫)'],
+                        data: [t('chart_legend_daily_si') + ' (' + channelLabel + ') (B ₫)'],
                         top: 0,
                         textStyle: { color: '#FFFFFF', fontSize: 11.5, fontWeight: 'bold' }
                     },
@@ -3590,7 +4307,7 @@
                         axisLabel: { color: '#FFFFFF', fontSize: 9.5, fontWeight: 'bold', formatter: '{value}B' }
                     },
                     series: [{
-                        name: 'Doanh số ngày ' + channelLabel + ' (Tỷ ₫)',
+                        name: t('chart_legend_daily_si') + ' (' + channelLabel + ') (B ₫)',
                         data: vals.length > 0 ? vals : [1.2, 2.5, 1.8, 3.2, 2.1, 4.0, 3.5],
                         type: 'line',
                         smooth: true,
@@ -3654,7 +4371,7 @@
 
                 const option = {
                     legend: {
-                        data: ['Năm 2025 (Cùng kỳ)', 'Năm 2026 (Thực tế)'],
+                        data: [t('chart_legend_2025'), t('chart_legend_2026')],
                         top: 0,
                         textStyle: { color: '#FFFFFF', fontSize: 11.5, fontWeight: 'bold' }
                     },
@@ -3673,7 +4390,7 @@
                     },
                     series: [
                         {
-                            name: 'Năm 2025 (Cùng kỳ)',
+                            name: t('chart_legend_2025'),
                             type: 'bar',
                             data: data2025,
                             barMaxWidth: 13,
@@ -3690,7 +4407,7 @@
                             }
                         },
                         {
-                            name: 'Năm 2026 (Thực tế)',
+                            name: t('chart_legend_2026'),
                             type: 'bar',
                             data: data2026,
                             barMaxWidth: 15,
@@ -4449,7 +5166,7 @@
 
                 const option = {
                     legend: {
-                        data: ['Sell-in GT (SAP)', 'Sell-out Thực Tế (DMS)', 'Số Ngày Tồn Kho DOI'],
+                        data: [t('legend_si_gt'), t('legend_so_real'), t('legend_doi_days')],
                         top: 5,
                         textStyle: { color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' },
                         icon: 'roundRect'
@@ -4482,7 +5199,7 @@
                     ],
                     series: [
                         {
-                            name: 'Sell-in GT (SAP)',
+                            name: t('legend_si_gt'),
                             type: 'bar',
                             data: siArr,
                             barMaxWidth: 11,
@@ -4499,7 +5216,7 @@
                             }
                         },
                         {
-                            name: 'Sell-out Thực Tế (DMS)',
+                            name: t('legend_so_real'),
                             type: 'bar',
                             data: soArr,
                             barMaxWidth: 11,
@@ -4516,7 +5233,7 @@
                             }
                         },
                         {
-                            name: 'Số Ngày Tồn Kho DOI',
+                            name: t('legend_doi_days'),
                             type: 'line',
                             yAxisIndex: 1,
                             data: doiArr,
@@ -4588,7 +5305,7 @@
 
                 const option = {
                     legend: {
-                        data: ['ASO (Điểm Bán Active Thực Tế)', 'MCP (Tuyến Viếng Thăm Chuẩn)'],
+                        data: [t('legend_aso_active'), t('legend_mcp_std')],
                         top: 5,
                         textStyle: { color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' },
                         icon: 'roundRect'
@@ -4620,7 +5337,7 @@
                     },
                     series: [
                         {
-                            name: 'ASO (Điểm Bán Active Thực Tế)',
+                            name: t('legend_aso_active'),
                             type: 'line',
                             data: aso12M,
                             smooth: true,
@@ -4644,7 +5361,7 @@
                             }
                         },
                         {
-                            name: 'MCP (Tuyến Viếng Thăm Chuẩn)',
+                            name: t('legend_mcp_std'),
                             type: 'line',
                             data: mcp12M,
                             smooth: true,
@@ -4721,7 +5438,7 @@
 
                 const option = {
                     legend: {
-                        data: ['Daily Sell-in GT (SAP - Tỷ ₫)', 'Daily Sell-out GT (DMS - Tỷ ₫)'],
+                        data: [t('legend_daily_si_gt'), t('legend_daily_so_gt')],
                         top: 5,
                         textStyle: { color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' },
                         icon: 'roundRect'
@@ -4753,7 +5470,7 @@
                     },
                     series: [
                         {
-                            name: 'Daily Sell-in GT (SAP - Tỷ ₫)',
+                            name: t('legend_daily_si_gt'),
                             type: 'line',
                             data: siVals.length > 0 ? siVals : [0.5, 1.2, 0.8, 1.5, 2.0],
                             smooth: true,
@@ -4771,7 +5488,7 @@
                             }
                         },
                         {
-                            name: 'Daily Sell-out GT (DMS - Tỷ ₫)',
+                            name: t('legend_daily_so_gt'),
                             type: 'line',
                             data: soVals.length > 0 ? soVals : [0.8, 1.0, 1.4, 1.8, 1.6],
                             smooth: true,
@@ -5388,7 +6105,7 @@
 
                 const option = {
                     legend: {
-                        data: ['Doanh số chuỗi (Tỷ ₫)'],
+                        data: [t('legend_mt_chain_si')],
                         top: 0,
                         textStyle: { color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }
                     },
@@ -5406,7 +6123,7 @@
                         axisLabel: { color: '#FFFFFF', fontSize: 10, fontWeight: 'bold' }
                     },
                     series: [{
-                        name: 'Doanh số chuỗi (Tỷ ₫)',
+                        name: t('legend_mt_chain_si'),
                         data: sorted.map(d => d.val).reverse(),
                         type: 'bar',
                         barMaxWidth: 13,
@@ -5453,7 +6170,7 @@
 
                 const option = {
                     legend: {
-                        data: ['Doanh số phân khúc (Tỷ ₫)'],
+                        data: [t('legend_mt_subchan_si')],
                         top: 0,
                         textStyle: { color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }
                     },
@@ -5471,7 +6188,7 @@
                         axisLabel: { color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }
                     },
                     series: [{
-                        name: 'Doanh số phân khúc (Tỷ ₫)',
+                        name: t('legend_mt_subchan_si'),
                         data: barData.map(d => d.val).reverse(),
                         type: 'bar',
                         barMaxWidth: 15,
@@ -5529,7 +6246,7 @@
                         }
                     },
                     legend: {
-                        data: ['Doanh số xuất hàng MT (Tỷ ₫)'],
+                        data: [t('legend_mt_daily_si')],
                         top: 4,
                         textStyle: { color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' }
                     },
@@ -5546,7 +6263,7 @@
                         axisLabel: { color: '#E2E8F0', fontSize: 9.5, formatter: '{value}B' }
                     },
                     series: [{
-                        name: 'Doanh số xuất hàng MT (Tỷ ₫)',
+                        name: t('legend_mt_daily_si'),
                         data: vals,
                         type: 'line',
                         smooth: 0.35,
@@ -8027,6 +8744,10 @@
 
         function initApp() {
             try {
+                // Initialize Language
+                const savedLang = localStorage.getItem('cj_lang') || 'vi';
+                setLanguage(savedLang);
+
                 initDropdowns();
                 updateMonthChipsUI();
                 initAuth();
@@ -8057,23 +8778,23 @@
     <nav id="cj-mobile-bottom-nav" class="cj-mobile-bottom-nav">
         <a onclick="switchTab('tab-overview')" id="bnav-tab-overview" class="bnav-item active">
             <span class="bnav-icon">📊</span>
-            <span class="bnav-label">Tổng Quan</span>
+            <span class="bnav-label" data-i18n="bnav_overview">Tổng Quan</span>
         </a>
         <a onclick="switchTab('tab-gt')" id="bnav-tab-gt" class="bnav-item">
             <span class="bnav-icon">📍</span>
-            <span class="bnav-label">Kênh GT</span>
+            <span class="bnav-label" data-i18n="bnav_gt">Kênh GT</span>
         </a>
         <a onclick="switchTab('tab-mt')" id="bnav-tab-mt" class="bnav-item">
             <span class="bnav-icon">🏬</span>
-            <span class="bnav-label">Kênh MT</span>
+            <span class="bnav-label" data-i18n="bnav_mt">Kênh MT</span>
         </a>
         <a onclick="switchTab('tab-b2b')" id="bnav-tab-b2b" class="bnav-item">
             <span class="bnav-icon">🍽️</span>
-            <span class="bnav-label">Kênh B2B</span>
+            <span class="bnav-label" data-i18n="bnav_b2b">Kênh B2B</span>
         </a>
         <a onclick="switchTab('tab-kr')" id="bnav-tab-kr" class="bnav-item">
             <span class="bnav-icon">🏪</span>
-            <span class="bnav-label">Kênh KR</span>
+            <span class="bnav-label" data-i18n="bnav_kr">Kênh KR</span>
         </a>
     </nav>
 
@@ -8091,7 +8812,20 @@
                 <button type="button" onclick="closeMobileDrawer()" class="text-white/80 hover:text-white text-xl font-bold p-1">✕</button>
             </div>
             <div class="cj-drawer-body">
-                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">Chức Năng Hệ Thống</div>
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1" data-i18n="lbl_language">Ngôn Ngữ / Language</div>
+                <div class="grid grid-cols-3 gap-2 mb-4">
+                    <button type="button" onclick="setLanguage('vi'); closeMobileDrawer();" id="m-lang-btn-vi" class="py-2 px-1 rounded-xl text-xs font-black border flex flex-col items-center gap-1 transition-all bg-sky-50 text-sky-800 border-sky-300 shadow-sm">
+                        <span class="text-base">🇻🇳</span> <span>VIE</span>
+                    </button>
+                    <button type="button" onclick="setLanguage('en'); closeMobileDrawer();" id="m-lang-btn-en" class="py-2 px-1 rounded-xl text-xs font-black border flex flex-col items-center gap-1 transition-all bg-white text-slate-700 border-slate-200">
+                        <span class="text-base">🇬🇧</span> <span>ENG</span>
+                    </button>
+                    <button type="button" onclick="setLanguage('ko'); closeMobileDrawer();" id="m-lang-btn-ko" class="py-2 px-1 rounded-xl text-xs font-black border flex flex-col items-center gap-1 transition-all bg-white text-slate-700 border-slate-200">
+                        <span class="text-base">🇰🇷</span> <span>KOR</span>
+                    </button>
+                </div>
+
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1" data-i18n="lbl_sys_function">Chức Năng Hệ Thống</div>
                 <button type="button" id="m-btn-admin" onclick="closeMobileDrawer(); openAdminModal();" class="drawer-action-btn bg-indigo-50 text-indigo-700 hover:bg-indigo-100 hidden">
                     <span>⚙️</span> <span>Quản Trị Người Dùng (Admin)</span>
                 </button>
