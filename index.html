@@ -1503,14 +1503,52 @@
 
             <!-- BỘ CHỌN NGÔN NGỮ (LANGUAGE SELECTOR: VI | EN | KO) -->
             <div class="flex items-center gap-1 bg-white/15 hover:bg-white/25 rounded-lg p-0.5 border border-white/30 transition-all ml-auto mr-2" id="lang-switcher-container">
-                <button type="button" onclick="setLanguage('vi')" id="lang-btn-vi" class="px-2 py-0.5 rounded text-xs font-black transition-all flex items-center gap-1 bg-white text-blue-900 shadow" title="Tiếng Việt">
-                    <span>🇻🇳</span> <span class="hidden sm:inline">VIE</span>
+                <button type="button" onclick="setLanguage('vi')" id="lang-btn-vi" class="px-2 py-1 rounded text-xs font-black transition-all flex items-center gap-1.5 bg-white text-blue-900 shadow" title="Tiếng Việt">
+                    <svg viewBox="0 0 30 20" class="w-4 h-2.5 rounded-[2px] shadow-sm flex-shrink-0" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="30" height="20" fill="#da251d"/>
+                        <polygon points="15,4 16.55,8.76 21.55,8.76 17.5,11.71 19.05,16.47 15,13.53 10.95,16.47 12.5,11.71 8.45,8.76 13.45,8.76" fill="#ff0"/>
+                    </svg>
+                    <span>VI</span>
                 </button>
-                <button type="button" onclick="setLanguage('en')" id="lang-btn-en" class="px-2 py-0.5 rounded text-xs font-black transition-all flex items-center gap-1 text-white hover:bg-white/20" title="English">
-                    <span>🇬🇧</span> <span class="hidden sm:inline">ENG</span>
+                <button type="button" onclick="setLanguage('en')" id="lang-btn-en" class="px-2 py-1 rounded text-xs font-black transition-all flex items-center gap-1.5 text-white hover:bg-white/20" title="English">
+                    <svg viewBox="0 0 60 30" class="w-4 h-2.5 rounded-[2px] shadow-sm flex-shrink-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="60" height="30" fill="#012169"/>
+                        <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+                        <path d="M0,0 L60,30 M60,0 L0,30" stroke="#c8102e" stroke-width="2"/>
+                        <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+                        <path d="M30,0 v30 M0,15 h60" stroke="#c8102e" stroke-width="6"/>
+                    </svg>
+                    <span>EN</span>
                 </button>
-                <button type="button" onclick="setLanguage('ko')" id="lang-btn-ko" class="px-2 py-0.5 rounded text-xs font-black transition-all flex items-center gap-1 text-white hover:bg-white/20" title="한국어">
-                    <span>🇰🇷</span> <span class="hidden sm:inline">KOR</span>
+                <button type="button" onclick="setLanguage('ko')" id="lang-btn-ko" class="px-2 py-1 rounded text-xs font-black transition-all flex items-center gap-1.5 text-white hover:bg-white/20" title="한국어">
+                    <svg viewBox="0 0 30 20" class="w-4 h-2.5 rounded-[2px] shadow-sm flex-shrink-0 border border-slate-300" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="30" height="20" fill="#ffffff"/>
+                        <g transform="translate(15,10) rotate(-33.7)">
+                            <path d="M-5,0 A5,5 0 0,1 5,0 A2.5,2.5 0 0,1 0,0 A2.5,2.5 0 0,0 -5,0" fill="#cd2e3a"/>
+                            <path d="M-5,0 A5,5 0 0,0 5,0 A2.5,2.5 0 0,0 0,0 A2.5,2.5 0 0,1 -5,0" fill="#0047a0"/>
+                        </g>
+                        <g transform="translate(7.5,5) rotate(33.7)" stroke="#000" stroke-width="0.8">
+                            <line x1="-2" y1="-1.5" x2="2" y2="-1.5"/>
+                            <line x1="-2" y1="0" x2="2" y2="0"/>
+                            <line x1="-2" y1="1.5" x2="2" y2="1.5"/>
+                        </g>
+                        <g transform="translate(22.5,15) rotate(33.7)" stroke="#000" stroke-width="0.8">
+                            <line x1="-2" y1="-1.5" x2="-0.4" y2="-1.5"/><line x1="0.4" y1="-1.5" x2="2" y2="-1.5"/>
+                            <line x1="-2" y1="0" x2="-0.4" y2="0"/><line x1="0.4" y1="0" x2="2" y2="0"/>
+                            <line x1="-2" y1="1.5" x2="-0.4" y2="1.5"/><line x1="0.4" y1="1.5" x2="2" y2="1.5"/>
+                        </g>
+                        <g transform="translate(22.5,5) rotate(-33.7)" stroke="#000" stroke-width="0.8">
+                            <line x1="-2" y1="-1.5" x2="-0.4" y2="-1.5"/><line x1="0.4" y1="-1.5" x2="2" y2="-1.5"/>
+                            <line x1="-2" y1="0" x2="2" y2="0"/>
+                            <line x1="-2" y1="1.5" x2="-0.4" y2="1.5"/><line x1="0.4" y1="1.5" x2="2" y2="1.5"/>
+                        </g>
+                        <g transform="translate(7.5,15) rotate(-33.7)" stroke="#000" stroke-width="0.8">
+                            <line x1="-2" y1="-1.5" x2="2" y2="-1.5"/>
+                            <line x1="-2" y1="0" x2="-0.4" y2="0"/><line x1="0.4" y1="0" x2="2" y2="0"/>
+                            <line x1="-2" y1="1.5" x2="2" y2="1.5"/>
+                        </g>
+                    </svg>
+                    <span>KO</span>
                 </button>
             </div>
 
@@ -3190,9 +3228,9 @@
                 const btn = document.getElementById('lang-btn-' + l);
                 if (btn) {
                     if (l === lang) {
-                        btn.className = 'px-2 py-0.5 rounded text-xs font-black transition-all flex items-center gap-1 bg-white text-blue-900 shadow';
+                        btn.className = 'px-2 py-1 rounded text-xs font-black transition-all flex items-center gap-1.5 bg-white text-blue-900 shadow';
                     } else {
-                        btn.className = 'px-2 py-0.5 rounded text-xs font-black transition-all flex items-center gap-1 text-white hover:bg-white/20';
+                        btn.className = 'px-2 py-1 rounded text-xs font-black transition-all flex items-center gap-1.5 text-white hover:bg-white/20';
                     }
                 }
             });
@@ -8814,14 +8852,50 @@
             <div class="cj-drawer-body">
                 <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1" data-i18n="lbl_language">Ngôn Ngữ / Language</div>
                 <div class="grid grid-cols-3 gap-2 mb-4">
-                    <button type="button" onclick="setLanguage('vi'); closeMobileDrawer();" id="m-lang-btn-vi" class="py-2 px-1 rounded-xl text-xs font-black border flex flex-col items-center gap-1 transition-all bg-sky-50 text-sky-800 border-sky-300 shadow-sm">
-                        <span class="text-base">🇻🇳</span> <span>VIE</span>
+                    <button type="button" onclick="setLanguage('vi'); closeMobileDrawer();" id="m-lang-btn-vi" class="py-2.5 px-1 rounded-xl text-xs font-black border flex flex-col items-center gap-1.5 transition-all bg-sky-50 text-sky-800 border-sky-300 shadow-sm">
+                        <svg viewBox="0 0 30 20" class="w-6 h-4 rounded-[2px] shadow-sm flex-shrink-0" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="30" height="20" fill="#da251d"/>
+                            <polygon points="15,4 16.55,8.76 21.55,8.76 17.5,11.71 19.05,16.47 15,13.53 10.95,16.47 12.5,11.71 8.45,8.76 13.45,8.76" fill="#ff0"/>
+                        </svg>
+                        <span>VIE</span>
                     </button>
-                    <button type="button" onclick="setLanguage('en'); closeMobileDrawer();" id="m-lang-btn-en" class="py-2 px-1 rounded-xl text-xs font-black border flex flex-col items-center gap-1 transition-all bg-white text-slate-700 border-slate-200">
-                        <span class="text-base">🇬🇧</span> <span>ENG</span>
+                    <button type="button" onclick="setLanguage('en'); closeMobileDrawer();" id="m-lang-btn-en" class="py-2.5 px-1 rounded-xl text-xs font-black border flex flex-col items-center gap-1.5 transition-all bg-white text-slate-700 border-slate-200">
+                        <svg viewBox="0 0 60 30" class="w-6 h-4 rounded-[2px] shadow-sm flex-shrink-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="60" height="30" fill="#012169"/>
+                            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+                            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#c8102e" stroke-width="2"/>
+                            <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+                            <path d="M30,0 v30 M0,15 h60" stroke="#c8102e" stroke-width="6"/>
+                        </svg>
+                        <span>EN</span>
                     </button>
-                    <button type="button" onclick="setLanguage('ko'); closeMobileDrawer();" id="m-lang-btn-ko" class="py-2 px-1 rounded-xl text-xs font-black border flex flex-col items-center gap-1 transition-all bg-white text-slate-700 border-slate-200">
-                        <span class="text-base">🇰🇷</span> <span>KOR</span>
+                    <button type="button" onclick="setLanguage('ko'); closeMobileDrawer();" id="m-lang-btn-ko" class="py-2.5 px-1 rounded-xl text-xs font-black border flex flex-col items-center gap-1.5 transition-all bg-white text-slate-700 border-slate-200">
+                        <svg viewBox="0 0 30 20" class="w-6 h-4 rounded-[2px] shadow-sm flex-shrink-0 border border-slate-300" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="30" height="20" fill="#ffffff"/>
+                            <g transform="translate(15,10) rotate(-33.7)">
+                                <path d="M-5,0 A5,5 0 0,1 5,0 A2.5,2.5 0 0,1 0,0 A2.5,2.5 0 0,0 -5,0" fill="#cd2e3a"/>
+                                <path d="M-5,0 A5,5 0 0,0 5,0 A2.5,2.5 0 0,0 0,0 A2.5,2.5 0 0,1 -5,0" fill="#0047a0"/>
+                            </g>
+                            <g transform="translate(7.5,5) rotate(33.7)" stroke="#000" stroke-width="0.8">
+                                <line x1="-2" y1="-1.5" x2="2" y2="-1.5"/><line x1="-2" y1="0" x2="2" y2="0"/><line x1="-2" y1="1.5" x2="2" y2="1.5"/>
+                            </g>
+                            <g transform="translate(22.5,15) rotate(33.7)" stroke="#000" stroke-width="0.8">
+                                <line x1="-2" y1="-1.5" x2="-0.4" y2="-1.5"/><line x1="0.4" y1="-1.5" x2="2" y2="-1.5"/>
+                                <line x1="-2" y1="0" x2="-0.4" y2="0"/><line x1="0.4" y1="0" x2="2" y2="0"/>
+                                <line x1="-2" y1="1.5" x2="-0.4" y2="1.5"/><line x1="0.4" y1="1.5" x2="2" y2="1.5"/>
+                            </g>
+                            <g transform="translate(22.5,5) rotate(-33.7)" stroke="#000" stroke-width="0.8">
+                                <line x1="-2" y1="-1.5" x2="-0.4" y2="-1.5"/><line x1="0.4" y1="-1.5" x2="2" y2="-1.5"/>
+                                <line x1="-2" y1="0" x2="2" y2="0"/>
+                                <line x1="-2" y1="1.5" x2="-0.4" y2="1.5"/><line x1="0.4" y1="1.5" x2="2" y2="1.5"/>
+                            </g>
+                            <g transform="translate(7.5,15) rotate(-33.7)" stroke="#000" stroke-width="0.8">
+                                <line x1="-2" y1="-1.5" x2="2" y2="-1.5"/>
+                                <line x1="-2" y1="0" x2="-0.4" y2="0"/><line x1="0.4" y1="0" x2="2" y2="0"/>
+                                <line x1="-2" y1="1.5" x2="2" y2="1.5"/>
+                            </g>
+                        </svg>
+                        <span>KOR</span>
                     </button>
                 </div>
 
