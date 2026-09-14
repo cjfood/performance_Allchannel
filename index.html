@@ -1888,7 +1888,13 @@
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #f43f5e !important;">
                         <div>
                             <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">DOANH SỐ SELL-OUT</div>
-                            <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="gt-kpi-sellout">0,0 B</div>
+                            <div class="flex items-center justify-between gap-2 mt-1 mb-1">
+                                <div class="text-2xl font-black font-mono-num text-slate-900 tracking-tight" id="gt-kpi-sellout">0,0 B</div>
+                                <div class="text-right flex flex-col items-end">
+                                    <span id="gt-kpi-so-achieve" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num bg-rose-50 text-rose-600 border border-rose-200 shadow-2xs" title="Tỷ lệ đạt chỉ tiêu Target Sell-out">Đạt 0.0%</span>
+                                    <span id="gt-kpi-so-target-sub" class="text-[10px] text-slate-400 font-semibold font-mono-num mt-0.5">Tgt: 0 B</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
                             <div id="gt-kpi-so-yoy-wrap">YoY: <b id="gt-kpi-so-yoy" class="text-rose-600">-0.0%</b> <span class="text-slate-400 font-normal" id="gt-kpi-so-ly">(vs cùng kỳ: 0 B)</span></div>
@@ -1900,7 +1906,13 @@
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #2563eb !important;">
                         <div>
                             <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide">DOANH SỐ SELL-IN GT</div>
-                            <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="gt-kpi-sellin">0,0 B</div>
+                            <div class="flex items-center justify-between gap-2 mt-1 mb-1">
+                                <div class="text-2xl font-black font-mono-num text-slate-900 tracking-tight" id="gt-kpi-sellin">0,0 B</div>
+                                <div class="text-right flex flex-col items-end">
+                                    <span id="gt-kpi-si-achieve" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num bg-rose-50 text-rose-600 border border-rose-200 shadow-2xs" title="Tỷ lệ đạt chỉ tiêu Target Sell-in GT">Đạt 0.0%</span>
+                                    <span id="gt-kpi-si-target-sub" class="text-[10px] text-slate-400 font-semibold font-mono-num mt-0.5">Tgt: 0 B</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
                             <div id="gt-kpi-si-yoy-wrap">YoY: <b id="gt-kpi-si-yoy" class="text-rose-600">-0.0%</b> <span class="text-slate-400 font-normal" id="gt-kpi-si-ly">(vs cùng kỳ: 0 B)</span></div>
@@ -4099,14 +4111,16 @@
                 const soYoY = lySellout > 0 ? ((totalSellout - lySellout) / lySellout) * 100 : 0;
                 const soYtd = ytdSellout2025 > 0 ? ((ytdSellout2026 - ytdSellout2025) / ytdSellout2025) * 100 : 0;
 
-                // Geo-filtered NPP set for GT Sell-in
+                // Geo-filtered NPP set for GT Sell-in & Target
                 const allowedNppCodes = new Set();
+                const allowedNppNames = new Set();
                 DIM_GEO_HIER.forEach(d => {
                     if (state.geoMien !== 'ALL' && d.mien !== state.geoMien) return;
                     if (state.geoVung !== 'ALL' && d.vung !== state.geoVung) return;
                     if (state.geoGsbh !== 'ALL' && d.gsbh !== state.geoGsbh) return;
                     if (state.geoNpp !== 'ALL' && d.npp_code !== state.geoNpp) return;
-                    allowedNppCodes.add(d.npp_code);
+                    if (d.npp_code) allowedNppCodes.add(d.npp_code);
+                    if (d.npp_name) allowedNppNames.add(d.npp_name);
                 });
                 const isGeoFiltered = (state.geoMien !== 'ALL' || state.geoVung !== 'ALL' || state.geoGsbh !== 'ALL' || state.geoNpp !== 'ALL');
 
@@ -4149,6 +4163,40 @@
                 const siYoY = lySellinGT > 0 ? ((totalSellinGT - lySellinGT) / lySellinGT) * 100 : 0;
                 const siYtd = ytdSellinGT2025 > 0 ? ((ytdSellinGT2026 - ytdSellinGT2025) / ytdSellinGT2025) * 100 : 0;
 
+                // Target Sell-out GT (Filters by Geo & Product)
+                let totalTargetSo = 0;
+                if (typeof TARGET_SELLOUT !== 'undefined' && Array.isArray(TARGET_SELLOUT)) {
+                    TARGET_SELLOUT.filter(d => {
+                        if (d.channel !== 'GT') return false;
+                        if (d.year !== state.year || !state.selectedMonths.includes(d.month.substring(5, 7))) return false;
+                        if (isGeoFiltered) {
+                            if (!allowedNppCodes.has(d.distributor_code) && !allowedNppNames.has(d.distributor_code)) return false;
+                        }
+                        if (state.prodStorage !== 'ALL' && d.storage && d.storage !== state.prodStorage) return false;
+                        if (state.prodPh1 !== 'ALL' && d.ph1 && d.ph1 !== state.prodPh1) return false;
+                        return true;
+                    }).forEach(d => totalTargetSo += (Number(d.target_amt) || 0));
+                }
+                const soAchieveRate = totalTargetSo > 0 ? (totalSellout / totalTargetSo) * 100 : 0;
+
+                // Target Sell-in GT (Filters by Geo & Product)
+                let totalTargetSi = 0;
+                if (typeof TARGET_SELLIN !== 'undefined' && Array.isArray(TARGET_SELLIN)) {
+                    TARGET_SELLIN.filter(d => {
+                        if (d.channel !== 'GT') return false;
+                        if (d.year !== state.year || !state.selectedMonths.includes(d.month.substring(5, 7))) return false;
+                        if (isGeoFiltered) {
+                            const matchCode = d.distributor_code && allowedNppCodes.has(d.distributor_code);
+                            const matchName = d.account_npp && (allowedNppNames.has(d.account_npp) || allowedNppCodes.has(d.account_npp));
+                            if (!matchCode && !matchName) return false;
+                        }
+                        if (state.prodStorage !== 'ALL' && d.storage && d.storage !== state.prodStorage) return false;
+                        if (state.prodPh1 !== 'ALL' && d.ph1 && d.ph1 !== state.prodPh1) return false;
+                        return true;
+                    }).forEach(d => totalTargetSi += (Number(d.target_amt) || 0));
+                }
+                const siAchieveRate = totalTargetSi > 0 ? (totalSellinGT / totalTargetSi) * 100 : 0;
+
                 // MCP and Strike Rate (Dynamic Geo Filtering)
                 let totalMcp = 0;
                 if (typeof GT_MCP_M !== 'undefined' && Array.isArray(GT_MCP_M)) {
@@ -4190,6 +4238,29 @@
                     elSo.innerText = formatBnVn(totalSellout);
                     elSo.title = formatExactVND(totalSellout);
                 }
+                const elSoAch = document.getElementById('gt-kpi-so-achieve');
+                const elSoTgtSub = document.getElementById('gt-kpi-so-target-sub');
+                if (elSoAch) {
+                    if (totalTargetSo > 0) {
+                        elSoAch.innerText = 'Đạt ' + soAchieveRate.toFixed(1) + '%';
+                        elSoAch.title = 'Sell-out Thực Tế: ' + formatExactVND(totalSellout) + ' / Target: ' + formatExactVND(totalTargetSo);
+                        if (soAchieveRate >= 100) {
+                            elSoAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs';
+                        } else if (soAchieveRate >= 80) {
+                            elSoAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num bg-sky-50 text-sky-700 border border-sky-200 shadow-2xs';
+                        } else {
+                            elSoAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num bg-rose-50 text-rose-600 border border-rose-200 shadow-2xs';
+                        }
+                    } else {
+                        elSoAch.innerText = 'Đạt -';
+                        elSoAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono-num bg-slate-100 text-slate-400 border border-slate-200';
+                        elSoAch.title = 'Không có chỉ tiêu Target cho kỳ chọn';
+                    }
+                }
+                if (elSoTgtSub) {
+                    elSoTgtSub.innerText = totalTargetSo > 0 ? 'Tgt: ' + formatBnVn(totalTargetSo) : 'Tgt: -';
+                    if (totalTargetSo > 0) elSoTgtSub.title = 'Target Sell-out MTD: ' + formatExactVND(totalTargetSo);
+                }
                 const elSoYoy = document.getElementById('gt-kpi-so-yoy');
                 if (elSoYoy) {
                     elSoYoy.innerText = (soYoY >= 0 ? '+' : '') + soYoY.toFixed(1) + '%';
@@ -4210,6 +4281,29 @@
                 if (elSi) {
                     elSi.innerText = formatBnVn(totalSellinGT);
                     elSi.title = formatExactVND(totalSellinGT);
+                }
+                const elSiAch = document.getElementById('gt-kpi-si-achieve');
+                const elSiTgtSub = document.getElementById('gt-kpi-si-target-sub');
+                if (elSiAch) {
+                    if (totalTargetSi > 0) {
+                        elSiAch.innerText = 'Đạt ' + siAchieveRate.toFixed(1) + '%';
+                        elSiAch.title = 'Sell-in Thực Tế: ' + formatExactVND(totalSellinGT) + ' / Target: ' + formatExactVND(totalTargetSi);
+                        if (siAchieveRate >= 100) {
+                            elSiAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs';
+                        } else if (siAchieveRate >= 80) {
+                            elSiAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num bg-sky-50 text-sky-700 border border-sky-200 shadow-2xs';
+                        } else {
+                            elSiAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num bg-rose-50 text-rose-600 border border-rose-200 shadow-2xs';
+                        }
+                    } else {
+                        elSiAch.innerText = 'Đạt -';
+                        elSiAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono-num bg-slate-100 text-slate-400 border border-slate-200';
+                        elSiAch.title = 'Không có chỉ tiêu Target cho kỳ chọn';
+                    }
+                }
+                if (elSiTgtSub) {
+                    elSiTgtSub.innerText = totalTargetSi > 0 ? 'Tgt: ' + formatBnVn(totalTargetSi) : 'Tgt: -';
+                    if (totalTargetSi > 0) elSiTgtSub.title = 'Target Sell-in GT MTD: ' + formatExactVND(totalTargetSi);
                 }
                 const elSiYoy = document.getElementById('gt-kpi-si-yoy');
                 if (elSiYoy) {
