@@ -4816,7 +4816,7 @@
                     const sShare = totalSellin > 0 ? (sVal / totalSellin) * 100 : 0;
 
                     let rowHtml = '<tr class="bg-slate-50 font-bold border-b border-slate-200">';
-                    rowHtml += '<td><span class="tree-toggle" onclick="toggleTreeNode('' + sId + '')">' + (sOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + storage + '</span></td>';
+                    rowHtml += '<td><span class="tree-toggle" onclick="toggleTreeNode(\'' + sId + '\')\">' + (sOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + storage + '</span></td>';
                     rowHtml += '<td class="text-right font-mono-num font-bold text-sky-800" title="' + formatExactVND(sVal) + '">' + formatVND(sVal) + '</td>';
                     rowHtml += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(sTarget) + '">' + (sTarget > 0 ? formatVND(sTarget) : '-') + '</td>';
                     rowHtml += '<td class="text-center font-mono-num">' + formatAchieveBadge(sVal, sTarget) + '</td>';
@@ -4835,7 +4835,7 @@
                             const cShare = totalSellin > 0 ? (cVal / totalSellin) * 100 : 0;
 
                             let cRow = '<tr class="bg-slate-100/60 font-semibold border-b border-slate-200/60">';
-                            cRow += '<td style="padding-left: 24px;"><span class="tree-toggle" onclick="toggleTreeNode('' + cId + '')">' + (cOpen ? '−' : '+') + '</span><span class="text-slate-800">' + cate + '</span></td>';
+                            cRow += '<td style="padding-left: 24px;"><span class="tree-toggle" onclick="toggleTreeNode(\'' + cId + '\')\">' + (cOpen ? '−' : '+') + '</span><span class="text-slate-800">' + cate + '</span></td>';
                             cRow += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(cVal) + '">' + formatVND(cVal) + '</td>';
                             cRow += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(cTarget) + '">' + (cTarget > 0 ? formatVND(cTarget) : '-') + '</td>';
                             cRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(cVal, cTarget) + '</td>';
@@ -4854,7 +4854,7 @@
                                     const p1Share = totalSellin > 0 ? (p1Val / totalSellin) * 100 : 0;
 
                                     let p1Row = '<tr class="bg-white hover:bg-slate-50 border-b border-slate-100">';
-                                    p1Row += '<td style="padding-left: 44px;"><span class="tree-toggle" onclick="toggleTreeNode('' + p1Id + '')">' + (p1Open ? '−' : '+') + '</span><span class="text-slate-700 font-medium">' + ph1 + '</span></td>';
+                                    p1Row += '<td style="padding-left: 44px;"><span class="tree-toggle" onclick="toggleTreeNode(\'' + p1Id + '\')\">' + (p1Open ? '−' : '+') + '</span><span class="text-slate-700 font-medium">' + ph1 + '</span></td>';
                                     p1Row += '<td class="text-right font-mono-num text-slate-700" title="' + formatExactVND(p1Val) + '">' + formatVND(p1Val) + '</td>';
                                     p1Row += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(p1Target) + '">' + (p1Target > 0 ? formatVND(p1Target) : '-') + '</td>';
                                     p1Row += '<td class="text-center font-mono-num">' + formatAchieveBadge(p1Val, p1Target) + '</td>';
