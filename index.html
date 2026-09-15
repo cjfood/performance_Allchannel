@@ -1931,6 +1931,8 @@
                                 <tr>
                                     <th data-i18n="th_prod_struct">Cơ Cấu Sản Phẩm</th>
                                     <th class="text-right" data-i18n="th_si_bil_mil">Doanh Số Sell-in (Bil/Mil)</th>
+                                    <th class="text-right" data-i18n="th_target">Target</th>
+                                    <th class="text-center" data-i18n="th_pct_achv">% Đạt</th>
                                     <th class="text-right" data-i18n="th_share_pct">Tỷ Trọng %</th>
                                     <th class="text-right" data-i18n="th_growth_yoy">Tăng Trưởng YoY</th>
                                 </tr>
@@ -4709,6 +4711,31 @@
                     data.forEach(d => totalSellin += (Number(d.sellin_val) || 0));
                 }
 
+                // Xây dựng bản đồ ph1 -> cate từ DIM_PROD_HIER và SELLIN_M
+                const ph1ToCateMap = {};
+                if (typeof DIM_PROD_HIER !== 'undefined' && Array.isArray(DIM_PROD_HIER)) {
+                    DIM_PROD_HIER.forEach(p => {
+                        if (p.ph1) {
+                            const kSp = ((p.storage || '') + '_' + p.ph1).trim().toLowerCase();
+                            const kP = p.ph1.trim().toLowerCase();
+                            if (p.cate) {
+                                ph1ToCateMap[kSp] = p.cate;
+                                if (!ph1ToCateMap[kP]) ph1ToCateMap[kP] = p.cate;
+                            }
+                        }
+                    });
+                }
+                if (typeof SELLIN_M !== 'undefined' && Array.isArray(SELLIN_M)) {
+                    SELLIN_M.forEach(p => {
+                        if (p.ph1 && p.cate) {
+                            const kSp = ((p.storage || '') + '_' + p.ph1).trim().toLowerCase();
+                            const kP = p.ph1.trim().toLowerCase();
+                            if (!ph1ToCateMap[kSp]) ph1ToCateMap[kSp] = p.cate;
+                            if (!ph1ToCateMap[kP]) ph1ToCateMap[kP] = p.cate;
+                        }
+                    });
+                }
+
                 const tree = {};
                 data.forEach(d => {
                     const s = d.storage || 'Ambient';
@@ -4730,6 +4757,53 @@
                     tree[s].children[c].children[p1].children[p2].val += v;
                 });
 
+                // Bổ sung các sản phẩm có Target trong kỳ vào cây phân cấp
+                if (typeof TARGET_SELLIN !== 'undefined' && Array.isArray(TARGET_SELLIN)) {
+                    TARGET_SELLIN.filter(d => {
+                        if (d.year !== state.year || !state.selectedMonths.includes(d.month.substring(5, 7))) return false;
+                        if (state.dashChannel !== 'ALL' && d.channel !== state.dashChannel) return false;
+                        if (state.dashSubChannel !== 'ALL' && d.sub_channel !== state.dashSubChannel) return false;
+                        if (state.dashAccount !== 'ALL' && d.account_npp !== state.dashAccount && d.distributor_code !== state.dashAccount) return false;
+                        if (state.prodStorage !== 'ALL' && d.storage && d.storage !== state.prodStorage) return false;
+                        if (state.prodPh1 !== 'ALL' && d.ph1 && d.ph1 !== state.prodPh1) return false;
+                        return true;
+                    }).forEach(d => {
+                        const s = d.storage || 'Ambient';
+                        const p1 = d.ph1 || 'Other PH1';
+                        const c = ph1ToCateMap[((s + '_' + p1).toLowerCase())] || ph1ToCateMap[p1.toLowerCase()] || 'Other Category';
+                        if (!tree[s]) tree[s] = { val: 0, children: {} };
+                        if (!tree[s].children[c]) tree[s].children[c] = { val: 0, children: {} };
+                        if (!tree[s].children[c].children[p1]) tree[s].children[c].children[p1] = { val: 0, children: {} };
+                    });
+                }
+
+                // Map Target Sell-in cho từng cấp Sản phẩm
+                const prodStorageTargetMap = {};
+                const prodCateTargetMap = {};
+                const prodPh1TargetMap = {};
+
+                if (typeof TARGET_SELLIN !== 'undefined' && Array.isArray(TARGET_SELLIN)) {
+                    TARGET_SELLIN.filter(d => {
+                        if (d.year !== state.year || !state.selectedMonths.includes(d.month.substring(5, 7))) return false;
+                        if (state.dashChannel !== 'ALL' && d.channel !== state.dashChannel) return false;
+                        if (state.dashSubChannel !== 'ALL' && d.sub_channel !== state.dashSubChannel) return false;
+                        if (state.dashAccount !== 'ALL' && d.account_npp !== state.dashAccount && d.distributor_code !== state.dashAccount) return false;
+                        if (state.prodStorage !== 'ALL' && d.storage && d.storage !== state.prodStorage) return false;
+                        if (state.prodPh1 !== 'ALL' && d.ph1 && d.ph1 !== state.prodPh1) return false;
+                        return true;
+                    }).forEach(d => {
+                        const s = d.storage || 'Ambient';
+                        const p1 = d.ph1 || 'Other PH1';
+                        const c = ph1ToCateMap[((s + '_' + p1).toLowerCase())] || ph1ToCateMap[p1.toLowerCase()] || 'Other Category';
+                        const tgt = Number(d.target_amt) || 0;
+
+                        prodStorageTargetMap[s] = (prodStorageTargetMap[s] || 0) + tgt;
+                        prodCateTargetMap[s + '_' + c] = (prodCateTargetMap[s + '_' + c] || 0) + tgt;
+                        prodPh1TargetMap[s + '_' + c + '_' + p1] = (prodPh1TargetMap[s + '_' + c + '_' + p1] || 0) + tgt;
+                        prodPh1TargetMap[s + '_' + p1] = (prodPh1TargetMap[s + '_' + p1] || 0) + tgt;
+                    });
+                }
+
                 const tbody = document.getElementById('tbody-tree-prod');
                 if (!tbody) return;
                 const htmlRows = [];
@@ -4738,11 +4812,14 @@
                     const sId = 'prod_' + storage;
                     const sOpen = openNodes.has(sId);
                     const sVal = tree[storage].val;
+                    const sTarget = prodStorageTargetMap[storage] || 0;
                     const sShare = totalSellin > 0 ? (sVal / totalSellin) * 100 : 0;
 
                     let rowHtml = '<tr class="bg-slate-50 font-bold border-b border-slate-200">';
-                    rowHtml += '<td><span class="tree-toggle" onclick="toggleTreeNode(\'' + sId + '\')">' + (sOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + storage + '</span></td>';
+                    rowHtml += '<td><span class="tree-toggle" onclick="toggleTreeNode('' + sId + '')">' + (sOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + storage + '</span></td>';
                     rowHtml += '<td class="text-right font-mono-num font-bold text-sky-800" title="' + formatExactVND(sVal) + '">' + formatVND(sVal) + '</td>';
+                    rowHtml += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(sTarget) + '">' + (sTarget > 0 ? formatVND(sTarget) : '-') + '</td>';
+                    rowHtml += '<td class="text-center font-mono-num">' + formatAchieveBadge(sVal, sTarget) + '</td>';
                     rowHtml += '<td class="text-right font-mono-num text-emerald-600">' + sShare.toFixed(1) + '%</td>';
                     rowHtml += '<td class="text-right font-mono-num text-sky-600">+4.5%</td>';
                     rowHtml += '</tr>';
@@ -4754,11 +4831,14 @@
                             const cId = sId + '_' + cate;
                             const cOpen = openNodes.has(cId);
                             const cVal = cateObj[cate].val;
+                            const cTarget = prodCateTargetMap[storage + '_' + cate] || 0;
                             const cShare = totalSellin > 0 ? (cVal / totalSellin) * 100 : 0;
 
                             let cRow = '<tr class="bg-slate-100/60 font-semibold border-b border-slate-200/60">';
-                            cRow += '<td style="padding-left: 24px;"><span class="tree-toggle" onclick="toggleTreeNode(\'' + cId + '\')">' + (cOpen ? '−' : '+') + '</span><span class="text-slate-800">' + cate + '</span></td>';
+                            cRow += '<td style="padding-left: 24px;"><span class="tree-toggle" onclick="toggleTreeNode('' + cId + '')">' + (cOpen ? '−' : '+') + '</span><span class="text-slate-800">' + cate + '</span></td>';
                             cRow += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(cVal) + '">' + formatVND(cVal) + '</td>';
+                            cRow += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(cTarget) + '">' + (cTarget > 0 ? formatVND(cTarget) : '-') + '</td>';
+                            cRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(cVal, cTarget) + '</td>';
                             cRow += '<td class="text-right font-mono-num text-slate-600">' + cShare.toFixed(1) + '%</td>';
                             cRow += '<td class="text-right font-mono-num text-slate-500">+3.8%</td>';
                             cRow += '</tr>';
@@ -4770,11 +4850,14 @@
                                     const p1Id = cId + '_' + ph1;
                                     const p1Open = openNodes.has(p1Id);
                                     const p1Val = ph1Obj[ph1].val;
+                                    const p1Target = prodPh1TargetMap[storage + '_' + cate + '_' + ph1] || prodPh1TargetMap[storage + '_' + ph1] || 0;
                                     const p1Share = totalSellin > 0 ? (p1Val / totalSellin) * 100 : 0;
 
                                     let p1Row = '<tr class="bg-white hover:bg-slate-50 border-b border-slate-100">';
-                                    p1Row += '<td style="padding-left: 44px;"><span class="tree-toggle" onclick="toggleTreeNode(\'' + p1Id + '\')">' + (p1Open ? '−' : '+') + '</span><span class="text-slate-700 font-medium">' + ph1 + '</span></td>';
+                                    p1Row += '<td style="padding-left: 44px;"><span class="tree-toggle" onclick="toggleTreeNode('' + p1Id + '')">' + (p1Open ? '−' : '+') + '</span><span class="text-slate-700 font-medium">' + ph1 + '</span></td>';
                                     p1Row += '<td class="text-right font-mono-num text-slate-700" title="' + formatExactVND(p1Val) + '">' + formatVND(p1Val) + '</td>';
+                                    p1Row += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(p1Target) + '">' + (p1Target > 0 ? formatVND(p1Target) : '-') + '</td>';
+                                    p1Row += '<td class="text-center font-mono-num">' + formatAchieveBadge(p1Val, p1Target) + '</td>';
                                     p1Row += '<td class="text-right font-mono-num text-slate-500">' + p1Share.toFixed(1) + '%</td>';
                                     p1Row += '<td class="text-right font-mono-num text-slate-500">+2.9%</td>';
                                     p1Row += '</tr>';
@@ -4789,6 +4872,8 @@
                                             let p2Row = '<tr class="text-slate-600 text-xs bg-slate-50/40 hover:bg-slate-100/60 border-b border-slate-100">';
                                             p2Row += '<td style="padding-left: 64px;"><span class="inline-block w-1.5 h-1.5 rounded-full bg-purple-500 mr-2"></span>' + ph2 + '</td>';
                                             p2Row += '<td class="text-right font-mono-num font-semibold text-slate-700" title="' + formatExactVND(p2Val) + '">' + formatVND(p2Val) + '</td>';
+                                            p2Row += '<td class="text-right font-mono-num text-slate-400">-</td>';
+                                            p2Row += '<td class="text-center font-mono-num"><span class="text-slate-400 font-normal">-</span></td>';
                                             p2Row += '<td class="text-right font-mono-num text-slate-500">' + p2Share.toFixed(1) + '%</td>';
                                             p2Row += '<td class="text-right font-mono-num text-emerald-600 font-bold">+5.1%</td>';
                                             p2Row += '</tr>';
