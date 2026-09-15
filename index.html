@@ -1748,9 +1748,16 @@
                             <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_sellin_rev">DOANH SỐ SELL-IN</div>
                             <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="dash-kpi-sellin">0,0 B</div>
                         </div>
-                        <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
-                            <div id="dash-kpi-si-yoy-wrap">YoY: <b id="dash-kpi-si-yoy" class="text-rose-600">-0.0%</b> <span class="text-slate-400 font-normal" id="dash-kpi-si-ly">(vs cùng kỳ: 0 B)</span></div>
-                            <div id="dash-kpi-si-ytd-wrap" class="text-slate-600">YTD: <b id="dash-kpi-si-ytd" class="text-emerald-600">+0.0%</b> <span class="text-slate-400 font-normal" id="dash-kpi-si-ytd-val">(Lũy kế: 0 B)</span></div>
+                        <div class="flex justify-between items-end pt-1.5 border-t border-slate-100/80 text-[11px] font-semibold">
+                            <div class="space-y-0.5 min-w-0 pr-1.5">
+                                <div id="dash-kpi-si-yoy-wrap">YoY: <b id="dash-kpi-si-yoy" class="text-rose-600">-0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-si-ly">(vs cùng kỳ: 0 B)</span></div>
+                                <div id="dash-kpi-si-ytd-wrap" class="text-slate-600">YTD: <b id="dash-kpi-si-ytd" class="text-emerald-600">+0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-si-ytd-val">(Lũy kế: 0 B)</span></div>
+                            </div>
+                            <div class="text-right pl-2 border-l border-slate-100 space-y-0.5 flex-shrink-0" id="dash-kpi-si-mtd-wrap">
+                                <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider" data-i18n="lbl_mom_mtd">MoM MTD</div>
+                                <div><b id="dash-kpi-si-mom" class="text-rose-600 font-bold">-0.0%</b></div>
+                                <div class="text-[10px] text-slate-400 font-normal whitespace-nowrap" id="dash-kpi-si-lmmtd">(vs MTD: 0 B)</div>
+                            </div>
                         </div>
                     </div>
 
@@ -1800,10 +1807,17 @@
                             <span id="dash-kpi-chan-gt-share" class="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">Tỷ trọng: 0.0%</span>
                         </div>
                         <div class="text-2xl font-black font-mono-num text-blue-600 my-1" id="dash-kpi-chan-gt">0,0 B</div>
-                        <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100">
-                            <div class="text-slate-600 font-medium truncate" id="dash-kpi-chan-gt-target">Target: 0 B (Đạt 0%)</div>
-                            <div id="dash-kpi-chan-gt-yoy-wrap">YoY: <b id="dash-kpi-chan-gt-yoy" class="text-rose-600">-0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-gt-ly">(vs cùng kỳ: 0 B)</span></div>
-                            <div id="dash-kpi-chan-gt-ytd-wrap">YTD: <b id="dash-kpi-chan-gt-ytd" class="text-emerald-600">+0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-gt-ytd-val">(Lũy kế: 0 B)</span></div>
+                        <div class="flex justify-between items-end pt-1.5 border-t border-slate-100 text-[11px] font-semibold">
+                            <div class="space-y-0.5 min-w-0 pr-1.5">
+                                <div class="text-slate-600 font-medium truncate" id="dash-kpi-chan-gt-target">Target: 0 B (Đạt 0%)</div>
+                                <div id="dash-kpi-chan-gt-yoy-wrap" class="truncate">YoY: <b id="dash-kpi-chan-gt-yoy" class="text-rose-600">-0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-gt-ly">(vs cùng kỳ: 0 B)</span></div>
+                                <div id="dash-kpi-chan-gt-ytd-wrap" class="truncate">YTD: <b id="dash-kpi-chan-gt-ytd" class="text-emerald-600">+0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-gt-ytd-val">(Lũy kế: 0 B)</span></div>
+                            </div>
+                            <div class="text-right pl-2 border-l border-slate-100 space-y-0.5 flex-shrink-0" id="dash-kpi-chan-gt-mtd-wrap">
+                                <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider" data-i18n="lbl_mom_mtd">MoM MTD</div>
+                                <div><b id="dash-kpi-chan-gt-mom" class="text-rose-600 font-bold">-0.0%</b></div>
+                                <div class="text-[10px] text-slate-400 font-normal whitespace-nowrap" id="dash-kpi-chan-gt-lmmtd">(vs MTD: 0 B)</div>
+                            </div>
                         </div>
                     </div>
 
@@ -1814,10 +1828,17 @@
                             <span id="dash-kpi-chan-mt-share" class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">Tỷ trọng: 0.0%</span>
                         </div>
                         <div class="text-2xl font-black font-mono-num text-amber-500 my-1" id="dash-kpi-chan-mt">0,0 B</div>
-                        <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100">
-                            <div class="text-slate-600 font-medium truncate" id="dash-kpi-chan-mt-target">Target: 0 B (Đạt 0%)</div>
-                            <div id="dash-kpi-chan-mt-yoy-wrap">YoY: <b id="dash-kpi-chan-mt-yoy" class="text-rose-600">-0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-mt-ly">(vs cùng kỳ: 0 B)</span></div>
-                            <div id="dash-kpi-chan-mt-ytd-wrap">YTD: <b id="dash-kpi-chan-mt-ytd" class="text-emerald-600">+0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-mt-ytd-val">(Lũy kế: 0 B)</span></div>
+                        <div class="flex justify-between items-end pt-1.5 border-t border-slate-100 text-[11px] font-semibold">
+                            <div class="space-y-0.5 min-w-0 pr-1.5">
+                                <div class="text-slate-600 font-medium truncate" id="dash-kpi-chan-mt-target">Target: 0 B (Đạt 0%)</div>
+                                <div id="dash-kpi-chan-mt-yoy-wrap" class="truncate">YoY: <b id="dash-kpi-chan-mt-yoy" class="text-rose-600">-0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-mt-ly">(vs cùng kỳ: 0 B)</span></div>
+                                <div id="dash-kpi-chan-mt-ytd-wrap" class="truncate">YTD: <b id="dash-kpi-chan-mt-ytd" class="text-emerald-600">+0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-mt-ytd-val">(Lũy kế: 0 B)</span></div>
+                            </div>
+                            <div class="text-right pl-2 border-l border-slate-100 space-y-0.5 flex-shrink-0" id="dash-kpi-chan-mt-mtd-wrap">
+                                <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider" data-i18n="lbl_mom_mtd">MoM MTD</div>
+                                <div><b id="dash-kpi-chan-mt-mom" class="text-rose-600 font-bold">-0.0%</b></div>
+                                <div class="text-[10px] text-slate-400 font-normal whitespace-nowrap" id="dash-kpi-chan-mt-lmmtd">(vs MTD: 0 B)</div>
+                            </div>
                         </div>
                     </div>
 
@@ -1828,10 +1849,17 @@
                             <span id="dash-kpi-chan-b2b-share" class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Tỷ trọng: 0.0%</span>
                         </div>
                         <div class="text-2xl font-black font-mono-num text-emerald-600 my-1" id="dash-kpi-chan-b2b">0,0 B</div>
-                        <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100">
-                            <div class="text-slate-600 font-medium truncate" id="dash-kpi-chan-b2b-target">Target: 0 B (Đạt 0%)</div>
-                            <div id="dash-kpi-chan-b2b-yoy-wrap">YoY: <b id="dash-kpi-chan-b2b-yoy" class="text-rose-600">-0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-b2b-ly">(vs cùng kỳ: 0 B)</span></div>
-                            <div id="dash-kpi-chan-b2b-ytd-wrap">YTD: <b id="dash-kpi-chan-b2b-ytd" class="text-emerald-600">+0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-b2b-ytd-val">(Lũy kế: 0 B)</span></div>
+                        <div class="flex justify-between items-end pt-1.5 border-t border-slate-100 text-[11px] font-semibold">
+                            <div class="space-y-0.5 min-w-0 pr-1.5">
+                                <div class="text-slate-600 font-medium truncate" id="dash-kpi-chan-b2b-target">Target: 0 B (Đạt 0%)</div>
+                                <div id="dash-kpi-chan-b2b-yoy-wrap" class="truncate">YoY: <b id="dash-kpi-chan-b2b-yoy" class="text-rose-600">-0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-b2b-ly">(vs cùng kỳ: 0 B)</span></div>
+                                <div id="dash-kpi-chan-b2b-ytd-wrap" class="truncate">YTD: <b id="dash-kpi-chan-b2b-ytd" class="text-emerald-600">+0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-b2b-ytd-val">(Lũy kế: 0 B)</span></div>
+                            </div>
+                            <div class="text-right pl-2 border-l border-slate-100 space-y-0.5 flex-shrink-0" id="dash-kpi-chan-b2b-mtd-wrap">
+                                <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider" data-i18n="lbl_mom_mtd">MoM MTD</div>
+                                <div><b id="dash-kpi-chan-b2b-mom" class="text-rose-600 font-bold">-0.0%</b></div>
+                                <div class="text-[10px] text-slate-400 font-normal whitespace-nowrap" id="dash-kpi-chan-b2b-lmmtd">(vs MTD: 0 B)</div>
+                            </div>
                         </div>
                     </div>
 
@@ -1842,10 +1870,17 @@
                             <span id="dash-kpi-chan-kr-share" class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">Tỷ trọng: 0.0%</span>
                         </div>
                         <div class="text-2xl font-black font-mono-num text-purple-600 my-1" id="dash-kpi-chan-kr">0,0 B</div>
-                        <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100">
-                            <div class="text-slate-600 font-medium truncate" id="dash-kpi-chan-kr-target">Target: 0 B (Đạt 0%)</div>
-                            <div id="dash-kpi-chan-kr-yoy-wrap">YoY: <b id="dash-kpi-chan-kr-yoy" class="text-rose-600">-0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-kr-ly">(vs cùng kỳ: 0 B)</span></div>
-                            <div id="dash-kpi-chan-kr-ytd-wrap">YTD: <b id="dash-kpi-chan-kr-ytd" class="text-emerald-600">+0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-kr-ytd-val">(Lũy kế: 0 B)</span></div>
+                        <div class="flex justify-between items-end pt-1.5 border-t border-slate-100 text-[11px] font-semibold">
+                            <div class="space-y-0.5 min-w-0 pr-1.5">
+                                <div class="text-slate-600 font-medium truncate" id="dash-kpi-chan-kr-target">Target: 0 B (Đạt 0%)</div>
+                                <div id="dash-kpi-chan-kr-yoy-wrap" class="truncate">YoY: <b id="dash-kpi-chan-kr-yoy" class="text-rose-600">-0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-kr-ly">(vs cùng kỳ: 0 B)</span></div>
+                                <div id="dash-kpi-chan-kr-ytd-wrap" class="truncate">YTD: <b id="dash-kpi-chan-kr-ytd" class="text-emerald-600">+0.0%</b> <span class="text-slate-400 font-normal text-[10px]" id="dash-kpi-chan-kr-ytd-val">(Lũy kế: 0 B)</span></div>
+                            </div>
+                            <div class="text-right pl-2 border-l border-slate-100 space-y-0.5 flex-shrink-0" id="dash-kpi-chan-kr-mtd-wrap">
+                                <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider" data-i18n="lbl_mom_mtd">MoM MTD</div>
+                                <div><b id="dash-kpi-chan-kr-mom" class="text-rose-600 font-bold">-0.0%</b></div>
+                                <div class="text-[10px] text-slate-400 font-normal whitespace-nowrap" id="dash-kpi-chan-kr-lmmtd">(vs MTD: 0 B)</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2686,6 +2721,7 @@
                 lbl_tgt: "Tgt",
                 lbl_diff: "Chênh lệch",
                 lbl_same_period: "Cùng kỳ",
+                lbl_mom_mtd: "MoM MTD",
 
                 chart_daily_sellin_title: "Daily Sell-in Trend & Nhịp Độ Hàng Ngày",
                 chart_daily_sellin_sub: "Tiến độ xuất hóa đơn SAP thực tế theo bộ lọc đang chọn",
@@ -2889,6 +2925,7 @@
                 lbl_tgt: "Tgt",
                 lbl_diff: "Variance",
                 lbl_same_period: "Last Year",
+                lbl_mom_mtd: "MoM MTD",
 
                 chart_daily_sellin_title: "Daily Sell-in Trend & Daily Pace",
                 chart_daily_sellin_sub: "Actual SAP billing pace according to selected filters",
@@ -3092,6 +3129,7 @@
                 lbl_tgt: "목표",
                 lbl_diff: "차이",
                 lbl_same_period: "전년동기",
+                lbl_mom_mtd: "전월 MTD",
 
                 chart_daily_sellin_title: "일별 출하 추이 및 매출 페이스 (Daily Pace)",
                 chart_daily_sellin_sub: "선택된 조건에 따른 SAP 실시간 세금계산서 발행 진척도",
@@ -4038,6 +4076,87 @@
                 const activeAccounts = activeAccountsSet.size;
                 const vpoSellin = activeAccounts > 0 ? (totalSellin2026 / activeAccounts) : 0;
 
+                // ==========================================
+                // TÍNH TOÁN CHỈ SỐ MTD SO VỚI THÁNG TRƯỚC (MoM MTD)
+                // ==========================================
+                let siMomMtdPct = null;
+                let totalCurMtd = 0;
+                let totalPriorMtd = 0;
+                let priorMonthLabel = '';
+
+                let gtMomMtdPct = null, gtPriorMtd = 0;
+                let mtMomMtdPct = null, mtPriorMtd = 0;
+                let b2bMomMtdPct = null, b2bPriorMtd = 0;
+                let krMomMtdPct = null, krPriorMtd = 0;
+                let maxDayInMonth = 0;
+
+                if (typeof DAILY_DATA !== 'undefined' && Array.isArray(DAILY_DATA) && state.selectedMonths.length === 1) {
+                    const selM = state.selectedMonths[0]; // e.g. "09"
+                    const curYearNum = parseInt(state.year, 10);
+                    const curMonthNum = parseInt(selM, 10);
+                    const curMonthPrefix = state.year + '-' + selM;
+
+                    // Tìm ngày lớn nhất có phát sinh Sell-in trong tháng được chọn
+                    DAILY_DATA.forEach(d => {
+                        const dt = String(d.date_val || '');
+                        if (dt.startsWith(curMonthPrefix) && (Number(d.daily_sellin) || 0) > 0) {
+                            const dayNum = parseInt(dt.substring(8, 10), 10);
+                            if (dayNum > maxDayInMonth) maxDayInMonth = dayNum;
+                        }
+                    });
+
+                    if (maxDayInMonth > 0) {
+                        const priorMonthNum = curMonthNum === 1 ? 12 : curMonthNum - 1;
+                        const priorYearNum = curMonthNum === 1 ? curYearNum - 1 : curYearNum;
+                        const priorMonthPrefix = priorYearNum + '-' + String(priorMonthNum).padStart(2, '0');
+                        priorMonthLabel = 'T' + priorMonthNum;
+
+                        let curMtdGT = 0, curMtdMT = 0, curMtdB2B = 0, curMtdKR = 0;
+
+                        DAILY_DATA.forEach(d => {
+                            const dt = String(d.date_val || '');
+                            const v = Number(d.daily_sellin) || 0;
+                            if (v === 0) return;
+
+                            if (state.dashChannel !== 'ALL' && d.channel !== state.dashChannel) return;
+                            if (state.prodStorage !== 'ALL' && d.storage !== state.prodStorage) return;
+
+                            const dayNum = parseInt(dt.substring(8, 10), 10);
+                            if (dayNum > maxDayInMonth) return;
+
+                            if (dt.startsWith(curMonthPrefix)) {
+                                totalCurMtd += v;
+                                if (d.channel === 'GT') curMtdGT += v;
+                                else if (d.channel === 'MT') curMtdMT += v;
+                                else if (d.channel === 'B2B') curMtdB2B += v;
+                                else if (d.channel === 'KR') curMtdKR += v;
+                            } else if (dt.startsWith(priorMonthPrefix)) {
+                                totalPriorMtd += v;
+                                if (d.channel === 'GT') gtPriorMtd += v;
+                                else if (d.channel === 'MT') mtPriorMtd += v;
+                                else if (d.channel === 'B2B') b2bPriorMtd += v;
+                                else if (d.channel === 'KR') krPriorMtd += v;
+                            }
+                        });
+
+                        if (totalPriorMtd > 0) {
+                            siMomMtdPct = ((totalCurMtd - totalPriorMtd) / totalPriorMtd) * 100;
+                        }
+                        if (gtPriorMtd > 0) {
+                            gtMomMtdPct = ((curMtdGT - gtPriorMtd) / gtPriorMtd) * 100;
+                        }
+                        if (mtPriorMtd > 0) {
+                            mtMomMtdPct = ((curMtdMT - mtPriorMtd) / mtPriorMtd) * 100;
+                        }
+                        if (b2bPriorMtd > 0) {
+                            b2bMomMtdPct = ((curMtdB2B - b2bPriorMtd) / b2bPriorMtd) * 100;
+                        }
+                        if (krPriorMtd > 0) {
+                            krMomMtdPct = ((curMtdKR - krPriorMtd) / krPriorMtd) * 100;
+                        }
+                    }
+                }
+
                 // 1. DOANH SỐ SELL-IN
                 const elSi = document.getElementById('dash-kpi-sellin');
                 if (elSi) {
@@ -4058,6 +4177,22 @@
                 }
                 const elSiYtdVal = document.getElementById('dash-kpi-si-ytd-val');
                 if (elSiYtdVal) elSiYtdVal.innerText = '(Lũy kế: ' + formatBnVn(ytdSellin2026) + ')';
+
+                // MoM MTD cho Card 1
+                const elSiMom = document.getElementById('dash-kpi-si-mom');
+                const elSiLmMtd = document.getElementById('dash-kpi-si-lmmtd');
+                if (elSiMom && elSiLmMtd) {
+                    if (siMomMtdPct !== null) {
+                        elSiMom.innerText = (siMomMtdPct >= 0 ? '+' : '') + siMomMtdPct.toFixed(1) + '%';
+                        elSiMom.className = (siMomMtdPct >= 0 ? 'text-emerald-600' : 'text-rose-600') + ' font-bold';
+                        elSiLmMtd.innerText = '(vs MTD ' + priorMonthLabel + ': ' + formatBnVn(totalPriorMtd) + ')';
+                        elSiLmMtd.title = 'So sánh lũy kế từ ngày 1 đến ngày ' + maxDayInMonth + ' của ' + priorMonthLabel;
+                    } else {
+                        elSiMom.innerText = '--%';
+                        elSiMom.className = 'text-slate-400 font-bold';
+                        elSiLmMtd.innerText = '(N/A)';
+                    }
+                }
 
                 // 2. CHỈ TIÊU BÁN HÀNG (TARGET)
                 const elTarget = document.getElementById('dash-kpi-target');
@@ -4226,6 +4361,24 @@
                     if (elYtdVal) elYtdVal.innerText = '(Lũy kế: ' + formatBnVn(ytdCur) + ')';
                 };
 
+                // Helper to render MoM MTD for channels
+                const setChanMom = (prefix, pct, priorVal) => {
+                    const elMom = document.getElementById(prefix + '-mom');
+                    const elLm = document.getElementById(prefix + '-lmmtd');
+                    if (elMom && elLm) {
+                        if (pct !== null) {
+                            elMom.innerText = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
+                            elMom.className = (pct >= 0 ? 'text-emerald-600' : 'text-rose-600') + ' font-bold';
+                            elLm.innerText = '(vs ' + priorMonthLabel + ': ' + formatBnVn(priorVal) + ')';
+                            elLm.title = 'So sánh cùng kỳ từ ngày 1 đến ngày ' + maxDayInMonth + ' của ' + priorMonthLabel;
+                        } else {
+                            elMom.innerText = '--%';
+                            elMom.className = 'text-slate-400 font-bold';
+                            elLm.innerText = '(N/A)';
+                        }
+                    }
+                };
+
                 // Card 5: GT
                 const elChanGt = document.getElementById('dash-kpi-chan-gt');
                 if (elChanGt) elChanGt.innerText = formatBnVn(gtSellin);
@@ -4241,6 +4394,7 @@
                     }
                 }
                 setChanGrowth('dash-kpi-chan-gt', gtSellin, gtSellinLY, gtYtd26, gtYtd25);
+                setChanMom('dash-kpi-chan-gt', gtMomMtdPct, gtPriorMtd);
 
                 // Card 6: MT
                 const elChanMt = document.getElementById('dash-kpi-chan-mt');
@@ -4257,6 +4411,7 @@
                     }
                 }
                 setChanGrowth('dash-kpi-chan-mt', mtSellin, mtSellinLY, mtYtd26, mtYtd25);
+                setChanMom('dash-kpi-chan-mt', mtMomMtdPct, mtPriorMtd);
 
                 // Card 7: B2B
                 const elChanB2b = document.getElementById('dash-kpi-chan-b2b');
@@ -4273,6 +4428,7 @@
                     }
                 }
                 setChanGrowth('dash-kpi-chan-b2b', b2bSellin, b2bSellinLY, b2bYtd26, b2bYtd25);
+                setChanMom('dash-kpi-chan-b2b', b2bMomMtdPct, b2bPriorMtd);
 
                 // Card 8: KR
                 const elChanKr = document.getElementById('dash-kpi-chan-kr');
@@ -4289,6 +4445,7 @@
                     }
                 }
                 setChanGrowth('dash-kpi-chan-kr', krSellin, krSellinLY, krYtd26, krYtd25);
+                setChanMom('dash-kpi-chan-kr', krMomMtdPct, krPriorMtd);
 
                 renderDashDailyChart();
                 renderDash12MonthsChart();
