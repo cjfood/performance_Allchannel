@@ -1136,82 +1136,93 @@
                                 <option value="viewer">viewer (Back Office (Viewer) chỉ xem báo cáo)</option>
                             </select>
                         </div>
-                        <!-- 1. Kênh Được Phép Xem (Chọn 1 hoặc nhiều Kênh) -->
-                        <div class="md:col-span-2">
-                            <div class="flex items-center justify-between mb-1">
-                                <label class="block text-[11px] font-bold text-slate-700">Kênh Được Xem (Chọn 1 hoặc nhiều):</label>
-                                <span class="text-[10px] text-blue-600 font-semibold" id="adm-chan-summary">Đang chọn: Toàn bộ 4 Kênh</span>
+                        <!-- HÀNG 2: 3 CẤP PHÂN QUYỀN (KÊNH -> CẤP -> PHẠM VI) GỌN GÀNG THEO TỪNG CẤP NHƯ BAN ĐẦU -->
+                        <!-- Cấp 1: Kênh (Channel) - Dropdown Chọn Nhiều -->
+                        <div class="relative">
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1">
+                                1. Kênh (Channel):
+                            </label>
+                            <div id="adm-channel-btn" onclick="toggleAdminChannelDropdown(event)" class="w-full text-xs border border-slate-300 rounded-lg p-2 bg-white flex items-center justify-between cursor-pointer hover:border-blue-400 select-none shadow-xs">
+                                <span id="adm-channel-display" class="font-bold text-blue-800 truncate">Tất cả (4 Kênh)</span>
+                                <span class="text-[10px] text-slate-400 ml-1">▼</span>
                             </div>
-                            <div class="flex flex-wrap items-center gap-1.5 p-1.5 bg-white border border-slate-300 rounded-lg">
-                                <label class="flex items-center gap-1 px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded cursor-pointer text-xs font-bold text-slate-700 transition-colors">
-                                    <input type="checkbox" id="chk-chan-all" checked onchange="onAdminChannelCheckboxChange('all')" class="rounded text-blue-600 focus:ring-blue-500">
-                                    <span>Tất cả (4 Kênh)</span>
-                                </label>
-                                <label class="flex items-center gap-1 px-2 py-1 bg-blue-50 hover:bg-blue-100 rounded cursor-pointer text-xs font-bold text-blue-700 transition-colors">
-                                    <input type="checkbox" id="chk-chan-gt" value="GT" checked onchange="onAdminChannelCheckboxChange('GT')" class="rounded text-blue-600 focus:ring-blue-500">
-                                    <span>GT</span>
-                                </label>
-                                <label class="flex items-center gap-1 px-2 py-1 bg-emerald-50 hover:bg-emerald-100 rounded cursor-pointer text-xs font-bold text-emerald-700 transition-colors">
-                                    <input type="checkbox" id="chk-chan-mt" value="MT" checked onchange="onAdminChannelCheckboxChange('MT')" class="rounded text-emerald-600 focus:ring-emerald-500">
-                                    <span>MT</span>
-                                </label>
-                                <label class="flex items-center gap-1 px-2 py-1 bg-amber-50 hover:bg-amber-100 rounded cursor-pointer text-xs font-bold text-amber-700 transition-colors">
-                                    <input type="checkbox" id="chk-chan-b2b" value="B2B" checked onchange="onAdminChannelCheckboxChange('B2B')" class="rounded text-amber-600 focus:ring-amber-500">
-                                    <span>B2B</span>
-                                </label>
-                                <label class="flex items-center gap-1 px-2 py-1 bg-rose-50 hover:bg-rose-100 rounded cursor-pointer text-xs font-bold text-rose-700 transition-colors">
-                                    <input type="checkbox" id="chk-chan-kr" value="KR" checked onchange="onAdminChannelCheckboxChange('KR')" class="rounded text-rose-600 focus:ring-rose-500">
-                                    <span>KR</span>
-                                </label>
+                            <!-- Popover Dropdown Kênh -->
+                            <div id="adm-channel-menu" class="hidden absolute left-0 top-full mt-1 w-56 bg-white border border-slate-200 rounded-xl shadow-xl p-2.5 z-50">
+                                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 pb-1 border-b border-slate-100 flex items-center justify-between">
+                                    <span>Chọn 1 hoặc nhiều Kênh</span>
+                                    <button type="button" onclick="closeAdminChannelDropdown()" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="flex items-center gap-2 p-1.5 rounded hover:bg-slate-50 cursor-pointer text-xs font-bold text-slate-800">
+                                        <input type="checkbox" id="chk-chan-all" checked onchange="onAdminChannelCheckboxChange('all')" class="rounded text-blue-600 focus:ring-blue-500">
+                                        <span>Tất cả (4 Kênh)</span>
+                                    </label>
+                                    <div class="h-px bg-slate-100 my-1"></div>
+                                    <label class="flex items-center gap-2 p-1.5 rounded hover:bg-blue-50 cursor-pointer text-xs font-semibold text-blue-700">
+                                        <input type="checkbox" id="chk-chan-gt" value="GT" checked onchange="onAdminChannelCheckboxChange('GT')" class="rounded text-blue-600 focus:ring-blue-500">
+                                        <span>GT (Kênh Truyền Thống)</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 p-1.5 rounded hover:bg-emerald-50 cursor-pointer text-xs font-semibold text-emerald-700">
+                                        <input type="checkbox" id="chk-chan-mt" value="MT" checked onchange="onAdminChannelCheckboxChange('MT')" class="rounded text-emerald-600 focus:ring-emerald-500">
+                                        <span>MT (Kênh Hiện Đại)</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 p-1.5 rounded hover:bg-amber-50 cursor-pointer text-xs font-semibold text-amber-700">
+                                        <input type="checkbox" id="chk-chan-b2b" value="B2B" checked onchange="onAdminChannelCheckboxChange('B2B')" class="rounded text-amber-600 focus:ring-amber-500">
+                                        <span>B2B (Food Service)</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 p-1.5 rounded hover:bg-rose-50 cursor-pointer text-xs font-semibold text-rose-700">
+                                        <input type="checkbox" id="chk-chan-kr" value="KR" checked onchange="onAdminChannelCheckboxChange('KR')" class="rounded text-rose-600 focus:ring-rose-500">
+                                        <span>KR (Khách Hàn Quốc)</span>
+                                    </label>
+                                </div>
                             </div>
                             <input type="hidden" id="adm-channel" value="all">
                         </div>
 
-                        <!-- 2. Cấp phân quyền (Scope Level) -->
-                        <div class="md:col-span-2">
-                            <label class="block text-[11px] font-bold text-slate-700 mb-1">Cấp Phân Quyền (Scope Level):</label>
-                            <select id="adm-scope-level" required onchange="onAdminScopeLevelChange()" class="w-full text-xs border border-blue-300 rounded-lg p-2 font-bold text-indigo-700 bg-white">
-                                <option value="all">all (Toàn quyền các Kênh đã chọn)</option>
+                        <!-- Cấp 2: Cấp phân quyền (Scope Level) - Dropdown chuẩn -->
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 mb-1">
+                                2. Cấp phân quyền (Scope Level):
+                            </label>
+                            <select id="adm-scope-level" required onchange="onAdminScopeLevelChange()" class="w-full text-xs border border-blue-300 rounded-lg p-2 font-bold text-indigo-700 bg-white hover:border-indigo-400 cursor-pointer shadow-xs">
+                                <option value="all">all (Toàn quyền Kênh)</option>
                             </select>
                         </div>
 
-                        <!-- 3. Phạm vi dữ liệu (Scope Value) Multi-Select Box -->
-                        <div class="md:col-span-4 bg-white border border-blue-200 rounded-xl p-3 shadow-xs">
-                            <div class="flex items-center justify-between mb-1.5">
-                                <div class="flex items-center gap-1.5">
-                                    <span class="text-xs">🎯</span>
-                                    <label class="text-[11px] font-bold text-slate-800">
-                                        Phạm Vi Dữ Liệu Được Xem (Scope Value - Chọn 1 hoặc nhiều mục):
-                                    </label>
+                        <!-- Cấp 3: Phạm vi dữ liệu (Scope Value) - Dropdown Chọn Nhiều -->
+                        <div class="md:col-span-2 relative">
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="block text-[11px] font-bold text-slate-700">
+                                    3. Phạm vi dữ liệu (Scope Value):
+                                </label>
+                                <span id="adm-scope-count-badge" class="text-[10px] text-blue-600 font-semibold truncate max-w-[200px]">Toàn quyền</span>
+                            </div>
+                            <div id="adm-scope-btn" onclick="toggleAdminScopeDropdown(event)" class="w-full text-xs border border-blue-300 rounded-lg p-2 bg-white flex items-center justify-between cursor-pointer hover:border-blue-500 select-none shadow-xs">
+                                <span id="adm-scope-display" class="font-bold text-sky-800 truncate">Toàn quốc (All Values)</span>
+                                <span class="text-[10px] text-slate-400 ml-1">▼</span>
+                            </div>
+                            <!-- Popover Dropdown Phạm Vi Xem (Chọn được nhiều mục) -->
+                            <div id="adm-scope-menu" class="hidden absolute right-0 top-full mt-1 w-full md:w-[460px] bg-white border border-slate-200 rounded-xl shadow-2xl p-3 z-50">
+                                <div class="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+                                    <div class="flex items-center gap-1.5">
+                                        <button type="button" onclick="selectAllScopeOptions(true)" class="px-2 py-0.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-[10px] font-bold rounded">✓ Chọn hết</button>
+                                        <button type="button" onclick="selectAllScopeOptions(false)" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-[10px] font-bold rounded">✕ Bỏ hết</button>
+                                    </div>
+                                    <button type="button" onclick="closeAdminScopeDropdown()" class="px-3 py-0.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded">Xong</button>
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <button type="button" onclick="selectAllScopeOptions(true)" class="px-2 py-0.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-[10px] font-bold rounded">✓ Chọn hết</button>
-                                    <button type="button" onclick="selectAllScopeOptions(false)" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-[10px] font-bold rounded">✕ Bỏ hết</button>
-                                    <span class="text-[10px] text-slate-400 font-medium italic">Có thể chọn nhiều mục</span>
+                                <div class="mb-2">
+                                    <input type="text" id="adm-scope-search" placeholder="🔍 Gõ từ khóa để lọc danh sách nhanh..." oninput="onScopeSearchInput(this.value)" class="w-full text-xs border border-slate-300 rounded-lg p-1.5 pl-2.5 focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <!-- Danh sách cuộn checkbox gọn gàng 2 cột -->
+                                <div id="adm-scope-options-container" class="max-h-48 overflow-y-auto border border-slate-100 rounded-lg p-1.5 grid grid-cols-2 gap-1 text-xs bg-slate-50/50">
+                                    <!-- Rendered dynamically -->
+                                </div>
+                                <!-- Nhập tùy biến nhỏ gọn bên dưới -->
+                                <div class="mt-2 pt-2 border-t border-slate-100 flex items-center gap-1.5">
+                                    <input type="text" id="adm-scope-custom-input" placeholder="Hoặc gõ tên mục tùy biến..." class="flex-1 text-[11px] border border-slate-200 rounded p-1">
+                                    <button type="button" onclick="addCustomScopeFromInput()" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[10px] font-bold rounded">+ Thêm</button>
                                 </div>
                             </div>
-
-                            <!-- Danh sách Tags đã chọn -->
-                            <div id="adm-scope-selected-tags" class="flex flex-wrap gap-1 mb-2 p-1.5 bg-slate-50 border border-slate-200 rounded-lg min-h-[32px] max-h-24 overflow-y-auto">
-                                <span class="text-xs text-slate-400 italic px-1">Chưa chọn mục nào (hoặc Toàn quyền)...</span>
-                            </div>
-
-                            <!-- Ô tìm kiếm nhanh & nhập tùy biến -->
-                            <div class="flex gap-2 mb-2">
-                                <div class="relative flex-1">
-                                    <input type="text" id="adm-scope-search" placeholder="🔍 Gõ tên Vùng / Chuỗi / NPP để lọc nhanh hoặc nhập nhiều mục phân cách bằng dấu phẩy..." oninput="onScopeSearchInput(this.value)" class="w-full text-xs border border-slate-300 rounded-lg p-2 pl-3 focus:ring-2 focus:ring-blue-500">
-                                </div>
-                                <button type="button" onclick="addCustomScopeFromInput()" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-200 whitespace-nowrap">
-                                    + Thêm Mục Nhập
-                                </button>
-                            </div>
-
-                            <!-- Danh sách Checkboxes lựa chọn nhanh -->
-                            <div id="adm-scope-options-container" class="max-h-36 overflow-y-auto border border-slate-200 rounded-lg p-2 grid grid-cols-2 md:grid-cols-4 gap-1.5 text-xs bg-white">
-                                <!-- Rendered dynamically -->
-                            </div>
-
-                            <!-- Ẩn input lưu trữ giá trị phân cách bởi dấu phẩy -->
                             <input type="hidden" id="adm-scope-value-select" value="all">
                         </div>
                         <div class="md:col-span-4 flex justify-end gap-2 pt-2">
@@ -9197,8 +9208,90 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
         // =========================================================================
         // MULTI-CHANNEL & MULTI-SCOPE RBAC MANAGEMENT ENGINE
         // =========================================================================
+        // =========================================================================
+        // MULTI-CHANNEL & MULTI-SCOPE 3-LEVEL HIERARCHICAL CONTROLS
+        // =========================================================================
         let selectedScopeValuesSet = new Set(['all']);
         let availableScopeOptionsCache = [];
+
+        function toggleAdminChannelDropdown(e) {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('adm-channel-menu');
+            if (menu) menu.classList.toggle('hidden');
+            closeAdminScopeDropdown();
+        }
+
+        function closeAdminChannelDropdown() {
+            const menu = document.getElementById('adm-channel-menu');
+            if (menu) menu.classList.add('hidden');
+        }
+
+        function toggleAdminScopeDropdown(e) {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('adm-scope-menu');
+            if (menu) menu.classList.toggle('hidden');
+            closeAdminChannelDropdown();
+        }
+
+        function closeAdminScopeDropdown() {
+            const menu = document.getElementById('adm-scope-menu');
+            if (menu) menu.classList.add('hidden');
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            const cBtn = document.getElementById('adm-channel-btn');
+            const cMenu = document.getElementById('adm-channel-menu');
+            if (cBtn && cMenu && !cBtn.contains(e.target) && !cMenu.contains(e.target)) {
+                cMenu.classList.add('hidden');
+            }
+            const sBtn = document.getElementById('adm-scope-btn');
+            const sMenu = document.getElementById('adm-scope-menu');
+            if (sBtn && sMenu && !sBtn.contains(e.target) && !sMenu.contains(e.target)) {
+                sMenu.classList.add('hidden');
+            }
+        });
+
+        function onAdminChannelCheckboxChange(chanKey) {
+            const chkAll = document.getElementById('chk-chan-all');
+            const chkGt = document.getElementById('chk-chan-gt');
+            const chkMt = document.getElementById('chk-chan-mt');
+            const chkB2b = document.getElementById('chk-chan-b2b');
+            const chkKr = document.getElementById('chk-chan-kr');
+            const hiddenChan = document.getElementById('adm-channel');
+            const displayEl = document.getElementById('adm-channel-display');
+
+            if (chanKey === 'all') {
+                const isAll = chkAll.checked;
+                if (chkGt) chkGt.checked = isAll;
+                if (chkMt) chkMt.checked = isAll;
+                if (chkB2b) chkB2b.checked = isAll;
+                if (chkKr) chkKr.checked = isAll;
+            } else {
+                const allIndivChecked = (chkGt?.checked && chkMt?.checked && chkB2b?.checked && chkKr?.checked);
+                if (chkAll) chkAll.checked = allIndivChecked;
+            }
+
+            const selectedChans = [];
+            if (chkGt?.checked) selectedChans.push('GT');
+            if (chkMt?.checked) selectedChans.push('MT');
+            if (chkB2b?.checked) selectedChans.push('B2B');
+            if (chkKr?.checked) selectedChans.push('KR');
+
+            if (selectedChans.length === 4 || chkAll?.checked) {
+                hiddenChan.value = 'all';
+                if (displayEl) displayEl.textContent = 'Tất cả (4 Kênh)';
+            } else if (selectedChans.length === 0) {
+                chkGt.checked = true;
+                hiddenChan.value = 'GT';
+                if (displayEl) displayEl.textContent = 'Kênh GT';
+            } else {
+                hiddenChan.value = selectedChans.join(', ');
+                if (displayEl) displayEl.textContent = selectedChans.join(', ');
+            }
+
+            onAdminChannelChange();
+        }
 
         function setAdminChannelCheckboxes(chanVal) {
             const chkAll = document.getElementById('chk-chan-all');
@@ -9207,7 +9300,7 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
             const chkB2b = document.getElementById('chk-chan-b2b');
             const chkKr = document.getElementById('chk-chan-kr');
             const hiddenChan = document.getElementById('adm-channel');
-            const summary = document.getElementById('adm-chan-summary');
+            const displayEl = document.getElementById('adm-channel-display');
 
             const chans = parseChannelList(chanVal);
             const isAll = chans.includes('ALL') || chans.length === 4;
@@ -9219,8 +9312,8 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
             if (chkKr) chkKr.checked = isAll || chans.includes('KR');
 
             if (hiddenChan) hiddenChan.value = isAll ? 'all' : chans.join(', ');
-            if (summary) {
-                summary.textContent = isAll ? 'Đang chọn: Toàn bộ 4 Kênh (ALL)' : `Đang chọn ${chans.length} Kênh: ${chans.join(', ')}`;
+            if (displayEl) {
+                displayEl.textContent = isAll ? 'Tất cả (4 Kênh)' : chans.join(', ');
             }
         }
 
@@ -9236,7 +9329,7 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
             if (chans.includes('ALL') || chans.length > 1) {
                 levels = [
                     { val: 'all', label: 'all (Toàn quyền các Kênh đã chọn)' },
-                    { val: 'vung', label: 'vung (Theo Vùng địa lý đa kênh: HCM, Đà Nẵng, Cần Thơ...)' },
+                    { val: 'vung', label: 'vung (Theo Vùng địa lý đa kênh: HCM, Cần Thơ...)' },
                     { val: 'region', label: 'region (Theo Miền: Miền Bắc / Miền Nam)' },
                     { val: 'custom', label: 'custom (Nhập/Chọn phạm vi tùy biến đa giá trị)' }
                 ];
@@ -9290,19 +9383,19 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
                 options = [{ val: 'all', label: chans.includes('ALL') ? 'Toàn Quốc (4 Kênh)' : `Toàn Kênh ${chans.join(', ')}` }];
             } else if (level === 'region' || level === 'mien') {
                 const set = new Set();
-                DIM_GEO_HIER.forEach(g => { if (g.mien) set.add(g.mien); });
+                if (typeof DIM_GEO_HIER !== 'undefined') DIM_GEO_HIER.forEach(g => { if (g.mien) set.add(g.mien); });
                 options = Array.from(set).sort().map(m => ({ val: m, label: m }));
             } else if (level === 'vung') {
                 const set = new Set();
-                DIM_GEO_HIER.forEach(g => { if (g.vung) set.add(g.vung); });
+                if (typeof DIM_GEO_HIER !== 'undefined') DIM_GEO_HIER.forEach(g => { if (g.vung) set.add(g.vung); });
                 options = Array.from(set).sort().map(v => ({ val: v, label: v }));
             } else if (level === 'office' || level === 'gsbh') {
                 const set = new Set();
-                DIM_GEO_HIER.forEach(g => { if (g.gsbh) set.add(g.gsbh); });
+                if (typeof DIM_GEO_HIER !== 'undefined') DIM_GEO_HIER.forEach(g => { if (g.gsbh) set.add(g.gsbh); });
                 options = Array.from(set).sort().map(g => ({ val: g, label: g }));
             } else if (level === 'npp') {
                 const set = new Set();
-                DIM_GEO_HIER.forEach(g => { if (g.npp_name) set.add(g.npp_name); });
+                if (typeof DIM_GEO_HIER !== 'undefined') DIM_GEO_HIER.forEach(g => { if (g.npp_name) set.add(g.npp_name); });
                 options = Array.from(set).sort().map(n => ({ val: n, label: n }));
             } else if (level === 'chain') {
                 const set = new Set();
@@ -9323,7 +9416,6 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
                 if (typeof KR_TREE !== 'undefined') KR_TREE.forEach(k => { if (k.kr_chain || k.customer_name) set.add(k.kr_chain || k.customer_name); });
                 options = Array.from(set).sort().map(a => ({ val: a, label: a }));
             } else {
-                // custom level
                 options = [{ val: 'all', label: 'Tùy chỉnh (Nhập danh sách giá trị)' }];
             }
 
@@ -9340,14 +9432,14 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
             const filtered = options.filter(opt => !kw || opt.label.toLowerCase().includes(kw) || opt.val.toLowerCase().includes(kw));
 
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="col-span-4 text-center text-slate-400 py-3 italic">Không tìm thấy mục nào khớp từ khóa. Bấm nút "+ Thêm Mục Nhập" nếu muốn nhập giá trị tùy chỉnh.</div>`;
+                container.innerHTML = `<div class="col-span-2 text-center text-slate-400 py-3 italic">Không có mục nào khớp. Bạn có thể nhập bên dưới.</div>`;
                 return;
             }
 
             container.innerHTML = filtered.map(opt => {
                 const isChecked = selectedScopeValuesSet.has(opt.val) || (opt.val === 'all' && selectedScopeValuesSet.has('all'));
                 return `
-                    <label class="flex items-center gap-1.5 p-1 rounded hover:bg-blue-50/80 cursor-pointer text-[11px] text-slate-700 select-none">
+                    <label class="flex items-center gap-1.5 p-1 rounded hover:bg-blue-50 cursor-pointer text-[11px] text-slate-700 select-none truncate">
                         <input type="checkbox" value="${opt.val}" ${isChecked ? 'checked' : ''} onchange="toggleScopeOption('${opt.val}', this.checked)" class="rounded text-blue-600 focus:ring-blue-500">
                         <span class="truncate" title="${opt.label}">${opt.label}</span>
                     </label>
@@ -9371,7 +9463,6 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
                 }
             }
             updateScopeHiddenInputAndTags();
-            // Re-render check states
             renderScopeOptionsList(availableScopeOptionsCache, document.getElementById('adm-scope-search')?.value || '');
         }
 
@@ -9394,7 +9485,7 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
         }
 
         function addCustomScopeFromInput() {
-            const input = document.getElementById('adm-scope-search');
+            const input = document.getElementById('adm-scope-custom-input');
             if (!input || !input.value.trim()) return;
             const items = input.value.split(',').map(s => s.trim()).filter(Boolean);
             if (items.length > 0) {
@@ -9406,36 +9497,22 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
             }
         }
 
-        function removeSelectedScopeTag(val) {
-            selectedScopeValuesSet.delete(val);
-            if (selectedScopeValuesSet.size === 0) {
-                selectedScopeValuesSet.add('all');
-            }
-            updateScopeHiddenInputAndTags();
-            renderScopeOptionsList(availableScopeOptionsCache, document.getElementById('adm-scope-search')?.value || '');
-        }
-
         function updateScopeHiddenInputAndTags() {
             const hiddenInput = document.getElementById('adm-scope-value-select');
-            const tagsContainer = document.getElementById('adm-scope-selected-tags');
-            if (!hiddenInput || !tagsContainer) return;
+            const displayEl = document.getElementById('adm-scope-display');
+            const badgeEl = document.getElementById('adm-scope-count-badge');
+            if (!hiddenInput) return;
 
             const arr = Array.from(selectedScopeValuesSet);
             if (arr.length === 0 || arr.includes('all')) {
                 hiddenInput.value = 'all';
-                tagsContainer.innerHTML = `
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                        🌐 Toàn quyền (All Values)
-                    </span>
-                `;
+                if (displayEl) displayEl.textContent = 'Toàn quyền (All Values)';
+                if (badgeEl) badgeEl.textContent = 'Tất cả';
             } else {
                 hiddenInput.value = arr.join(', ');
-                tagsContainer.innerHTML = arr.map(v => `
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
-                        <span>${v}</span>
-                        <button type="button" onclick="removeSelectedScopeTag('${v}')" class="hover:text-red-600 font-black ml-0.5">✕</button>
-                    </span>
-                `).join('');
+                const summaryTxt = arr.length <= 2 ? arr.join(', ') : `${arr.slice(0, 2).join(', ')} (+${arr.length - 2} mục)`;
+                if (displayEl) displayEl.textContent = summaryTxt;
+                if (badgeEl) badgeEl.textContent = `Đã chọn: ${arr.length} mục`;
             }
         }
 
