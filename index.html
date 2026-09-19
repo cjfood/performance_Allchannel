@@ -6634,6 +6634,7 @@
 
                 const nppAsoMap = {};
                 const nppOrdersMap = {};
+                const isProductFiltered = (state.prodStorage !== 'ALL' || state.prodCate !== 'ALL' || state.prodPh1 !== 'ALL' || state.prodPh2 !== 'ALL');
                 if (!isProductFiltered && typeof GT_ASO_M !== 'undefined' && Array.isArray(GT_ASO_M)) {
                     GT_ASO_M.filter(d => {
                         if (d.year !== state.year || !state.selectedMonths.includes(d.month_num)) return false;
