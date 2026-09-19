@@ -710,6 +710,8 @@
             body:not(.desktop-mode-override) .cj-mobile-bottom-nav {
                 display: flex !important;
             }
+            body:not(.desktop-mode-override) [class*="grid-cols-5"] > div,
+            body.mobile-mode [class*="grid-cols-5"] > div,
             body:not(.desktop-mode-override) [class*="grid-cols-4"] > div,
             body.mobile-mode [class*="grid-cols-4"] > div,
             body:not(.desktop-mode-override) [class*="grid-cols-2"] > div,
@@ -736,19 +738,56 @@
             body:not(.desktop-mode-override) #main-filter-bar-wrapper.mobile-expanded {
                 display: flex !important;
             }
-            body:not(.desktop-mode-override) [class*="grid-cols-5"] {
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 8px !important;
+
+            /* 1. Core Primary KPI Cards (Full-width, perfectly uniform, no broken numbers) */
+            body:not(.desktop-mode-override) [class*="grid-cols-5"],
+            body:not(.desktop-mode-override) [class*="grid-cols-4"] {
+                grid-template-columns: 1fr !important;
+                gap: 10px !important;
             }
             body:not(.desktop-mode-override) [class*="grid-cols-5"] > div:last-child {
-                grid-column: span 2 !important;
+                grid-column: span 1 !important;
             }
-            body:not(.desktop-mode-override) [class*="grid-cols-4"] {
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 8px !important;
+
+            /* 2. Secondary Productivity & Efficiency Metric Bar (3 compact tiles side by side) */
+            body:not(.desktop-mode-override) .kpi-productivity-grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 6px !important;
             }
-            body:not(.desktop-mode-override) [class*="grid-cols-3"],
-            body:not(.desktop-mode-override) [class*="md:grid-cols-3"] {
+            body:not(.desktop-mode-override) .kpi-productivity-grid > div {
+                padding: 8px 4px !important;
+                min-width: 0 !important;
+                border-radius: 10px !important;
+            }
+            body:not(.desktop-mode-override) .kpi-productivity-grid span[data-i18n] {
+                font-size: 9px !important;
+                line-height: 1.15 !important;
+                text-align: center !important;
+                display: -webkit-box !important;
+                -webkit-line-clamp: 2 !important;
+                -webkit-box-orient: vertical !important;
+                overflow: hidden !important;
+            }
+            body:not(.desktop-mode-override) .kpi-productivity-grid .font-mono-num {
+                font-size: 16px !important;
+                line-height: 1.2 !important;
+                margin-top: 2px !important;
+                margin-bottom: 2px !important;
+            }
+            body:not(.desktop-mode-override) .kpi-productivity-grid span:last-child {
+                font-size: 8.5px !important;
+                line-height: 1.15 !important;
+                text-align: center !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                max-width: 100% !important;
+            }
+
+            /* 3. General 3-cols and 2-cols containers (Reports, Charts, Dialogs) */
+            body:not(.desktop-mode-override) [class*="grid-cols-3"]:not(.kpi-productivity-grid):not(#adm-scope-options-container *):not(#mobile-drawer-view *),
+            body:not(.desktop-mode-override) [class*="md:grid-cols-3"]:not(.kpi-productivity-grid) {
                 grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
                 gap: 8px !important;
             }
@@ -756,6 +795,9 @@
             body:not(.desktop-mode-override) [class*="lg:grid-cols-2"] {
                 grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
                 gap: 8px !important;
+            }
+            body:not(.desktop-mode-override) .font-mono-num {
+                white-space: nowrap !important;
             }
             body:not(.desktop-mode-override) .text-2xl {
                 font-size: 1.25rem !important;
@@ -849,19 +891,55 @@
         body.mobile-mode #main-filter-bar-wrapper.mobile-expanded {
             display: flex !important;
         }
-        body.mobile-mode [class*="grid-cols-5"] {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            gap: 8px !important;
+        /* 1. Core Primary KPI Cards (Full-width, perfectly uniform, no broken numbers) */
+        body.mobile-mode [class*="grid-cols-5"],
+        body.mobile-mode [class*="grid-cols-4"] {
+            grid-template-columns: 1fr !important;
+            gap: 10px !important;
         }
         body.mobile-mode [class*="grid-cols-5"] > div:last-child {
-            grid-column: span 2 !important;
+            grid-column: span 1 !important;
         }
-        body.mobile-mode [class*="grid-cols-4"] {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            gap: 8px !important;
+
+        /* 2. Secondary Productivity & Efficiency Metric Bar (3 compact tiles side by side) */
+        body.mobile-mode .kpi-productivity-grid {
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 6px !important;
         }
-        body.mobile-mode [class*="grid-cols-3"],
-        body.mobile-mode [class*="md:grid-cols-3"] {
+        body.mobile-mode .kpi-productivity-grid > div {
+            padding: 8px 4px !important;
+            min-width: 0 !important;
+            border-radius: 10px !important;
+        }
+        body.mobile-mode .kpi-productivity-grid span[data-i18n] {
+            font-size: 9px !important;
+            line-height: 1.15 !important;
+            text-align: center !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+            overflow: hidden !important;
+        }
+        body.mobile-mode .kpi-productivity-grid .font-mono-num {
+            font-size: 16px !important;
+            line-height: 1.2 !important;
+            margin-top: 2px !important;
+            margin-bottom: 2px !important;
+        }
+        body.mobile-mode .kpi-productivity-grid span:last-child {
+            font-size: 8.5px !important;
+            line-height: 1.15 !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            max-width: 100% !important;
+        }
+
+        /* 3. General 3-cols and 2-cols containers (Reports, Charts, Dialogs) */
+        body.mobile-mode [class*="grid-cols-3"]:not(.kpi-productivity-grid):not(#adm-scope-options-container *):not(#mobile-drawer-view *),
+        body.mobile-mode [class*="md:grid-cols-3"]:not(.kpi-productivity-grid) {
             grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
             gap: 8px !important;
         }
@@ -869,6 +947,9 @@
         body.mobile-mode [class*="lg:grid-cols-2"] {
             grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
             gap: 8px !important;
+        }
+        body.mobile-mode .font-mono-num {
+            white-space: nowrap !important;
         }
         body.mobile-mode .text-2xl {
             font-size: 1.25rem !important;
@@ -2144,7 +2225,7 @@
                 </div>
 
                 <!-- ROW 2: 3 EFFICIENCY & PRODUCTIVITY CARDS -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                <div class="kpi-productivity-grid grid grid-cols-1 md:grid-cols-3 gap-3.5">
                     <!-- Card 6: TẦN SUẤT MUA HÀNG -->
                     <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
                         <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="kpi_gt_frequency">TẦN SUẤT MUA HÀNG (FREQUENCY)</span>
@@ -2448,7 +2529,7 @@
                 </div>
 
                 <!-- ROW 2: 3 EFFICIENCY & METRIC CARDS -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                <div class="kpi-productivity-grid grid grid-cols-1 md:grid-cols-3 gap-3.5">
                     <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
                         <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="kpi_b2b_vpo">DOANH SỐ TB / KHÁCH (VPO B2B)</span>
                         <span class="text-2xl font-black font-mono-num text-blue-600 my-0.5" id="b2b-kpi-row2-vpo">0,0 M</span>
@@ -2556,7 +2637,7 @@
                 </div>
 
                 <!-- ROW 2: 3 EFFICIENCY & METRIC CARDS -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                <div class="kpi-productivity-grid grid grid-cols-1 md:grid-cols-3 gap-3.5">
                     <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
                         <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="kpi_kr_vpo">DOANH SỐ TB / ĐẠI LÝ (VPO KR)</span>
                         <span class="text-2xl font-black font-mono-num text-blue-600 my-0.5" id="kr-kpi-row2-vpo">0,0 M</span>
