@@ -1179,7 +1179,7 @@
 </head>
 <body class="flex min-h-screen bg-[#F0F2F5]">
         <!-- LOGIN MODAL (EXACT MATCH OF USER SCREENSHOT media_1788600533788.png) -->
-    <div id="login-overlay" style="display: flex !important; position: fixed; inset: 0; z-index: 999999; background: #0f172a; align-items: center; justify-content: center;" class="cj-modal-backdrop" onclick="if(event.target === this && currentUser) closeLoginModal();">
+    <div id="login-overlay" style="display: flex; position: fixed; inset: 0; z-index: 999999; background: #0f172a; align-items: center; justify-content: center;" class="cj-modal-backdrop" onclick="if(event.target === this && currentUser) closeLoginModal();">
         <div class="cj-modal-window relative max-w-md w-full rounded-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation();" style="max-width: 440px;">
             <!-- Close Button (X) - ONLY VISIBLE WHEN USER IS LOGGED IN -->
             <button id="login-modal-close-btn" onclick="closeLoginModal()" type="button" class="absolute top-3 right-3 text-white/80 hover:text-white hover:bg-white/20 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold z-20 transition-all cursor-pointer hidden" title="Đóng bảng đăng nhập">
@@ -8981,7 +8981,9 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
             if (savedUserJson) {
                 try {
                     const parsed = JSON.parse(savedUserJson);
-                    user = users.find(u => u.username.toLowerCase() === (parsed.username || '').toLowerCase()) || null;
+                    const uname = (parsed.username || '').toLowerCase();
+                    user = users.find(u => (u.username || '').toLowerCase() === uname) || 
+                           (typeof BASE_APP_USERS !== 'undefined' ? BASE_APP_USERS.find(u => (u.username || '').toLowerCase() === uname) : null);
                 } catch(e) {
                     user = null;
                 }
@@ -9332,7 +9334,7 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
             const modal = document.getElementById('login-overlay');
             if (modal) {
                 modal.classList.add('active');
-                modal.style.display = 'flex';
+                modal.style.setProperty('display', 'flex', 'important');
                 document.getElementById('login-error-msg')?.classList.add('hidden');
 
                 const closeBtn = document.getElementById('login-modal-close-btn');
@@ -9344,11 +9346,10 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
         }
 
         function closeLoginModal() {
-            if (!currentUser) return;
             const modal = document.getElementById('login-overlay');
             if (modal) {
                 modal.classList.remove('active');
-                modal.style.display = 'none';
+                modal.style.setProperty('display', 'none', 'important');
             }
         }
 
@@ -9396,8 +9397,24 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
 
             let isMatch = checkMatch(user, pass);
 
-            // BẢO ĐẢM HOẠT ĐỘNG TRÊN THIẾT BỊ MỚI:
-            // Nếu tìm trong máy không thấy user hoặc sai mật khẩu, BẮT BUỘC fetch GET trực tiếp lên Google Sheets theo thời gian thực
+            // 1. Kiểm tra đối soát trực tiếp với BASE_APP_USERS (Đảm bảo tài khoản chuẩn luôn đăng nhập được)
+            if ((!user || !isMatch) && typeof BASE_APP_USERS !== 'undefined' && Array.isArray(BASE_APP_USERS)) {
+                const baseUser = BASE_APP_USERS.find(u => (u.username || '').toLowerCase().trim() === username.toLowerCase());
+                if (baseUser && checkMatch(baseUser, pass)) {
+                    user = JSON.parse(JSON.stringify(baseUser));
+                    isMatch = true;
+                    // Cập nhật lại vào bộ nhớ cục bộ
+                    const uIdx = users.findIndex(u => (u.username || '').toLowerCase().trim() === username.toLowerCase());
+                    if (uIdx !== -1) {
+                        users[uIdx] = Object.assign({}, users[uIdx], baseUser);
+                    } else {
+                        users.push(user);
+                    }
+                    saveAppUsers(users);
+                }
+            }
+
+            // 2. Nếu thiết bị mới hoàn toàn và chưa có: Thử fetch từ Cloud Webhook (có timeout 2.5s)
             const webhookUrl = getCloudWebhookUrl();
             if ((!user || !isMatch) && webhookUrl) {
                 const origBtnHtml = submitBtn ? submitBtn.innerHTML : '';
@@ -9406,7 +9423,10 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
                         submitBtn.disabled = true;
                         submitBtn.innerHTML = `<span>🔄</span> <span>Đang xác thực với đám mây...</span>`;
                     }
-                    const resp = await fetch(webhookUrl, { method: 'GET' });
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 2500);
+                    const resp = await fetch(webhookUrl, { method: 'GET', signal: controller.signal });
+                    clearTimeout(timeoutId);
                     if (resp.ok) {
                         const data = await resp.json();
                         if (data && Array.isArray(data.users) && data.users.length > 0) {
