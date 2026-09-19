@@ -230,18 +230,53 @@
             border-color: #2563EB;
         }
 
+        /* ENTERPRISE TABLE SCROLL & DUAL-AXIS FREEZE */
+        .table-scroll-container {
+            max-height: 520px;
+            overflow-y: auto !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            position: relative !important;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            scrollbar-width: thin;
+            scrollbar-color: #94A3B8 #F1F5F9;
+        }
+        .table-scroll-container::-webkit-scrollbar {
+            width: 6px !important;
+            height: 6px !important;
+            display: block !important;
+        }
+        .table-scroll-container::-webkit-scrollbar-track {
+            background: #F1F5F9 !important;
+            border-radius: 4px !important;
+        }
+        .table-scroll-container::-webkit-scrollbar-thumb {
+            background: #94A3B8 !important;
+            border-radius: 4px !important;
+        }
+        .table-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #64748B !important;
+        }
+
         .mat-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
         }
-        .mat-table th {
+        .mat-table thead th {
             text-transform: uppercase;
             font-size: 10px;
             font-weight: 700;
-            color: #7B809A;
-            border-bottom: 1px solid #E9ECEF;
+            color: #475569;
+            background-color: #F8FAFC !important;
+            border-bottom: 2px solid #CBD5E1 !important;
             padding: 8px 10px;
             text-align: left;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 20 !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
         }
         .mat-table td {
             font-size: 11px;
@@ -249,6 +284,43 @@
             border-bottom: 1px solid #F0F2F5;
             color: #344767;
         }
+
+        /* STICKY FIRST COLUMN (Freeze Column horizontally) */
+        .mat-table th:first-child,
+        .mat-table td:first-child {
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 15 !important;
+            box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08) !important;
+        }
+
+        /* STICKY CORNER CELL (Top-Left intersection of header & first column) */
+        .mat-table thead th:first-child {
+            position: sticky !important;
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 35 !important;
+            background-color: #F1F5F9 !important;
+        }
+
+        /* FIRST COLUMN DESKTOP WIDTH & INDENTATION */
+        .th-first-col {
+            min-width: 240px;
+        }
+        .tree-lvl-1 { padding-left: 8px !important; }
+        .tree-lvl-2 { padding-left: 22px !important; }
+        .tree-lvl-3 { padding-left: 38px !important; }
+        .tree-lvl-4 { padding-left: 54px !important; }
+        .tree-lvl-5 { padding-left: 70px !important; }
+
+        /* OPAQUE BACKGROUNDS FOR STICKY TD:FIRST-CHILD */
+        .mat-table tr[class*="bg-purple-100"] td:first-child { background-color: #f3e8ff !important; }
+        .mat-table tr[class*="bg-sky-50"] td:first-child { background-color: #f0f9ff !important; }
+        .mat-table tr[class*="bg-amber-50"] td:first-child { background-color: #fffbeb !important; }
+        .mat-table tr[class*="bg-slate-50"] td:first-child { background-color: #f8fafc !important; }
+        .mat-table tr[class*="bg-slate-100"] td:first-child { background-color: #f1f5f9 !important; }
+        .mat-table tr td:first-child { background-color: #ffffff !important; }
+
         .tree-toggle {
             cursor: pointer;
             display: inline-flex;
@@ -826,12 +898,45 @@
                 padding: 5px 8px !important;
                 border-radius: 6px !important;
             }
+            /* MOBILE TABLE NARROW STICKY COLUMN & COMPACT INDENT */
+            body:not(.desktop-mode-override) .table-scroll-container {
+                max-height: 58vh !important;
+            }
+            body:not(.desktop-mode-override) .th-first-col,
             body:not(.desktop-mode-override) .mat-table th:first-child,
             body:not(.desktop-mode-override) .mat-table td:first-child {
                 position: sticky !important;
                 left: 0 !important;
-                z-index: 10 !important;
-                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.08) !important;
+                z-index: 15 !important;
+                width: 145px !important;
+                min-width: 140px !important;
+                max-width: 155px !important;
+                word-break: break-word !important;
+                overflow-wrap: break-word !important;
+                padding: 6px 4px !important;
+                font-size: 10px !important;
+                line-height: 1.25 !important;
+                box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08) !important;
+            }
+            body:not(.desktop-mode-override) .mat-table thead th:first-child {
+                position: sticky !important;
+                top: 0 !important;
+                left: 0 !important;
+                z-index: 35 !important;
+                background-color: #F1F5F9 !important;
+            }
+            body:not(.desktop-mode-override) .tree-lvl-1 { padding-left: 2px !important; }
+            body:not(.desktop-mode-override) .tree-lvl-2 { padding-left: 6px !important; }
+            body:not(.desktop-mode-override) .tree-lvl-3 { padding-left: 12px !important; }
+            body:not(.desktop-mode-override) .tree-lvl-4 { padding-left: 18px !important; }
+            body:not(.desktop-mode-override) .tree-lvl-5 { padding-left: 24px !important; }
+            body:not(.desktop-mode-override) .tree-toggle {
+                width: 13px !important;
+                height: 13px !important;
+                font-size: 8.5px !important;
+                margin-right: 3px !important;
+                border-radius: 3px !important;
+                flex-shrink: 0 !important;
             }
             body:not(.desktop-mode-override) tr[class*="bg-purple-100"] td:first-child { background-color: #f3e8ff !important; }
             body:not(.desktop-mode-override) tr[class*="bg-sky-50"] td:first-child { background-color: #f0f9ff !important; }
@@ -978,12 +1083,45 @@
             padding: 5px 8px !important;
             border-radius: 6px !important;
         }
+        /* MOBILE TABLE NARROW STICKY COLUMN & COMPACT INDENT */
+        body.mobile-mode .table-scroll-container {
+            max-height: 58vh !important;
+        }
+        body.mobile-mode .th-first-col,
         body.mobile-mode .mat-table th:first-child,
         body.mobile-mode .mat-table td:first-child {
             position: sticky !important;
             left: 0 !important;
-            z-index: 10 !important;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.08) !important;
+            z-index: 15 !important;
+            width: 145px !important;
+            min-width: 140px !important;
+            max-width: 155px !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+            padding: 6px 4px !important;
+            font-size: 10px !important;
+            line-height: 1.25 !important;
+            box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08) !important;
+        }
+        body.mobile-mode .mat-table thead th:first-child {
+            position: sticky !important;
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 35 !important;
+            background-color: #F1F5F9 !important;
+        }
+        body.mobile-mode .tree-lvl-1 { padding-left: 2px !important; }
+        body.mobile-mode .tree-lvl-2 { padding-left: 6px !important; }
+        body.mobile-mode .tree-lvl-3 { padding-left: 12px !important; }
+        body.mobile-mode .tree-lvl-4 { padding-left: 18px !important; }
+        body.mobile-mode .tree-lvl-5 { padding-left: 24px !important; }
+        body.mobile-mode .tree-toggle {
+            width: 13px !important;
+            height: 13px !important;
+            font-size: 8.5px !important;
+            margin-right: 3px !important;
+            border-radius: 3px !important;
+            flex-shrink: 0 !important;
         }
         body.mobile-mode tr[class*="bg-purple-100"] td:first-child { background-color: #f3e8ff !important; }
         body.mobile-mode tr[class*="bg-sky-50"] td:first-child { background-color: #f0f9ff !important; }
@@ -2101,11 +2239,11 @@
                         </div>
                         <span class="text-xs font-bold text-sky-600 hover:text-sky-800 cursor-pointer" onclick="toggleAllProductNodes()" data-i18n="btn_toggle_all">Bung / Đóng Hết</span>
                     </div>
-                    <div class="overflow-x-auto max-h-96">
+                    <div class="table-scroll-container">
                         <table class="mat-table text-[11px]" id="table-tree-prod">
                             <thead>
                                 <tr>
-                                    <th data-i18n="th_prod_struct">Cơ Cấu Sản Phẩm</th>
+                                    <th class="th-first-col" data-i18n="th_prod_struct">Cơ Cấu Sản Phẩm</th>
                                     <th class="text-right" data-i18n="th_si_bil_mil">Doanh Số Sell-in (Bil/Mil)</th>
                                     <th class="text-right" data-i18n="th_target">Target</th>
                                     <th class="text-center" data-i18n="th_pct_achv">% Đạt</th>
@@ -2126,11 +2264,11 @@
                         </div>
                         <span class="text-xs font-bold text-sky-600 hover:text-sky-800 cursor-pointer" onclick="toggleAllChannelNodes()" data-i18n="btn_toggle_all">Bung / Đóng Hết</span>
                     </div>
-                    <div class="overflow-x-auto max-h-96">
+                    <div class="table-scroll-container">
                         <table class="mat-table text-[11px]" id="table-tree-chan">
                             <thead>
                                 <tr>
-                                    <th data-i18n="th_chan_cust">Kênh / Khách Hàng</th>
+                                    <th class="th-first-col" data-i18n="th_chan_cust">Kênh / Khách Hàng</th>
                                     <th class="text-right" data-i18n="th_si_bil_mil">Doanh Số Sell-in</th>
                                     <th class="text-right" data-i18n="th_target">Target</th>
                                     <th class="text-center" data-i18n="th_pct_achv">% Đạt</th>
@@ -2306,11 +2444,11 @@
                         </button>
                     </div>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="table-scroll-container">
                     <table class="mat-table text-[11px]" id="table-tree-gt">
                         <thead>
                             <tr class="bg-slate-100 text-slate-700">
-                                <th style="min-width: 240px;" data-i18n="th_org_struct">Cơ Cấu Tổ Chức</th>
+                                <th class="th-first-col" data-i18n="th_org_struct">Cơ Cấu Tổ Chức</th>
                                 <th class="text-right" style="min-width: 95px;" data-i18n="th_si_gross">Sell-in Gross</th>
                                 <th class="text-right" style="min-width: 95px;" data-i18n="th_si_target">Target (SI)</th>
                                 <th class="text-center" style="min-width: 75px;" data-i18n="th_si_achv">% Đạt (SI)</th>
@@ -2442,11 +2580,11 @@
 
             <div class="material-card p-4">
                 <h3 class="text-sm font-bold text-slate-800 mb-3" data-i18n="table_mt_title">Phân Cấp Kênh MT (Sub-channel ➔ Chuỗi ➔ Vùng)</h3>
-                <div class="overflow-x-auto max-h-96">
+                <div class="table-scroll-container">
                     <table class="mat-table text-[11px]">
                         <thead>
                             <tr>
-                                <th data-i18n="th_mt_struct">Cơ Cấu MT</th>
+                                <th class="th-first-col" data-i18n="th_mt_struct">Cơ Cấu MT</th>
                                 <th class="text-right" data-i18n="th_sellin_vnd">Sell-in (VND)</th>
                                 <th class="text-right" data-i18n="th_target">Target</th>
                                 <th class="text-center" data-i18n="th_pct_achv">% Đạt</th>
@@ -2550,11 +2688,11 @@
 
             <div class="material-card p-4">
                 <h3 class="text-sm font-bold text-slate-800 mb-3" data-i18n="table_b2b_title">Phân Cấp Khách Hàng B2B</h3>
-                <div class="overflow-x-auto max-h-96">
+                <div class="table-scroll-container">
                     <table class="mat-table text-[11px]">
                         <thead>
                             <tr>
-                                <th data-i18n="th_cust_b2b">Khách Hàng B2B</th>
+                                <th class="th-first-col" data-i18n="th_cust_b2b">Khách Hàng B2B</th>
                                 <th class="text-right" data-i18n="th_rev_vnd">Doanh Số (VND)</th>
                                 <th class="text-right" data-i18n="th_target">Target</th>
                                 <th class="text-center" data-i18n="th_pct_achv">% Đạt</th>
@@ -2658,11 +2796,11 @@
 
             <div class="material-card p-4">
                 <h3 class="text-sm font-bold text-slate-800 mb-3" data-i18n="table_kr_title">Phân Cấp Khách Hàng KR</h3>
-                <div class="overflow-x-auto max-h-96">
+                <div class="table-scroll-container">
                     <table class="mat-table text-[11px]">
                         <thead>
                             <tr>
-                                <th data-i18n="th_cust_kr">Khách Hàng KR</th>
+                                <th class="th-first-col" data-i18n="th_cust_kr">Khách Hàng KR</th>
                                 <th class="text-right" data-i18n="th_rev_vnd">Doanh Số (VND)</th>
                                 <th class="text-right" data-i18n="th_target">Target</th>
                                 <th class="text-center" data-i18n="th_pct_achv">% Đạt</th>
@@ -5216,7 +5354,7 @@
                     const sShare = totalSellin > 0 ? (sVal / totalSellin) * 100 : 0;
 
                     let rowHtml = '<tr class="bg-slate-50 font-bold border-b border-slate-200">';
-                    rowHtml += '<td><span class="tree-toggle" onclick="toggleTreeNode(\'' + sId + '\')">' + (sOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + storage + '</span></td>';
+                    rowHtml += '<td class="tree-lvl-1"><span class="tree-toggle" onclick="toggleTreeNode(\' + sId + \')">' + (sOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + storage + '</span></td>';
                     rowHtml += '<td class="text-right font-mono-num font-bold text-sky-800" title="' + formatExactVND(sVal) + '">' + formatVND(sVal) + '</td>';
                     rowHtml += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(sTarget) + '">' + (sTarget > 0 ? formatVND(sTarget) : '-') + '</td>';
                     rowHtml += '<td class="text-center font-mono-num">' + formatAchieveBadge(sVal, sTarget) + '</td>';
@@ -5235,7 +5373,7 @@
                             const cShare = totalSellin > 0 ? (cVal / totalSellin) * 100 : 0;
 
                             let cRow = '<tr class="bg-slate-100/60 font-semibold border-b border-slate-200/60">';
-                            cRow += '<td style="padding-left: 24px;"><span class="tree-toggle" onclick="toggleTreeNode(\'' + cId + '\')">' + (cOpen ? '−' : '+') + '</span><span class="text-slate-800">' + cate + '</span></td>';
+                            cRow += '<td class="tree-lvl-2"><span class="tree-toggle" onclick="toggleTreeNode(\' + cId + \')">' + (cOpen ? '−' : '+') + '</span><span class="text-slate-800">' + cate + '</span></td>';
                             cRow += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(cVal) + '">' + formatVND(cVal) + '</td>';
                             cRow += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(cTarget) + '">' + (cTarget > 0 ? formatVND(cTarget) : '-') + '</td>';
                             cRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(cVal, cTarget) + '</td>';
@@ -5254,7 +5392,7 @@
                                     const p1Share = totalSellin > 0 ? (p1Val / totalSellin) * 100 : 0;
 
                                     let p1Row = '<tr class="bg-white hover:bg-slate-50 border-b border-slate-100">';
-                                    p1Row += '<td style="padding-left: 44px;"><span class="tree-toggle" onclick="toggleTreeNode(\'' + p1Id + '\')">' + (p1Open ? '−' : '+') + '</span><span class="text-slate-700 font-medium">' + ph1 + '</span></td>';
+                                    p1Row += '<td class="tree-lvl-3"><span class="tree-toggle" onclick="toggleTreeNode(\' + p1Id + \')">' + (p1Open ? '−' : '+') + '</span><span class="text-slate-700 font-medium">' + ph1 + '</span></td>';
                                     p1Row += '<td class="text-right font-mono-num text-slate-700" title="' + formatExactVND(p1Val) + '">' + formatVND(p1Val) + '</td>';
                                     p1Row += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(p1Target) + '">' + (p1Target > 0 ? formatVND(p1Target) : '-') + '</td>';
                                     p1Row += '<td class="text-center font-mono-num">' + formatAchieveBadge(p1Val, p1Target) + '</td>';
@@ -5270,7 +5408,7 @@
                                             const p2Share = totalSellin > 0 ? (p2Val / totalSellin) * 100 : 0;
 
                                             let p2Row = '<tr class="text-slate-600 text-xs bg-slate-50/40 hover:bg-slate-100/60 border-b border-slate-100">';
-                                            p2Row += '<td style="padding-left: 64px;"><span class="inline-block w-1.5 h-1.5 rounded-full bg-purple-500 mr-2"></span>' + ph2 + '</td>';
+                                            p2Row += '<td class="tree-lvl-4"><span class="inline-block w-1.5 h-1.5 rounded-full bg-purple-500 mr-2"></span>' + ph2 + '</td>';
                                             p2Row += '<td class="text-right font-mono-num font-semibold text-slate-700" title="' + formatExactVND(p2Val) + '">' + formatVND(p2Val) + '</td>';
                                             p2Row += '<td class="text-right font-mono-num text-slate-400">-</td>';
                                             p2Row += '<td class="text-center font-mono-num"><span class="text-slate-400 font-normal">-</span></td>';
@@ -5385,7 +5523,7 @@
                     const chShare = totalSellin > 0 ? (chVal / totalSellin) * 100 : 0;
 
                     let chRow = '<tr class="bg-slate-50 font-bold border-b border-slate-200">';
-                    chRow += '<td><span class="tree-toggle" onclick="toggleTreeNode(\'' + chId + '\')">' + (chOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + ch + '</span></td>';
+                    chRow += '<td class="tree-lvl-1"><span class="tree-toggle" onclick="toggleTreeNode(\' + chId + \')">' + (chOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + ch + '</span></td>';
                     chRow += '<td class="text-right font-mono-num font-bold text-sky-800" title="' + formatExactVND(chVal) + '">' + formatVND(chVal) + '</td>';
                     chRow += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(chTarget) + '">' + (chTarget > 0 ? formatVND(chTarget) : '-') + '</td>';
                     chRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(chVal, chTarget) + '</td>';
@@ -5404,7 +5542,7 @@
                             const scShare = totalSellin > 0 ? (scVal / totalSellin) * 100 : 0;
 
                             let scRow = '<tr class="bg-slate-100/60 font-semibold border-b border-slate-200/60">';
-                            scRow += '<td style="padding-left: 24px;"><span class="tree-toggle" onclick="toggleTreeNode(\'' + scId + '\')">' + (scOpen ? '−' : '+') + '</span><span class="text-slate-800">' + sc + '</span></td>';
+                            scRow += '<td class="tree-lvl-2"><span class="tree-toggle" onclick="toggleTreeNode(\' + scId + \')">' + (scOpen ? '−' : '+') + '</span><span class="text-slate-800">' + sc + '</span></td>';
                             scRow += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(scVal) + '">' + formatVND(scVal) + '</td>';
                             scRow += '<td class="text-right font-mono-num font-semibold text-slate-600" title="' + formatExactVND(scTarget) + '">' + (scTarget > 0 ? formatVND(scTarget) : '-') + '</td>';
                             scRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(scVal, scTarget) + '</td>';
@@ -5422,7 +5560,7 @@
                                     const accShare = totalSellin > 0 ? (accVal / totalSellin) * 100 : 0;
 
                                     let accRow = '<tr class="text-slate-600 text-xs bg-white hover:bg-slate-50 border-b border-slate-100">';
-                                    accRow += '<td style="padding-left: 48px;"><span class="inline-block w-1.5 h-1.5 rounded-full bg-sky-500 mr-2"></span>' + acc + '</td>';
+                                    accRow += '<td class="tree-lvl-3"><span class="inline-block w-1.5 h-1.5 rounded-full bg-sky-500 mr-2"></span>' + acc + '</td>';
                                     accRow += '<td class="text-right font-mono-num font-semibold text-slate-800" title="' + formatExactVND(accVal) + '">' + formatVND(accVal) + '</td>';
                                     accRow += '<td class="text-right font-mono-num text-slate-600" title="' + formatExactVND(accTarget) + '">' + (accTarget > 0 ? formatVND(accTarget) : '-') + '</td>';
                                     accRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(accVal, accTarget) + '</td>';
@@ -6397,7 +6535,7 @@
                     const mSkuStore = mNode.aso > 0 ? mNode.aso_skus / mNode.aso : 0;
 
                     let mRow = '<tr class="bg-purple-100/70 font-bold border-t border-purple-200">';
-                    mRow += '<td><span class="tree-toggle bg-purple-700 text-white" onclick="toggleTreeNode(\'' + mId + '\')">' + (mOpen ? '−' : '+') + '</span><span class="text-purple-950 font-black">' + m + '</span></td>';
+                    mRow += '<td class="tree-lvl-1"><span class="tree-toggle bg-purple-700 text-white" onclick="toggleTreeNode(\'' + mId + '\')">' + (mOpen ? '−' : '+') + '</span><span class="text-purple-950 font-black">' + m + '</span></td>';
                     mRow += '<td class="text-right font-mono-num font-bold text-sky-800">' + formatBn(mSi) + ' B</td>';
                     mRow += '<td class="text-right font-mono-num font-bold text-slate-700">' + (mTargetSi > 0 ? formatBn(mTargetSi) + ' B' : '-') + '</td>';
                     mRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(mSi, mTargetSi) + '</td>';
@@ -6434,7 +6572,7 @@
                             const vSkuStore = vNode.aso > 0 ? vNode.aso_skus / vNode.aso : 0;
 
                             let vRow = '<tr class="bg-slate-100 font-bold border-b border-slate-200">';
-                            vRow += '<td style="padding-left: 18px;"><span class="tree-toggle bg-slate-600 text-white" onclick="toggleTreeNode(\'' + vId + '\')">' + (vOpen ? '−' : '+') + '</span><span class="text-slate-900">' + v + '</span></td>';
+                            vRow += '<td class="tree-lvl-2"><span class="tree-toggle bg-slate-600 text-white" onclick="toggleTreeNode(\'' + vId + '\')">' + (vOpen ? '−' : '+') + '</span><span class="text-slate-900">' + v + '</span></td>';
                             vRow += '<td class="text-right font-mono-num font-semibold text-sky-700">' + formatBn(vSi) + ' B</td>';
                             vRow += '<td class="text-right font-mono-num font-bold text-slate-700">' + (vTargetSi > 0 ? formatBn(vTargetSi) + ' B' : '-') + '</td>';
                             vRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(vSi, vTargetSi) + '</td>';
@@ -6470,76 +6608,76 @@
                                     const gLppc = gsbhNode.orders > 0 ? gsbhNode.order_skus / gsbhNode.orders : 0;
                                     const gSkuStore = gsbhNode.aso > 0 ? gsbhNode.aso_skus / gsbhNode.aso : 0;
 
-                                    let gRow = '<tr class="bg-sky-50/60 font-semibold text-sky-950 border-b border-sky-100">';
-                                    gRow += '<td style="padding-left: 36px;"><span class="tree-toggle bg-sky-600 text-white" onclick="toggleTreeNode(\'' + gsbhId + '\')">' + (gsbhOpen ? '−' : '+') + '</span><span class="text-sky-900 font-bold">' + gsbh + '</span></td>';
-                                    gRow += '<td class="text-right font-mono-num text-slate-700">' + formatBn(gSi) + ' B</td>';
-                                    gRow += '<td class="text-right font-mono-num font-bold text-slate-700">' + (gTargetSi > 0 ? formatBn(gTargetSi) + ' B' : '-') + '</td>';
-                                    gRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(gSi, gTargetSi) + '</td>';
-                                    gRow += '<td class="text-right font-mono-num font-bold text-emerald-600">' + formatBn(gsbhNode.so) + ' B</td>';
-                                    gRow += '<td class="text-right font-mono-num font-bold text-slate-700">' + (gTarget > 0 ? formatBn(gTarget) + ' B' : '-') + '</td>';
-                                    gRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(gsbhNode.so, gTarget) + '</td>';
-                                    gRow += '<td class="text-right font-mono-num text-slate-600">' + formatBn(gStock) + ' B</td>';
-                                    gRow += '<td class="text-center font-mono-num ' + (gDoi > 35 ? 'text-rose-600 font-bold' : 'text-slate-700') + '">' + gDoi.toFixed(1) + 'd</td>';
-                                    gRow += '<td class="text-right font-mono-num text-sky-600 font-bold">' + gsbhNode.aso.toLocaleString() + '</td>';
-                                    gRow += '<td class="text-right font-mono-num text-slate-500">' + gMcp.toLocaleString() + '</td>';
-                                    gRow += '<td class="text-right font-mono-num text-slate-600">' + gStrike.toFixed(1) + '%</td>';
-                                    gRow += '<td class="text-right font-mono-num text-purple-700">' + (gDrop/1000).toFixed(1) + 'K</td>';
-                                    gRow += '<td class="text-right font-mono-num text-slate-600">' + gLppc.toFixed(1) + '</td>';
-                                    gRow += '<td class="text-right font-mono-num text-slate-600">' + gSkuStore.toFixed(1) + '</td>';
-                                    gRow += '</tr>';
-                                    htmlRows.push(gRow);
+                                     let gRow = '<tr class="bg-sky-50/60 font-semibold text-sky-950 border-b border-sky-100">';
+                                     gRow += '<td class="tree-lvl-3"><span class="tree-toggle bg-sky-600 text-white" onclick="toggleTreeNode(\'' + gsbhId + '\')">' + (gsbhOpen ? '−' : '+') + '</span><span class="text-sky-900 font-bold">' + gsbh + '</span></td>';
+                                     gRow += '<td class="text-right font-mono-num text-slate-700">' + formatBn(gSi) + ' B</td>';
+                                     gRow += '<td class="text-right font-mono-num font-bold text-slate-700">' + (gTargetSi > 0 ? formatBn(gTargetSi) + ' B' : '-') + '</td>';
+                                     gRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(gSi, gTargetSi) + '</td>';
+                                     gRow += '<td class="text-right font-mono-num font-bold text-emerald-600">' + formatBn(gsbhNode.so) + ' B</td>';
+                                     gRow += '<td class="text-right font-mono-num font-bold text-slate-700">' + (gTarget > 0 ? formatBn(gTarget) + ' B' : '-') + '</td>';
+                                     gRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(gsbhNode.so, gTarget) + '</td>';
+                                     gRow += '<td class="text-right font-mono-num text-slate-600">' + formatBn(gStock) + ' B</td>';
+                                     gRow += '<td class="text-center font-mono-num ' + (gDoi > 35 ? 'text-rose-600 font-bold' : 'text-slate-700') + '">' + gDoi.toFixed(1) + 'd</td>';
+                                     gRow += '<td class="text-right font-mono-num text-sky-600 font-bold">' + gsbhNode.aso.toLocaleString() + '</td>';
+                                     gRow += '<td class="text-right font-mono-num text-slate-500">' + gMcp.toLocaleString() + '</td>';
+                                     gRow += '<td class="text-right font-mono-num text-slate-600">' + gStrike.toFixed(1) + '%</td>';
+                                     gRow += '<td class="text-right font-mono-num text-purple-700">' + (gDrop/1000).toFixed(1) + 'K</td>';
+                                     gRow += '<td class="text-right font-mono-num text-slate-600">' + gLppc.toFixed(1) + '</td>';
+                                     gRow += '<td class="text-right font-mono-num text-slate-600">' + gSkuStore.toFixed(1) + '</td>';
+                                     gRow += '</tr>';
+                                     htmlRows.push(gRow);
 
-                                    if (gsbhOpen) {
-                                        const nppObj = gsbhNode.children;
-                                        Object.keys(nppObj).sort().forEach(npp => {
-                                            const nppId = gsbhId + '_' + npp;
-                                            const nppOpen = openNodes.has(nppId) || searchVal.length > 0;
-                                            const nppNode = nppObj[npp];
+                                     if (gsbhOpen) {
+                                         const nppObj = gsbhNode.children;
+                                         Object.keys(nppObj).sort().forEach(npp => {
+                                             const nppId = gsbhId + '_' + npp;
+                                             const nppOpen = openNodes.has(nppId) || searchVal.length > 0;
+                                             const nppNode = nppObj[npp];
 
-                                            const nppCode = nppNode.code;
-                                            const nppSi = nppSiMap[nppCode] || 0;
-                                            const nppTargetSi = nppTargetSiMap[nppCode] || nppTargetSiMap[npp] || 0;
-                                            const nppTarget = nppTargetSoMap[nppCode] || nppTargetSoMap[npp] || 0;
-                                            const nppStock = nppStockMap[nppCode] || (nppNode.so * 0.75);
-                                            const nppDoi = calcDoi(nppStock, nppNode.so);
-                                            const nppMcp = nppMcpMap[nppCode] || 0;
-                                            const nppStrike = nppMcp > 0 ? (nppNode.aso / nppMcp) * 100 : 0;
-                                            const nppDrop = nppNode.orders > 0 ? nppNode.so / nppNode.orders : 0;
-                                            const nppLppc = nppNode.orders > 0 ? nppNode.order_skus / nppNode.orders : 0;
-                                            const nppSkuStore = nppNode.aso > 0 ? nppNode.aso_skus / nppNode.aso : 0;
+                                             const nppCode = nppNode.code;
+                                             const nppSi = nppSiMap[nppCode] || 0;
+                                             const nppTargetSi = nppTargetSiMap[nppCode] || nppTargetSiMap[npp] || 0;
+                                             const nppTarget = nppTargetSoMap[nppCode] || nppTargetSoMap[npp] || 0;
+                                             const nppStock = nppStockMap[nppCode] || (nppNode.so * 0.75);
+                                             const nppDoi = calcDoi(nppStock, nppNode.so);
+                                             const nppMcp = nppMcpMap[nppCode] || 0;
+                                             const nppStrike = nppMcp > 0 ? (nppNode.aso / nppMcp) * 100 : 0;
+                                             const nppDrop = nppNode.orders > 0 ? nppNode.so / nppNode.orders : 0;
+                                             const nppLppc = nppNode.orders > 0 ? nppNode.order_skus / nppNode.orders : 0;
+                                             const nppSkuStore = nppNode.aso > 0 ? nppNode.aso_skus / nppNode.aso : 0;
 
-                                            let nppRow = '<tr class="bg-amber-50/50 text-xs border-b border-amber-100">';
-                                            nppRow += '<td style="padding-left: 54px;"><span class="tree-toggle bg-amber-500 text-white" onclick="toggleTreeNode(\'' + nppId + '\')">' + (nppOpen ? '−' : '+') + '</span><strong class="text-amber-950 font-bold">' + npp + '</strong></td>';
-                                            nppRow += '<td class="text-right font-mono-num text-sky-800 font-semibold" title="' + formatExactVND(nppSi) + '">' + formatVND(nppSi) + '</td>';
-                                            nppRow += '<td class="text-right font-mono-num font-semibold text-slate-700" title="' + formatExactVND(nppTargetSi) + '">' + (nppTargetSi > 0 ? formatVND(nppTargetSi) : '-') + '</td>';
-                                            nppRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(nppSi, nppTargetSi) + '</td>';
-                                            nppRow += '<td class="text-right font-mono-num font-bold text-emerald-700" title="' + formatExactVND(nppNode.so) + '">' + formatVND(nppNode.so) + '</td>';
-                                            nppRow += '<td class="text-right font-mono-num font-semibold text-slate-700" title="' + formatExactVND(nppTarget) + '">' + (nppTarget > 0 ? formatVND(nppTarget) : '-') + '</td>';
-                                            nppRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(nppNode.so, nppTarget) + '</td>';
-                                            nppRow += '<td class="text-right font-mono-num text-slate-700 font-semibold" title="' + formatExactVND(nppStock) + '">' + formatVND(nppStock) + '</td>';
-                                            nppRow += '<td class="text-center font-mono-num font-bold ' + (nppDoi > 35 ? 'text-rose-600 bg-rose-100 rounded px-1' : 'text-slate-800') + '">' + nppDoi.toFixed(1) + 'd</td>';
-                                            nppRow += '<td class="text-right font-mono-num text-sky-700 font-bold">' + nppNode.aso + '</td>';
-                                            nppRow += '<td class="text-right font-mono-num text-slate-600">' + nppMcp + '</td>';
-                                            nppRow += '<td class="text-right font-mono-num text-slate-700">' + nppStrike.toFixed(1) + '%</td>';
-                                            nppRow += '<td class="text-right font-mono-num font-semibold text-purple-800">' + (nppDrop/1000).toFixed(1) + 'K</td>';
-                                            nppRow += '<td class="text-right font-mono-num text-slate-600">' + nppLppc.toFixed(1) + '</td>';
-                                            nppRow += '<td class="text-right font-mono-num text-slate-600">' + nppSkuStore.toFixed(1) + '</td>';
-                                            nppRow += '</tr>';
-                                            htmlRows.push(nppRow);
+                                             let nppRow = '<tr class="bg-amber-50/50 text-xs border-b border-amber-100">';
+                                             nppRow += '<td class="tree-lvl-4"><span class="tree-toggle bg-amber-500 text-white" onclick="toggleTreeNode(\'' + nppId + '\')">' + (nppOpen ? '−' : '+') + '</span><strong class="text-amber-950 font-bold">' + npp + '</strong></td>';
+                                             nppRow += '<td class="text-right font-mono-num text-sky-800 font-semibold" title="' + formatExactVND(nppSi) + '">' + formatVND(nppSi) + '</td>';
+                                             nppRow += '<td class="text-right font-mono-num font-semibold text-slate-700" title="' + formatExactVND(nppTargetSi) + '">' + (nppTargetSi > 0 ? formatVND(nppTargetSi) : '-') + '</td>';
+                                             nppRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(nppSi, nppTargetSi) + '</td>';
+                                             nppRow += '<td class="text-right font-mono-num font-bold text-emerald-700" title="' + formatExactVND(nppNode.so) + '">' + formatVND(nppNode.so) + '</td>';
+                                             nppRow += '<td class="text-right font-mono-num font-semibold text-slate-700" title="' + formatExactVND(nppTarget) + '">' + (nppTarget > 0 ? formatVND(nppTarget) : '-') + '</td>';
+                                             nppRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(nppNode.so, nppTarget) + '</td>';
+                                             nppRow += '<td class="text-right font-mono-num text-slate-700 font-semibold" title="' + formatExactVND(nppStock) + '">' + formatVND(nppStock) + '</td>';
+                                             nppRow += '<td class="text-center font-mono-num font-bold ' + (nppDoi > 35 ? 'text-rose-600 bg-rose-100 rounded px-1' : 'text-slate-800') + '">' + nppDoi.toFixed(1) + 'd</td>';
+                                             nppRow += '<td class="text-right font-mono-num text-sky-700 font-bold">' + nppNode.aso + '</td>';
+                                             nppRow += '<td class="text-right font-mono-num text-slate-600">' + nppMcp + '</td>';
+                                             nppRow += '<td class="text-right font-mono-num text-slate-700">' + nppStrike.toFixed(1) + '%</td>';
+                                             nppRow += '<td class="text-right font-mono-num font-semibold text-purple-800">' + (nppDrop/1000).toFixed(1) + 'K</td>';
+                                             nppRow += '<td class="text-right font-mono-num text-slate-600">' + nppLppc.toFixed(1) + '</td>';
+                                             nppRow += '<td class="text-right font-mono-num text-slate-600">' + nppSkuStore.toFixed(1) + '</td>';
+                                             nppRow += '</tr>';
+                                             htmlRows.push(nppRow);
 
-                                            if (nppOpen) {
-                                                const nvbhObj = nppNode.children;
-                                                Object.keys(nvbhObj).sort().forEach(nvbh => {
-                                                    const nvNode = nvbhObj[nvbh];
-                                                    const nvTarget = nvbhTargetSoMap[nvbh] || 0;
-                                                    const nvMcp = nppNode.aso > 0 ? Math.round((nvNode.aso / nppNode.aso) * nppMcp) : 0;
-                                                    const nvStrike = nvMcp > 0 ? (nvNode.aso / nvMcp) * 100 : 0;
-                                                    const nvDrop = nvNode.orders > 0 ? nvNode.so / nvNode.orders : 0;
-                                                    const nvLppc = nvNode.orders > 0 ? nvNode.order_skus / nvNode.orders : 0;
-                                                    const nvSkuStore = nvNode.aso > 0 ? nvNode.aso_skus / nvNode.aso : 0;
+                                             if (nppOpen) {
+                                                 const nvbhObj = nppNode.children;
+                                                 Object.keys(nvbhObj).sort().forEach(nvbh => {
+                                                     const nvNode = nvbhObj[nvbh];
+                                                     const nvTarget = nvbhTargetSoMap[nvbh] || 0;
+                                                     const nvMcp = nppNode.aso > 0 ? Math.round((nvNode.aso / nppNode.aso) * nppMcp) : 0;
+                                                     const nvStrike = nvMcp > 0 ? (nvNode.aso / nvMcp) * 100 : 0;
+                                                     const nvDrop = nvNode.orders > 0 ? nvNode.so / nvNode.orders : 0;
+                                                     const nvLppc = nvNode.orders > 0 ? nvNode.order_skus / nvNode.orders : 0;
+                                                     const nvSkuStore = nvNode.aso > 0 ? nvNode.aso_skus / nvNode.aso : 0;
 
-                                                    let nvRow = '<tr class="text-slate-600 text-xs hover:bg-slate-100 border-b border-slate-100">';
-                                                    nvRow += '<td style="padding-left: 74px;"><span class="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2"></span><span class="text-slate-800 font-medium">' + nvbh + '</span></td>';
+                                                     let nvRow = '<tr class="text-slate-600 text-xs hover:bg-slate-100 border-b border-slate-100">';
+                                                     nvRow += '<td class="tree-lvl-5"><span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 flex-shrink-0"></span><span class="text-slate-800 font-medium">' + nvbh + '</span></td>';
                                                     nvRow += '<td class="text-right font-mono-num text-slate-300">-</td>';
                                                     nvRow += '<td class="text-right font-mono-num text-slate-300">-</td>';
                                                     nvRow += '<td class="text-center font-mono-num text-slate-300">-</td>';
@@ -7066,7 +7204,7 @@
                     const scShare = total > 0 ? (scVal / total) * 100 : 0;
 
                     let scRow = '<tr class="bg-slate-50 font-bold border-b border-slate-200">';
-                    scRow += '<td><span class="tree-toggle" onclick="toggleTreeNode(\'' + scId + '\')">' + (scOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + sc + '</span></td>';
+                    scRow += '<td class="tree-lvl-1"><span class="tree-toggle" onclick="toggleTreeNode(\' + scId + \')">' + (scOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + sc + '</span></td>';
                     scRow += '<td class="text-right font-mono-num font-bold text-sky-800">' + formatVND(scVal) + '</td>';
                     scRow += '<td class="text-right font-mono-num font-bold text-slate-700">' + (scTarget > 0 ? formatVND(scTarget) : '-') + '</td>';
                     scRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(scVal, scTarget) + '</td>';
@@ -7085,7 +7223,7 @@
                             const accShare = total > 0 ? (accVal / total) * 100 : 0;
 
                             let accRow = '<tr class="bg-slate-100/50 font-semibold border-b border-slate-200/60">';
-                            accRow += '<td style="padding-left: 24px;"><span class="tree-toggle" onclick="toggleTreeNode(\'' + accId + '\')">' + (accOpen ? '−' : '+') + '</span><span class="text-slate-800">' + acc + '</span></td>';
+                            accRow += '<td class="tree-lvl-2"><span class="tree-toggle" onclick="toggleTreeNode(\' + accId + \')">' + (accOpen ? '−' : '+') + '</span><span class="text-slate-800">' + acc + '</span></td>';
                             accRow += '<td class="text-right font-mono-num font-semibold text-slate-700">' + formatVND(accVal) + '</td>';
                             accRow += '<td class="text-right font-mono-num font-semibold text-slate-600">' + (accTarget > 0 ? formatVND(accTarget) : '-') + '</td>';
                             accRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(accVal, accTarget) + '</td>';
@@ -7101,7 +7239,7 @@
                                     const cShare = total > 0 ? (cVal / total) * 100 : 0;
 
                                     let cRow = '<tr class="text-slate-500 text-xs bg-white hover:bg-slate-50 border-b border-slate-100">';
-                                    cRow += '<td style="padding-left: 44px;">• ' + c + '</td>';
+                                    cRow += '<td class="tree-lvl-3">• ' + c + '</td>';
                                     cRow += '<td class="text-right font-mono-num">' + formatVND(cVal) + '</td>';
                                     cRow += '<td class="text-right font-mono-num text-slate-400">-</td>';
                                     cRow += '<td class="text-center font-mono-num text-slate-400">-</td>';
