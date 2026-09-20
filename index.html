@@ -2399,13 +2399,13 @@
                 <div id="filter-cluster-tab3" class="hidden flex flex-wrap items-center gap-1.5 border-r border-slate-200 pr-3">
                     <span class="text-[10px] font-black text-sky-800 uppercase" data-i18n="lbl_filter_mt">🏬 TÀI KHOẢN MT:</span>
                     <select id="sel-mt-subchan" class="header-dropdown" onchange="onMtSubchanChange()">
-                        <option value="ALL">Tất cả Phân Khúc</option>
+                        <option value="ALL" data-i18n="opt_all_subchannel">Tất cả Phân Khúc</option>
                     </select>
                     <select id="sel-mt-chain" class="header-dropdown font-bold text-sky-800" onchange="onMtChainChange()">
-                        <option value="ALL">Tất cả Chuỗi MT</option>
+                        <option value="ALL" data-i18n="opt_all_chains_mt">Tất cả Chuỗi MT</option>
                     </select>
                     <select id="sel-mt-cluster" class="header-dropdown" onchange="onFilterChange()">
-                        <option value="ALL">Tất cả Khu Vực</option>
+                        <option value="ALL" data-i18n="opt_all_clusters_mt">Tất cả Khu Vực</option>
                     </select>
                 </div>
 
@@ -2413,10 +2413,10 @@
                 <div id="filter-cluster-tab4" class="hidden flex flex-wrap items-center gap-1.5 border-r border-slate-200 pr-3">
                     <span class="text-[10px] font-black text-purple-800 uppercase" data-i18n="lbl_filter_b2b">🍽️ KHÁCH HÀNG B2B:</span>
                     <select id="sel-b2b-acc" class="header-dropdown font-bold text-purple-800" onchange="onB2bAccChange()">
-                        <option value="ALL">Tất cả Phân Nhóm</option>
+                        <option value="ALL" data-i18n="opt_all_subgroup_b2b">Tất cả Phân Nhóm</option>
                     </select>
                     <select id="sel-b2b-cust" class="header-dropdown" style="max-width: 155px;" onchange="onFilterChange()">
-                        <option value="ALL">Tất cả Khách Hàng</option>
+                        <option value="ALL" data-i18n="opt_all_cust_b2b">Tất cả Khách Hàng</option>
                     </select>
                 </div>
 
@@ -2424,10 +2424,10 @@
                 <div id="filter-cluster-tab5" class="hidden flex flex-wrap items-center gap-1.5 border-r border-slate-200 pr-3">
                     <span class="text-[10px] font-black text-amber-800 uppercase" data-i18n="lbl_filter_kr">🏪 TÀI KHOẢN KR:</span>
                     <select id="sel-kr-subchan" class="header-dropdown" onchange="onKrSubchanChange()">
-                        <option value="ALL">Tất cả Phân Khúc</option>
+                        <option value="ALL" data-i18n="opt_all_subchannel">Tất cả Phân Khúc</option>
                     </select>
                     <select id="sel-kr-chain" class="header-dropdown font-bold text-amber-800" onchange="onFilterChange()">
-                        <option value="ALL">Tất cả Chuỗi KR</option>
+                        <option value="ALL" data-i18n="opt_all_chains_kr">Tất cả Chuỗi KR</option>
                     </select>
                 </div>
 
@@ -2525,8 +2525,8 @@
                             <div class="text-2xl font-black font-mono-num text-purple-700 mt-1 mb-1 tracking-tight" id="dash-kpi-target">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
-                            <div id="dash-kpi-target-gap-wrap">Chênh lệch (Gap): <b id="dash-kpi-target-gap" class="text-rose-600">-0,0 B</b></div>
-                            <div class="text-slate-500 font-medium" id="dash-kpi-target-sub">Kế hoạch kinh doanh</div>
+                            <div id="dash-kpi-target-gap-wrap"><span data-i18n="lbl_gap">Chênh lệch (Gap)</span>: <b id="dash-kpi-target-gap" class="text-rose-600">-0,0 B</b></div>
+                            <div class="text-slate-500 font-medium" id="dash-kpi-target-sub" data-i18n="lbl_biz_plan">Kế hoạch kinh doanh</div>
                         </div>
                     </div>
 
@@ -2537,7 +2537,7 @@
                             <div class="text-2xl font-black font-mono-num text-emerald-600 mt-1 mb-1 tracking-tight" id="dash-kpi-achieve">0.0%</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
-                            <div>Tiến độ: <b id="dash-kpi-achieve-status" class="text-amber-600">Đang theo dõi</b></div>
+                            <div><span data-i18n="lbl_progress">Tiến độ</span>: <b id="dash-kpi-achieve-status" class="text-amber-600">Đang theo dõi</b></div>
                         </div>
                     </div>
 
@@ -2548,7 +2548,7 @@
                             <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="dash-kpi-ly">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
-                            <div>Tăng trưởng YoY: <b id="dash-kpi-ly-growth" class="text-rose-600">-0,0 B</b></div>
+                            <div><span data-i18n="th_growth_yoy">Tăng trưởng YoY</span>: <b id="dash-kpi-ly-growth" class="text-rose-600">-0,0 B</b></div>
                             <div class="text-slate-500 font-medium" id="dash-kpi-ly-ytd">Lũy kế LY YTD: 0 B</div>
                         </div>
                     </div>
@@ -2961,8 +2961,8 @@
                             <div class="text-2xl font-black font-mono-num text-purple-700 mt-1 mb-1 tracking-tight" id="mt-kpi-target">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
-                            <div id="mt-kpi-target-gap-wrap">Chênh lệch (Gap): <b id="mt-kpi-target-gap" class="text-rose-600">-0,0 B</b></div>
-                            <div class="text-slate-500 font-medium" id="mt-kpi-target-sub">Kế hoạch kênh MT</div>
+                            <div id="mt-kpi-target-gap-wrap"><span data-i18n="lbl_gap">Chênh lệch (Gap)</span>: <b id="mt-kpi-target-gap" class="text-rose-600">-0,0 B</b></div>
+                            <div class="text-slate-500 font-medium" id="mt-kpi-target-sub" data-i18n="sub_mt_target">Kế hoạch kênh MT</div>
                         </div>
                     </div>
 
@@ -2973,8 +2973,8 @@
                             <div class="text-2xl font-black font-mono-num text-emerald-600 mt-1 mb-1 tracking-tight" id="mt-kpi-achieve">0.0%</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
-                            <div>Tiến độ: <b id="mt-kpi-achieve-status" class="text-amber-600">Đang theo dõi</b></div>
-                            <div class="text-slate-500 font-medium">Xuất xưởng Key Accounts</div>
+                            <div><span data-i18n="lbl_progress">Tiến độ</span>: <b id="mt-kpi-achieve-status" class="text-amber-600">Đang theo dõi</b></div>
+                            <div class="text-slate-500 font-medium" data-i18n="sub_mt_achieve">Xuất xưởng Key Accounts</div>
                         </div>
                     </div>
 
@@ -2985,8 +2985,8 @@
                             <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="mt-kpi-ly">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
-                            <div>Tăng trưởng YoY: <b id="mt-kpi-ly-growth" class="text-rose-600">-0,0 B</b></div>
-                            <div class="text-slate-500 font-medium" id="mt-kpi-ly-sub">Doanh số MT 2025</div>
+                            <div><span data-i18n="th_growth_yoy">Tăng trưởng YoY</span>: <b id="mt-kpi-ly-growth" class="text-rose-600">-0,0 B</b></div>
+                            <div class="text-slate-500 font-medium" id="mt-kpi-ly-sub" data-i18n="sub_mt_ly">Doanh số MT 2025</div>
                         </div>
                     </div>
 
@@ -2994,11 +2994,11 @@
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #64748b !important;">
                         <div>
                             <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_mt_chains">CHUỖI KEY ACCOUNTS</div>
-                            <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="mt-kpi-accounts">0 Chuỗi</div>
+                            <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="mt-kpi-accounts">0 <span data-i18n="lbl_active_chains">Chuỗi</span></div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80 text-slate-500">
-                            <div>Doanh thu TB / Chuỗi: <b class="text-slate-700" id="mt-kpi-vpo">0,0 B</b></div>
-                            <div id="lbl-mt-scope">Tất cả chuỗi MT</div>
+                            <div><span data-i18n="lbl_avg_rev_chain">Doanh thu TB / Chuỗi</span>: <b class="text-slate-700" id="mt-kpi-vpo">0,0 B</b></div>
+                            <div id="lbl-mt-scope" data-i18n="opt_all_chains_mt">Tất cả chuỗi MT</div>
                         </div>
                     </div>
                 </div>
@@ -3011,7 +3011,7 @@
                     </div>
                     <div class="px-2 pt-3">
                         <h4 class="text-sm font-bold text-slate-800" data-i18n="chart_mt_chains_title">Top Chuỗi Siêu Thị Lớn (Key Accounts)</h4>
-                        <p class="text-xs text-slate-400 mt-0.5">WinMart, Co.op, BigC/GO!, Lotte, Aeon, BHX...</p>
+                        <p class="text-xs text-slate-400 mt-0.5" data-i18n="sub_mt_chains_desc">WinMart, Co.op, BigC/GO!, Lotte, Aeon, BHX...</p>
                     </div>
                 </div>
 
@@ -3021,7 +3021,7 @@
                     </div>
                     <div class="px-2 pt-3">
                         <h4 class="text-sm font-bold text-slate-800" data-i18n="chart_mt_subchan_title">Cơ Cấu Phân Khúc Kênh MT</h4>
-                        <p class="text-xs text-slate-400 mt-0.5">Sub-channel: Hyper, CS, CVS và Others</p>
+                        <p class="text-xs text-slate-400 mt-0.5" data-i18n="sub_mt_subchan_desc">Sub-channel: Hyper, CS, CVS và Others</p>
                     </div>
                 </div>
             </div>
@@ -3034,7 +3034,7 @@
                 <div class="px-2 pt-3 flex flex-col md:flex-row md:items-center md:justify-between">
                     <div>
                         <h4 class="text-sm font-bold text-slate-800" data-i18n="chart_mt_daily_title">Tiến Độ &amp; Nhịp Độ Xuất Hàng Kênh MT Hàng Ngày</h4>
-                        <p class="text-xs text-slate-400 mt-0.5" id="lbl-mt-daily-scope">Theo dõi giá trị xuất hàng SAP thực tế kênh MT từng ngày trong tháng</p>
+                        <p class="text-xs text-slate-400 mt-0.5" id="lbl-mt-daily-scope" data-i18n="sub_mt_daily_desc">Theo dõi giá trị xuất hàng SAP thực tế kênh MT từng ngày trong tháng</p>
                     </div>
                     <div class="mt-2 md:mt-0 flex items-center space-x-2">
                         <span class="badge-pill badge-pill-green">SAP Sell-in MT</span>
@@ -3095,8 +3095,8 @@
                             <div class="text-2xl font-black font-mono-num text-purple-700 mt-1 mb-1 tracking-tight" id="b2b-kpi-target">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
-                            <div id="b2b-kpi-target-gap-wrap">Chênh lệch (Gap): <b id="b2b-kpi-target-gap" class="text-rose-600">-0,0 B</b></div>
-                            <div class="text-slate-500 font-medium" id="b2b-kpi-target-sub">Kế hoạch Food Service</div>
+                            <div id="b2b-kpi-target-gap-wrap"><span data-i18n="lbl_gap">Chênh lệch (Gap)</span>: <b id="b2b-kpi-target-gap" class="text-rose-600">-0,0 B</b></div>
+                            <div class="text-slate-500 font-medium" id="b2b-kpi-target-sub" data-i18n="sub_b2b_target">Kế hoạch Food Service</div>
                         </div>
                     </div>
 
@@ -3107,8 +3107,8 @@
                             <div class="text-2xl font-black font-mono-num text-emerald-600 mt-1 mb-1 tracking-tight" id="b2b-kpi-achieve">0.0%</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
-                            <div>Tiến độ: <b id="b2b-kpi-achieve-status" class="text-amber-600">Đang theo dõi</b></div>
-                            <div class="text-slate-500 font-medium">Xuất bán Food Service</div>
+                            <div><span data-i18n="lbl_progress">Tiến độ</span>: <b id="b2b-kpi-achieve-status" class="text-amber-600">Đang theo dõi</b></div>
+                            <div class="text-slate-500 font-medium" data-i18n="sub_b2b_achieve">Xuất bán Food Service</div>
                         </div>
                     </div>
 
@@ -3119,8 +3119,8 @@
                             <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="b2b-kpi-ly">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
-                            <div>Tăng trưởng YoY: <b id="b2b-kpi-ly-growth" class="text-rose-600">-0,0 B</b></div>
-                            <div class="text-slate-500 font-medium">Doanh số B2B 2025</div>
+                            <div><span data-i18n="th_growth_yoy">Tăng trưởng YoY</span>: <b id="b2b-kpi-ly-growth" class="text-rose-600">-0,0 B</b></div>
+                            <div class="text-slate-500 font-medium" data-i18n="sub_b2b_ly">Doanh số B2B 2025</div>
                         </div>
                     </div>
 
@@ -3128,11 +3128,11 @@
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #64748b !important;">
                         <div>
                             <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_b2b_accounts">KHÁCH HÀNG B2B</div>
-                            <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="b2b-kpi-accounts">0 Doanh Nghiệp</div>
+                            <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="b2b-kpi-accounts">0 <span data-i18n="lbl_active_enterprises">Doanh Nghiệp</span></div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80 text-slate-500">
-                            <div>Doanh số TB / Khách: <b class="text-slate-700" id="b2b-kpi-vpo">0,0 M</b></div>
-                            <div id="lbl-b2b-scope">Tất cả khách hàng B2B</div>
+                            <div><span data-i18n="lbl_avg_rev_cust">Doanh số TB / Khách</span>: <b class="text-slate-700" id="b2b-kpi-vpo">0,0 M</b></div>
+                            <div id="lbl-b2b-scope" data-i18n="opt_all_cust_b2b">Tất cả khách hàng B2B</div>
                         </div>
                     </div>
                 </div>
@@ -3142,12 +3142,12 @@
                     <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
                         <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="kpi_b2b_vpo">DOANH SỐ TB / KHÁCH (VPO B2B)</span>
                         <span class="text-2xl font-black font-mono-num text-blue-600 my-0.5" id="b2b-kpi-row2-vpo">0,0 M</span>
-                        <span class="text-[11px] text-slate-400 font-medium">Bình quân trên 1 khách hàng B2B</span>
+                        <span class="text-[11px] text-slate-400 font-medium" data-i18n="sub_b2b_avg_cust">Bình quân trên 1 khách hàng B2B</span>
                     </div>
                     <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
-                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="th_share_pct">TỶ TRỌNG TRÊN TOÀN CÔNG TY</span>
+                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="lbl_company_share">TỶ TRỌNG TRÊN TOÀN CÔNG TY</span>
                         <span class="text-2xl font-black font-mono-num text-amber-500 my-0.5" id="b2b-kpi-share">0.0%</span>
-                        <span class="text-[11px] text-slate-400 font-medium">Đóng góp vào tổng Sell-in</span>
+                        <span class="text-[11px] text-slate-400 font-medium" data-i18n="sub_b2b_share_desc">Đóng góp vào tổng Sell-in</span>
                     </div>
                     <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
                         <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="kpi_b2b_pop">SO VỚI KỲ TRƯỚC (PoP / MoM)</span>
@@ -3210,8 +3210,8 @@
                             <div class="text-2xl font-black font-mono-num text-purple-700 mt-1 mb-1 tracking-tight" id="kr-kpi-target">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
-                            <div id="kr-kpi-target-gap-wrap">Chênh lệch (Gap): <b id="kr-kpi-target-gap" class="text-rose-600">-0,0 B</b></div>
-                            <div class="text-slate-500 font-medium" id="kr-kpi-target-sub">Kế hoạch Key Retailer</div>
+                            <div id="kr-kpi-target-gap-wrap"><span data-i18n="lbl_gap">Chênh lệch (Gap)</span>: <b id="kr-kpi-target-gap" class="text-rose-600">-0,0 B</b></div>
+                            <div class="text-slate-500 font-medium" id="kr-kpi-target-sub" data-i18n="sub_kr_target">Kế hoạch Key Retailer</div>
                         </div>
                     </div>
 
@@ -3222,8 +3222,8 @@
                             <div class="text-2xl font-black font-mono-num text-emerald-600 mt-1 mb-1 tracking-tight" id="kr-kpi-achieve">0.0%</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
-                            <div>Tiến độ: <b id="kr-kpi-achieve-status" class="text-amber-600">Đang theo dõi</b></div>
-                            <div class="text-slate-500 font-medium">Xuất bán Đại lý KR</div>
+                            <div><span data-i18n="lbl_progress">Tiến độ</span>: <b id="kr-kpi-achieve-status" class="text-amber-600">Đang theo dõi</b></div>
+                            <div class="text-slate-500 font-medium" data-i18n="sub_kr_achieve">Xuất bán Đại lý KR</div>
                         </div>
                     </div>
 
@@ -3234,8 +3234,8 @@
                             <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="kr-kpi-ly">0,0 B</div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80">
-                            <div>Tăng trưởng YoY: <b id="kr-kpi-ly-growth" class="text-rose-600">-0,0 B</b></div>
-                            <div class="text-slate-500 font-medium">Doanh số KR 2025</div>
+                            <div><span data-i18n="th_growth_yoy">Tăng trưởng YoY</span>: <b id="kr-kpi-ly-growth" class="text-rose-600">-0,0 B</b></div>
+                            <div class="text-slate-500 font-medium" data-i18n="sub_kr_ly">Doanh số KR 2025</div>
                         </div>
                     </div>
 
@@ -3243,11 +3243,11 @@
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-3.5 flex flex-col justify-between transition-all hover:shadow-md" style="border-left: 5px solid #64748b !important;">
                         <div>
                             <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wide" data-i18n="kpi_kr_accounts">ĐẠI LÝ KR HOẠT ĐỘNG</div>
-                            <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="kr-kpi-accounts">0 Đại Lý</div>
+                            <div class="text-2xl font-black font-mono-num text-slate-900 mt-1 mb-1 tracking-tight" id="kr-kpi-accounts">0 <span data-i18n="lbl_active_agencies">Đại Lý</span></div>
                         </div>
                         <div class="text-[11px] font-semibold space-y-0.5 pt-1.5 border-t border-slate-100/80 text-slate-500">
-                            <div>Doanh số TB / Đại lý: <b class="text-slate-700" id="kr-kpi-vpo">0,0 M</b></div>
-                            <div id="lbl-kr-scope">Chuỗi Bán Lẻ Trọng Điểm</div>
+                            <div><span data-i18n="lbl_avg_rev_agency">Doanh số TB / Đại lý</span>: <b class="text-slate-700" id="kr-kpi-vpo">0,0 M</b></div>
+                            <div id="lbl-kr-scope" data-i18n="lbl_kr_retail_chains">Chuỗi Bán Lẻ Trọng Điểm</div>
                         </div>
                     </div>
                 </div>
@@ -3257,12 +3257,12 @@
                     <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
                         <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="kpi_kr_vpo">DOANH SỐ TB / ĐẠI LÝ (VPO KR)</span>
                         <span class="text-2xl font-black font-mono-num text-blue-600 my-0.5" id="kr-kpi-row2-vpo">0,0 M</span>
-                        <span class="text-[11px] text-slate-400 font-medium">Bình quân trên 1 đại lý KR</span>
+                        <span class="text-[11px] text-slate-400 font-medium" data-i18n="sub_kr_avg_agent">Bình quân trên 1 đại lý KR</span>
                     </div>
                     <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
-                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="th_share_pct">TỶ TRỌNG TRÊN TOÀN CÔNG TY</span>
+                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="lbl_company_share">TỶ TRỌNG TRÊN TOÀN CÔNG TY</span>
                         <span class="text-2xl font-black font-mono-num text-amber-500 my-0.5" id="kr-kpi-share">0.0%</span>
-                        <span class="text-[11px] text-slate-400 font-medium">Đóng góp vào tổng Sell-in</span>
+                        <span class="text-[11px] text-slate-400 font-medium" data-i18n="sub_b2b_share_desc">Đóng góp vào tổng Sell-in</span>
                     </div>
                     <div class="bg-slate-50/70 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all hover:bg-slate-100/80">
                         <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide" data-i18n="kpi_b2b_pop">SO VỚI KỲ TRƯỚC (PoP / MoM)</span>
@@ -3664,7 +3664,36 @@
                 card_rep_si_4c: "Báo Cáo Sell-in 4 Kênh",
                 card_rep_gt_5l: "Báo Cáo Kênh GT 5 Cấp",
                 card_rep_ka: "Báo Cáo Key Accounts (MT, B2B, KR)",
-                btn_close: "Đóng"
+                btn_close: "Đóng",
+                lbl_progress: "Tiến độ",
+                lbl_gap: "Chênh lệch (Gap)",
+                lbl_biz_plan: "Kế hoạch kinh doanh",
+                sub_mt_target: "Kế hoạch kênh MT",
+                sub_mt_achieve: "Xuất xưởng Key Accounts",
+                sub_mt_ly: "Doanh số MT 2025",
+                lbl_avg_rev_chain: "Doanh thu TB / Chuỗi",
+                sub_mt_chains_desc: "WinMart, Co.op, BigC/GO!, Lotte, Aeon, BHX...",
+                sub_mt_subchan_desc: "Sub-channel: Hyper, CS, CVS và Others",
+                sub_mt_daily_desc: "Theo dõi giá trị xuất hàng SAP thực tế kênh MT từng ngày trong tháng",
+                sub_b2b_target: "Kế hoạch Food Service",
+                sub_b2b_achieve: "Xuất bán Food Service",
+                sub_b2b_ly: "Doanh số B2B 2025",
+                lbl_avg_rev_cust: "Doanh số TB / Khách",
+                sub_b2b_avg_cust: "Bình quân trên 1 khách hàng B2B",
+                lbl_company_share: "TỶ TRỌNG TRÊN TOÀN CÔNG TY",
+                sub_b2b_share_desc: "Đóng góp vào tổng Sell-in",
+                sub_kr_target: "Kế hoạch Key Retailer",
+                sub_kr_achieve: "Xuất bán Đại lý KR",
+                sub_kr_ly: "Doanh số KR 2025",
+                lbl_avg_rev_agency: "Doanh số TB / Đại lý",
+                sub_kr_avg_agent: "Bình quân trên 1 đại lý KR",
+                lbl_kr_retail_chains: "Chuỗi Bán Lẻ Trọng Điểm",
+                lbl_chain_prefix: "Chuỗi ",
+                lbl_cust_prefix: "Khách hàng ",
+                lbl_subgroup_prefix: "Phân nhóm ",
+                lbl_segment_prefix: "Phân khúc ",
+                lbl_other: "Khác",
+                lbl_date_prefix: "Ngày "
             },
             en: {
                 nav_dashboard: "1. Overview",
@@ -3902,7 +3931,36 @@
                 card_rep_si_4c: "4-Channel Sell-in Report",
                 card_rep_gt_5l: "GT 5-Level Hierarchy Report",
                 card_rep_ka: "Key Accounts Report (MT, B2B, KR)",
-                btn_close: "Close"
+                btn_close: "Close",
+                lbl_progress: "Progress",
+                lbl_gap: "Variance (Gap)",
+                lbl_biz_plan: "Business Plan",
+                sub_mt_target: "MT Channel Target",
+                sub_mt_achieve: "Key Accounts Billing",
+                sub_mt_ly: "MT Revenue 2025",
+                lbl_avg_rev_chain: "Avg Revenue / Chain",
+                sub_mt_chains_desc: "WinMart, Co.op, BigC/GO!, Lotte, Aeon, BHX...",
+                sub_mt_subchan_desc: "Sub-channels: Hyper, CS, CVS and Others",
+                sub_mt_daily_desc: "Track daily SAP billing pace for MT channel",
+                sub_b2b_target: "Food Service Target",
+                sub_b2b_achieve: "Food Service Billing",
+                sub_b2b_ly: "B2B Revenue 2025",
+                lbl_avg_rev_cust: "Avg Sales / Customer",
+                sub_b2b_avg_cust: "Average per B2B customer",
+                lbl_company_share: "SHARE OF TOTAL COMPANY",
+                sub_b2b_share_desc: "Contribution to total Sell-in",
+                sub_kr_target: "Key Retailer Target",
+                sub_kr_achieve: "KR Agency Billing",
+                sub_kr_ly: "KR Revenue 2025",
+                lbl_avg_rev_agency: "Avg Sales / Agency",
+                sub_kr_avg_agent: "Average per KR agency",
+                lbl_kr_retail_chains: "Key Retail Chains",
+                lbl_chain_prefix: "Chain ",
+                lbl_cust_prefix: "Customer ",
+                lbl_subgroup_prefix: "Subgroup ",
+                lbl_segment_prefix: "Segment ",
+                lbl_other: "Other",
+                lbl_date_prefix: "Date "
             },
             ko: {
                 nav_dashboard: "1. 종합 대시보드",
@@ -4140,7 +4198,36 @@
                 card_rep_si_4c: "4대 채널 출하(Sell-in) 보고서",
                 card_rep_gt_5l: "GT 5단계 영업조직 보고서",
                 card_rep_ka: "핵심 거래선 보고서 (MT, B2B, KR)",
-                btn_close: "닫기"
+                btn_close: "닫기",
+                lbl_progress: "진척도",
+                lbl_gap: "목표차이 (Gap)",
+                lbl_biz_plan: "사업계획",
+                sub_mt_target: "MT 채널 출하목표",
+                sub_mt_achieve: "주요 거래처 출하진행",
+                sub_mt_ly: "2025년 MT 실적",
+                lbl_avg_rev_chain: "체인당 평균 매출",
+                sub_mt_chains_desc: "WinMart, Co.op, BigC/GO!, Lotte, Aeon, BHX...",
+                sub_mt_subchan_desc: "세부채널: Hyper, CS, CVS 및 기타",
+                sub_mt_daily_desc: "MT 채널의 당월 일별 SAP 출하 추이 모니터링",
+                sub_b2b_target: "Food Service 출하목표",
+                sub_b2b_achieve: "Food Service 출하진행",
+                sub_b2b_ly: "2025년 B2B 실적",
+                lbl_avg_rev_cust: "고객사당 평균 매출",
+                sub_b2b_avg_cust: "B2B 고객사 1개사당 평균",
+                lbl_company_share: "전사 매출 비중",
+                sub_b2b_share_desc: "전체 출하 실적 기여도",
+                sub_kr_target: "Key Retailer 출하목표",
+                sub_kr_achieve: "KR 대리점 출하진행",
+                sub_kr_ly: "2025년 KR 실적",
+                lbl_avg_rev_agency: "대리점당 평균 매출",
+                sub_kr_avg_agent: "KR 대리점 1개소당 평균",
+                lbl_kr_retail_chains: "핵심 소매 체인",
+                lbl_chain_prefix: "체인 ",
+                lbl_cust_prefix: "고객사 ",
+                lbl_subgroup_prefix: "세부분류 ",
+                lbl_segment_prefix: "세부채널 ",
+                lbl_other: "기타",
+                lbl_date_prefix: "일자 "
             }
         };
 
@@ -4707,7 +4794,7 @@
                 }
             });
 
-            selSub.innerHTML = '<option value="ALL">Tất cả Phân Khúc</option>' + Array.from(scSet).sort().map(sc => '<option value="' + sc + '">' + sc + '</option>').join('');
+            selSub.innerHTML = '<option value="ALL">' + t('opt_all_subchannel') + '</option>' + Array.from(scSet).sort().map(sc => '<option value="' + sc + '">' + sc + '</option>').join('');
             selSub.value = state.mtSubChan;
 
             selChain.innerHTML = '<option value="ALL">' + t('opt_all_chains_mt') + '</option>' + Array.from(chSet).sort().map(ch => '<option value="' + ch + '">' + ch + '</option>').join('');
@@ -4777,7 +4864,7 @@
                 }
             });
 
-            selSub.innerHTML = '<option value="ALL">Tất cả Phân Khúc</option>' + Array.from(subSet).sort().map(s => '<option value="' + s + '">' + s + '</option>').join('');
+            selSub.innerHTML = '<option value="ALL">' + t('opt_all_subchannel') + '</option>' + Array.from(subSet).sort().map(s => '<option value="' + s + '">' + s + '</option>').join('');
             selSub.value = state.krSubChan;
 
             selChain.innerHTML = '<option value="ALL">' + t('opt_all_chains_kr') + '</option>' + Array.from(chainSet).sort().map(c => '<option value="' + c + '">' + c + '</option>').join('');
@@ -7540,9 +7627,9 @@
                 // Update Tab 3 UI
                 const lblScope = document.getElementById('lbl-mt-scope');
                 if (lblScope) {
-                    if (state.mtChain !== 'ALL') lblScope.innerText = 'Chuỗi ' + state.mtChain;
+                    if (state.mtChain !== 'ALL') lblScope.innerText = t('lbl_chain_prefix') + state.mtChain;
                     else if (state.mtSubChan !== 'ALL') lblScope.innerText = state.mtSubChan;
-                    else lblScope.innerText = 'Tất cả chuỗi MT';
+                    else lblScope.innerText = t('opt_all_chains_mt');
                 }
 
                 // Card 1: MT Sell-in
@@ -7635,25 +7722,26 @@
 
                 // Card 5: Active Chains
                 const kpiAcc = document.getElementById('mt-kpi-accounts');
-                if (kpiAcc) kpiAcc.innerText = formatNumVn(activeChains) + ' Chuỗi';
+                if (kpiAcc) kpiAcc.innerText = formatNumVn(activeChains) + ' ' + t('lbl_active_chains');
                 const kpiVpo = document.getElementById('mt-kpi-vpo');
                 if (kpiVpo) kpiVpo.innerText = formatBnVn(vpoMT);
 
                 // Row 2: Subchannels
+                const sharePrefix = t('lbl_share') + ': ';
                 const kpiHyper = document.getElementById('mt-kpi-sub-hyper');
                 if (kpiHyper) kpiHyper.innerText = formatBnVn(hyperSellin);
                 const kpiHyperShare = document.getElementById('mt-kpi-sub-hyper-share');
-                if (kpiHyperShare) kpiHyperShare.innerText = 'Tỷ trọng: ' + hyperShare.toFixed(1) + '%';
+                if (kpiHyperShare) kpiHyperShare.innerText = sharePrefix + hyperShare.toFixed(1) + '%';
 
                 const kpiSuper = document.getElementById('mt-kpi-sub-super');
                 if (kpiSuper) kpiSuper.innerText = formatBnVn(superSellin);
                 const kpiSuperShare = document.getElementById('mt-kpi-sub-super-share');
-                if (kpiSuperShare) kpiSuperShare.innerText = 'Tỷ trọng: ' + superShare.toFixed(1) + '%';
+                if (kpiSuperShare) kpiSuperShare.innerText = sharePrefix + superShare.toFixed(1) + '%';
 
                 const kpiCvs = document.getElementById('mt-kpi-sub-cvs');
                 if (kpiCvs) kpiCvs.innerText = formatBnVn(cvsSellin);
                 const kpiCvsShare = document.getElementById('mt-kpi-sub-cvs-share');
-                if (kpiCvsShare) kpiCvsShare.innerText = 'Tỷ trọng: ' + cvsShare.toFixed(1) + '%';
+                if (kpiCvsShare) kpiCvsShare.innerText = sharePrefix + cvsShare.toFixed(1) + '%';
 
                 renderMtChainsChart(data);
                 renderMtSubchanChart(data);
@@ -7814,9 +7902,10 @@
                         formatter: function(params) {
                             if (!params || !params.length) return '';
                             const p = params[0];
-                            return '<div class="font-sans text-xs p-1"><b>Ngày ' + p.name + '</b><br/>' +
+                            const bilUnit = state.currentLang === 'ko' ? ' 십억 ₫' : (state.currentLang === 'en' ? ' Bil ₫' : ' Tỷ ₫');
+                            return '<div class="font-sans text-xs p-1"><b>' + t('lbl_date_prefix') + p.name + '</b><br/>' +
                                    '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#34D399;margin-right:5px;"></span>' +
-                                   'Sell-in MT: <b>' + p.value + ' Tỷ ₫</b></div>';
+                                   t('legend_mt_daily_si') + ': <b>' + p.value + bilUnit + '</b></div>';
                         }
                     },
                     legend: {
@@ -7904,7 +7993,7 @@
                 data.forEach(d => {
                     const sc = d.sub_channel || 'MT)Other';
                     const acc = d.key_account || 'Other';
-                    const c = d.cluster || 'Khác';
+                    const c = d.cluster || t('lbl_other');
                     const v = Number(d.sellin_val) || 0;
 
                     if (!tree[sc]) tree[sc] = { val: 0, children: {} };
@@ -8083,9 +8172,9 @@
                 // Update UI
                 const lblScope = document.getElementById('lbl-b2b-scope');
                 if (lblScope) {
-                    if (state.b2bCust !== 'ALL') lblScope.innerText = 'Khách hàng ' + state.b2bCust;
-                    else if (state.b2bAcc !== 'ALL') lblScope.innerText = 'Phân nhóm ' + state.b2bAcc;
-                    else lblScope.innerText = 'Tất cả khách hàng B2B';
+                    if (state.b2bCust !== 'ALL') lblScope.innerText = t('lbl_cust_prefix') + state.b2bCust;
+                    else if (state.b2bAcc !== 'ALL') lblScope.innerText = t('lbl_subgroup_prefix') + state.b2bAcc;
+                    else lblScope.innerText = t('opt_all_cust_b2b');
                 }
 
                 // Card 1
@@ -8178,7 +8267,7 @@
 
                 // Card 5
                 const kpiAcc = document.getElementById('b2b-kpi-accounts');
-                if (kpiAcc) kpiAcc.innerText = formatNumVn(activeB2b) + ' Khách Hàng';
+                if (kpiAcc) kpiAcc.innerText = formatNumVn(activeB2b) + ' ' + t('lbl_active_enterprises');
                 const kpiVpo = document.getElementById('b2b-kpi-vpo');
                 if (kpiVpo) kpiVpo.innerText = vpoB2b >= 1e9 ? formatBnVn(vpoB2b) : formatMnVn(vpoB2b);
 
@@ -8325,9 +8414,9 @@
                 // Update UI
                 const lblScope = document.getElementById('lbl-kr-scope');
                 if (lblScope) {
-                    if (state.krChain !== 'ALL') lblScope.innerText = 'Chuỗi ' + state.krChain;
-                    else if (state.krSubChan !== 'ALL') lblScope.innerText = 'Phân khúc ' + state.krSubChan;
-                    else lblScope.innerText = 'Chuỗi Bán Lẻ Trọng Điểm';
+                    if (state.krChain !== 'ALL') lblScope.innerText = t('lbl_chain_prefix') + state.krChain;
+                    else if (state.krSubChan !== 'ALL') lblScope.innerText = t('lbl_segment_prefix') + state.krSubChan;
+                    else lblScope.innerText = t('lbl_kr_retail_chains');
                 }
 
                 // Card 1
@@ -8420,7 +8509,7 @@
 
                 // Card 5
                 const kpiAcc = document.getElementById('kr-kpi-accounts');
-                if (kpiAcc) kpiAcc.innerText = formatNumVn(activeKr) + ' Đại Lý';
+                if (kpiAcc) kpiAcc.innerText = formatNumVn(activeKr) + ' ' + t('lbl_active_agencies');
                 const kpiVpo = document.getElementById('kr-kpi-vpo');
                 if (kpiVpo) kpiVpo.innerText = vpoKr >= 1e9 ? formatBnVn(vpoKr) : formatMnVn(vpoKr);
 
