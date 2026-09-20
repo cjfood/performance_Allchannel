@@ -6306,8 +6306,7 @@
                 if (elSoAch) {
                     if (totalTargetSo > 0) {
                         elSoAch.innerText = t('lbl_achv') + ' ' + soAchieveRate.toFixed(1) + '%';
-                        elSoAch.title = ['Sell-out: ' + formatExactVND(totalSellout), '• Target Cả Tháng: ' + formatExactVND(totalTargetSo) + ' (Đạt ' + soAchieveRate.toFixed(1) + '%)', (isCurrentMtd ? '• Tiến độ Target MTD: ' + formatExactVND(mtdTargetSo) + ' (Đạt MTD ' + mtdSoAchieveRate.toFixed(1) + '%)' : '')].filter(Boolean).join('
-');
+                        elSoAch.title = ['Sell-out: ' + formatExactVND(totalSellout), '• Target Cả Tháng: ' + formatExactVND(totalTargetSo) + ' (Đạt ' + soAchieveRate.toFixed(1) + '%)', (isCurrentMtd ? '• Tiến độ Target MTD: ' + formatExactVND(mtdTargetSo) + ' (Đạt MTD ' + mtdSoAchieveRate.toFixed(1) + '%)' : '')].filter(Boolean).join(String.fromCharCode(10));
                         const isSoGood = soAchieveRate >= 100;
                         const isSoWarning = isCurrentMtd && (soAchieveRate >= (workProgressPct * 0.8));
                         elSoAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num ' + 
@@ -6361,8 +6360,7 @@
                 if (elSiAch) {
                     if (totalTargetSi > 0) {
                         elSiAch.innerText = t('lbl_achv') + ' ' + siAchieveRate.toFixed(1) + '%';
-                        elSiAch.title = ['Sell-in GT: ' + formatExactVND(totalSellinGT), '• Target Cả Tháng: ' + formatExactVND(totalTargetSi) + ' (Đạt ' + siAchieveRate.toFixed(1) + '%)', (isCurrentMtd ? '• Tiến độ Target MTD: ' + formatExactVND(mtdTargetSi) + ' (Đạt MTD ' + mtdSiAchieveRate.toFixed(1) + '%)' : '')].filter(Boolean).join('
-');
+                        elSiAch.title = ['Sell-in GT: ' + formatExactVND(totalSellinGT), '• Target Cả Tháng: ' + formatExactVND(totalTargetSi) + ' (Đạt ' + siAchieveRate.toFixed(1) + '%)', (isCurrentMtd ? '• Tiến độ Target MTD: ' + formatExactVND(mtdTargetSi) + ' (Đạt MTD ' + mtdSiAchieveRate.toFixed(1) + '%)' : '')].filter(Boolean).join(String.fromCharCode(10));
                         const isSiGood = siAchieveRate >= 100;
                         const isSiWarning = isCurrentMtd && (siAchieveRate >= (workProgressPct * 0.8));
                         elSiAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num ' + 
