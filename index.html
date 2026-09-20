@@ -6305,21 +6305,14 @@
                 const elSoTgtSub = document.getElementById('gt-kpi-so-target-sub');
                 if (elSoAch) {
                     if (totalTargetSo > 0) {
-                        if (isCurrentMtd) {
-                            elSoAch.innerText = 'Đạt MTD ' + mtdSoAchieveRate.toFixed(1) + '%';
-                            elSoAch.title = ['Sell-out MTD: ' + formatExactVND(totalSellout), '• Tiến độ Target MTD (16/26 ngày làm việc): ' + formatExactVND(mtdTargetSo) + ' (Đạt ' + mtdSoAchieveRate.toFixed(1) + '%)', '• Target Cả Tháng (30 ngày): ' + formatExactVND(totalTargetSo) + ' (Đạt ' + soAchieveRate.toFixed(1) + '%)'].join('\n');
-                            const isSoGood = mtdSoAchieveRate >= 100 || soAchieveRate >= workProgressPct;
-                            elSoAch.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-black font-mono-num ' + 
-                                (isSoGood ? 'bg-emerald-50 text-green-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200') + ' shadow-2xs';
-                            elSoAch.style.color = isSoGood ? '#15803d' : '#b45309';
-                        } else {
-                            elSoAch.innerText = t('lbl_achv') + ' ' + soAchieveRate.toFixed(1) + '%';
-                            elSoAch.title = 'Sell-out Thực Tế: ' + formatExactVND(totalSellout) + ' / Target: ' + formatExactVND(totalTargetSo);
-                            const isSoGood = soAchieveRate >= 100;
-                            elSoAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num ' + 
-                                (isSoGood ? 'bg-emerald-50 text-green-700 border border-emerald-200' : 'bg-rose-50 text-red-600 border border-rose-200') + ' shadow-2xs';
-                            elSoAch.style.color = isSoGood ? '#15803d' : '#dc2626';
-                        }
+                        elSoAch.innerText = t('lbl_achv') + ' ' + soAchieveRate.toFixed(1) + '%';
+                        elSoAch.title = ['Sell-out: ' + formatExactVND(totalSellout), '• Target Cả Tháng: ' + formatExactVND(totalTargetSo) + ' (Đạt ' + soAchieveRate.toFixed(1) + '%)', (isCurrentMtd ? '• Tiến độ Target MTD: ' + formatExactVND(mtdTargetSo) + ' (Đạt MTD ' + mtdSoAchieveRate.toFixed(1) + '%)' : '')].filter(Boolean).join('
+');
+                        const isSoGood = soAchieveRate >= 100;
+                        const isSoWarning = isCurrentMtd && (soAchieveRate >= (workProgressPct * 0.8));
+                        elSoAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num ' + 
+                            (isSoGood ? 'bg-emerald-50 text-green-700 border border-emerald-200' : (isSoWarning ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-rose-50 text-red-600 border border-rose-200')) + ' shadow-2xs';
+                        elSoAch.style.color = isSoGood ? '#15803d' : (isSoWarning ? '#b45309' : '#dc2626');
                     } else {
                         elSoAch.innerText = t('lbl_achv') + ' -';
                         elSoAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono-num bg-slate-100 text-slate-400 border border-slate-200';
@@ -6367,21 +6360,14 @@
                 const elSiTgtSub = document.getElementById('gt-kpi-si-target-sub');
                 if (elSiAch) {
                     if (totalTargetSi > 0) {
-                        if (isCurrentMtd) {
-                            elSiAch.innerText = 'Đạt MTD ' + mtdSiAchieveRate.toFixed(1) + '%';
-                            elSiAch.title = ['Sell-in GT MTD: ' + formatExactVND(totalSellinGT), '• Tiến độ Target MTD (16/26 ngày làm việc): ' + formatExactVND(mtdTargetSi) + ' (Đạt ' + mtdSiAchieveRate.toFixed(1) + '%)', '• Target Cả Tháng (30 ngày): ' + formatExactVND(totalTargetSi) + ' (Đạt ' + siAchieveRate.toFixed(1) + '%)'].join('\n');
-                            const isSiGood = mtdSiAchieveRate >= 100 || siAchieveRate >= workProgressPct;
-                            elSiAch.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-black font-mono-num ' + 
-                                (isSiGood ? 'bg-emerald-50 text-green-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200') + ' shadow-2xs';
-                            elSiAch.style.color = isSiGood ? '#15803d' : '#b45309';
-                        } else {
-                            elSiAch.innerText = t('lbl_achv') + ' ' + siAchieveRate.toFixed(1) + '%';
-                            elSiAch.title = 'Sell-in Thực Tế: ' + formatExactVND(totalSellinGT) + ' / Target: ' + formatExactVND(totalTargetSi);
-                            const isSiGood = siAchieveRate >= 100;
-                            elSiAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num ' + 
-                                (isSiGood ? 'bg-emerald-50 text-green-700 border border-emerald-200' : 'bg-rose-50 text-red-600 border border-rose-200') + ' shadow-2xs';
-                            elSiAch.style.color = isSiGood ? '#15803d' : '#dc2626';
-                        }
+                        elSiAch.innerText = t('lbl_achv') + ' ' + siAchieveRate.toFixed(1) + '%';
+                        elSiAch.title = ['Sell-in GT: ' + formatExactVND(totalSellinGT), '• Target Cả Tháng: ' + formatExactVND(totalTargetSi) + ' (Đạt ' + siAchieveRate.toFixed(1) + '%)', (isCurrentMtd ? '• Tiến độ Target MTD: ' + formatExactVND(mtdTargetSi) + ' (Đạt MTD ' + mtdSiAchieveRate.toFixed(1) + '%)' : '')].filter(Boolean).join('
+');
+                        const isSiGood = siAchieveRate >= 100;
+                        const isSiWarning = isCurrentMtd && (siAchieveRate >= (workProgressPct * 0.8));
+                        elSiAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black font-mono-num ' + 
+                            (isSiGood ? 'bg-emerald-50 text-green-700 border border-emerald-200' : (isSiWarning ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-rose-50 text-red-600 border border-rose-200')) + ' shadow-2xs';
+                        elSiAch.style.color = isSiGood ? '#15803d' : (isSiWarning ? '#b45309' : '#dc2626');
                     } else {
                         elSiAch.innerText = t('lbl_achv') + ' -';
                         elSiAch.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono-num bg-slate-100 text-slate-400 border border-slate-200';
