@@ -4705,6 +4705,22 @@
             return '<span style="color: ' + color + ' !important; font-weight: bold;">' + pct.toFixed(1) + '%</span>';
         }
 
+        function formatTreeYoy(val, lyVal) {
+            const v = Number(val) || 0;
+            const ly = Number(lyVal) || 0;
+            const titleAttr = ' title="Năm nay: ' + formatExactVND(v) + ' | Cùng kỳ: ' + formatExactVND(ly) + '"';
+            if (ly <= 0 && v <= 0) {
+                return '<span class="text-slate-400 font-normal"' + titleAttr + '>-</span>';
+            }
+            if (ly <= 0 && v > 0) {
+                return '<span class="text-emerald-600 font-bold font-mono-num"' + titleAttr + '>+100.0%</span>';
+            }
+            const yoy = ((v - ly) / ly) * 100;
+            const isPos = yoy >= 0;
+            const cls = isPos ? 'text-emerald-600 font-bold' : 'text-rose-600 font-bold';
+            const sign = yoy > 0 ? '+' : '';
+            return '<span class="' + cls + ' font-mono-num"' + titleAttr + '>' + sign + yoy.toFixed(1) + '%</span>';
+        }
 
         function getOrInitChart(domId) {
             const dom = document.getElementById(domId);
@@ -5465,14 +5481,15 @@
                     return true;
                 };
 
+                const lyYear = (parseInt(state.year) - 1).toString();
                 const data2026 = SELLIN_M.filter(d => filterItem(d, state.year, state.selectedMonths));
-                const data2025 = SELLIN_M.filter(d => filterItem(d, '2025', state.selectedMonths));
+                const data2025 = SELLIN_M.filter(d => filterItem(d, lyYear, state.selectedMonths));
 
                 // YTD Months: bounded by available data in current year
                 const ytdMonths = getYtdMonths();
 
                 const ytdData2026 = SELLIN_M.filter(d => filterItem(d, state.year, ytdMonths));
-                const ytdData2025 = SELLIN_M.filter(d => filterItem(d, '2025', ytdMonths));
+                const ytdData2025 = SELLIN_M.filter(d => filterItem(d, lyYear, ytdMonths));
 
                 let totalSellin2026 = 0; data2026.forEach(d => totalSellin2026 += (Number(d.sellin_val) || 0));
                 let totalSellin2025 = 0; data2025.forEach(d => totalSellin2025 += (Number(d.sellin_val) || 0));
@@ -6332,7 +6349,6 @@
                     const sTarget = prodStorageTargetMap[storage] || 0;
                     const sShare = totalSellin > 0 ? (sVal / totalSellin) * 100 : 0;
                     const sLy = lyDataMap[storage] || 0;
-                    const sYoy = sLy > 0 ? ((sVal - sLy) / sLy) * 100 : (sVal > 0 ? 100 : 0);
 
                     let rowHtml = '<tr class="bg-slate-50 font-bold border-b border-slate-200 hover:bg-slate-100 transition-colors">';
                     rowHtml += '<td class="tree-lvl-1 cursor-pointer select-none" onclick="toggleTreeNode(&quot;' + encodeURIComponent(sId) + '&quot;)"><span class="tree-toggle font-bold">' + (sOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + storage + '</span></td>';
@@ -6344,7 +6360,7 @@
                         rowHtml += '<td class="text-right font-mono-num font-bold text-emerald-700" title="' + formatExactVND(sSo) + '">' + (sSo > 0 ? formatVND(sSo) : '-') + '</td>';
                     }
                     rowHtml += '<td class="text-right font-mono-num text-emerald-600">' + sShare.toFixed(1) + '%</td>';
-                    rowHtml += '<td class="text-right font-mono-num ' + (sYoy >= 0 ? 'text-emerald-600' : 'text-rose-600') + '">' + (sYoy >= 0 ? '+' : '') + sYoy.toFixed(1) + '%</td>';
+                    rowHtml += '<td class="text-right font-mono-num">' + formatTreeYoy(sVal, sLy) + '</td>';
                     rowHtml += '</tr>';
                     htmlRows.push(rowHtml);
 
@@ -6357,7 +6373,6 @@
                             const cTarget = prodCateTargetMap[storage + '_' + cate] || 0;
                             const cShare = totalSellin > 0 ? (cVal / totalSellin) * 100 : 0;
                             const cLy = lyDataMap[storage + '_' + cate] || 0;
-                            const cYoy = cLy > 0 ? ((cVal - cLy) / cLy) * 100 : (cVal > 0 ? 100 : 0);
 
                             let cRow = '<tr class="bg-slate-100/60 font-semibold border-b border-slate-200/60 hover:bg-slate-200/50 transition-colors">';
                             cRow += '<td class="tree-lvl-2 cursor-pointer select-none" onclick="toggleTreeNode(&quot;' + encodeURIComponent(cId) + '&quot;)"><span class="tree-toggle font-bold">' + (cOpen ? '−' : '+') + '</span><span class="text-slate-800 font-bold">' + cate + '</span></td>';
@@ -6369,7 +6384,7 @@
                                 cRow += '<td class="text-right font-mono-num font-bold text-emerald-700" title="' + formatExactVND(cSo) + '">' + (cSo > 0 ? formatVND(cSo) : '-') + '</td>';
                             }
                             cRow += '<td class="text-right font-mono-num text-slate-600">' + cShare.toFixed(1) + '%</td>';
-                            cRow += '<td class="text-right font-mono-num ' + (cYoy >= 0 ? 'text-emerald-600' : 'text-rose-600') + '">' + (cYoy >= 0 ? '+' : '') + cYoy.toFixed(1) + '%</td>';
+                            cRow += '<td class="text-right font-mono-num">' + formatTreeYoy(cVal, cLy) + '</td>';
                             cRow += '</tr>';
                             htmlRows.push(cRow);
 
@@ -6382,7 +6397,6 @@
                                     const p1Target = prodPh1TargetMap[storage + '_' + cate + '_' + ph1] || prodPh1TargetMap[storage + '_' + ph1] || 0;
                                     const p1Share = totalSellin > 0 ? (p1Val / totalSellin) * 100 : 0;
                                     const p1Ly = lyDataMap[storage + '_' + cate + '_' + ph1] || 0;
-                                    const p1Yoy = p1Ly > 0 ? ((p1Val - p1Ly) / p1Ly) * 100 : (p1Val > 0 ? 100 : 0);
 
                                     let p1Row = '<tr class="bg-white hover:bg-slate-50 border-b border-slate-100 transition-colors">';
                                     p1Row += '<td class="tree-lvl-3 cursor-pointer select-none" onclick="toggleTreeNode(&quot;' + encodeURIComponent(p1Id) + '&quot;)"><span class="tree-toggle font-bold">' + (p1Open ? '−' : '+') + '</span><span class="text-slate-700 font-medium">' + ph1 + '</span></td>';
@@ -6394,7 +6408,7 @@
                                         p1Row += '<td class="text-right font-mono-num font-bold text-emerald-700" title="' + formatExactVND(p1So) + '">' + (p1So > 0 ? formatVND(p1So) : '-') + '</td>';
                                     }
                                     p1Row += '<td class="text-right font-mono-num text-slate-500">' + p1Share.toFixed(1) + '%</td>';
-                                    p1Row += '<td class="text-right font-mono-num ' + (p1Yoy >= 0 ? 'text-emerald-600' : 'text-rose-600') + '">' + (p1Yoy >= 0 ? '+' : '') + p1Yoy.toFixed(1) + '%</td>';
+                                    p1Row += '<td class="text-right font-mono-num">' + formatTreeYoy(p1Val, p1Ly) + '</td>';
                                     p1Row += '</tr>';
                                     htmlRows.push(p1Row);
 
@@ -6404,7 +6418,6 @@
                                             const p2Val = ph2Obj[ph2].val;
                                             const p2Share = totalSellin > 0 ? (p2Val / totalSellin) * 100 : 0;
                                             const p2Ly = lyDataMap[storage + '_' + cate + '_' + ph1 + '_' + ph2] || 0;
-                                            const p2Yoy = p2Ly > 0 ? ((p2Val - p2Ly) / p2Ly) * 100 : (p2Val > 0 ? 100 : 0);
 
                                             let p2Row = '<tr class="text-slate-600 text-xs bg-slate-50/40 hover:bg-slate-100/60 border-b border-slate-100">';
                                             p2Row += '<td class="tree-lvl-4 select-none"><span class="inline-block w-1.5 h-1.5 rounded-full bg-purple-500 mr-2"></span>' + ph2 + '</td>';
@@ -6416,7 +6429,7 @@
                                                 p2Row += '<td class="text-right font-mono-num font-semibold text-emerald-700" title="' + formatExactVND(p2So) + '">' + (p2So > 0 ? formatVND(p2So) : '-') + '</td>';
                                             }
                                             p2Row += '<td class="text-right font-mono-num text-slate-500">' + p2Share.toFixed(1) + '%</td>';
-                                            p2Row += '<td class="text-right font-mono-num ' + (p2Yoy >= 0 ? 'text-emerald-600' : 'text-rose-600') + '">' + (p2Yoy >= 0 ? '+' : '') + p2Yoy.toFixed(1) + '%</td>';
+                                            p2Row += '<td class="text-right font-mono-num">' + formatTreeYoy(p2Val, p2Ly) + '</td>';
                                             p2Row += '</tr>';
                                             htmlRows.push(p2Row);
                                         });
@@ -6628,6 +6641,32 @@
                     });
                 }
 
+                // Map Sell-in cùng kỳ năm trước (LY) để tính YoY cho Product Tree
+                const lyYear = (parseInt(state.year) - 1).toString();
+                const lyProdMap = {};
+                SELLIN_M.filter(d => {
+                    if (d.year !== lyYear) return false;
+                    if (!state.selectedMonths.includes(d.month_num)) return false;
+                    if (state.dashChannel !== 'ALL' && d.channel !== state.dashChannel) return false;
+                    if (state.dashSubChannel !== 'ALL' && d.sub_channel !== state.dashSubChannel) return false;
+                    if (state.dashAccount !== 'ALL' && d.account_name !== state.dashAccount && d.account_code !== state.dashAccount) return false;
+                    if (state.prodStorage !== 'ALL' && d.storage !== state.prodStorage) return false;
+                    if (state.prodCate !== 'ALL' && d.cate !== state.prodCate) return false;
+                    if (state.prodPh1 !== 'ALL' && d.ph1 !== state.prodPh1) return false;
+                    if (state.prodPh2 !== 'ALL' && d.ph2 !== state.prodPh2) return false;
+                    return true;
+                }).forEach(d => {
+                    const s = d.storage || 'Ambient';
+                    const c = d.cate || 'Other Category';
+                    const p1 = d.ph1 || 'Other PH1';
+                    const p2 = d.ph2 || 'Other PH2';
+                    const v = Number(d.sellin_val) || 0;
+                    lyProdMap[s] = (lyProdMap[s] || 0) + v;
+                    lyProdMap[s + '_' + c] = (lyProdMap[s + '_' + c] || 0) + v;
+                    lyProdMap[s + '_' + c + '_' + p1] = (lyProdMap[s + '_' + c + '_' + p1] || 0) + v;
+                    lyProdMap[s + '_' + c + '_' + p1 + '_' + p2] = (lyProdMap[s + '_' + c + '_' + p1 + '_' + p2] || 0) + v;
+                });
+
                 const tbody = document.getElementById('tbody-tree-prod');
                 if (!tbody) return;
                 const htmlRows = [];
@@ -6638,6 +6677,7 @@
                     const sVal = tree[storage].val;
                     const sTarget = prodStorageTargetMap[storage] || 0;
                     const sShare = totalSellin > 0 ? (sVal / totalSellin) * 100 : 0;
+                    const sLy = lyProdMap[storage] || 0;
 
                     let rowHtml = '<tr class="bg-slate-50 font-bold border-b border-slate-200 hover:bg-slate-100 transition-colors">';
                     rowHtml += '<td class="tree-lvl-1 cursor-pointer select-none" onclick="toggleTreeNode(\'' + encodeURIComponent(sId) + '\')"><span class="tree-toggle font-bold">' + (sOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + storage + '</span></td>';
@@ -6645,7 +6685,7 @@
                     rowHtml += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(sTarget) + '">' + (sTarget > 0 ? formatVND(sTarget) : '-') + '</td>';
                     rowHtml += '<td class="text-center font-mono-num">' + formatAchieveBadge(sVal, sTarget) + '</td>';
                     rowHtml += '<td class="text-right font-mono-num text-emerald-600">' + sShare.toFixed(1) + '%</td>';
-                    rowHtml += '<td class="text-right font-mono-num text-sky-600">+4.5%</td>';
+                    rowHtml += '<td class="text-right font-mono-num">' + formatTreeYoy(sVal, sLy) + '</td>';
                     rowHtml += '</tr>';
                     htmlRows.push(rowHtml);
 
@@ -6657,6 +6697,7 @@
                             const cVal = cateObj[cate].val;
                             const cTarget = prodCateTargetMap[storage + '_' + cate] || 0;
                             const cShare = totalSellin > 0 ? (cVal / totalSellin) * 100 : 0;
+                            const cLy = lyProdMap[storage + '_' + cate] || 0;
 
                             let cRow = '<tr class="bg-slate-100/60 font-semibold border-b border-slate-200/60 hover:bg-slate-200/50 transition-colors">';
                             cRow += '<td class="tree-lvl-2 cursor-pointer select-none" onclick="toggleTreeNode(\'' + encodeURIComponent(cId) + '\')"><span class="tree-toggle font-bold">' + (cOpen ? '−' : '+') + '</span><span class="text-slate-800 font-bold">' + cate + '</span></td>';
@@ -6664,7 +6705,7 @@
                             cRow += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(cTarget) + '">' + (cTarget > 0 ? formatVND(cTarget) : '-') + '</td>';
                             cRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(cVal, cTarget) + '</td>';
                             cRow += '<td class="text-right font-mono-num text-slate-600">' + cShare.toFixed(1) + '%</td>';
-                            cRow += '<td class="text-right font-mono-num text-slate-500">+3.8%</td>';
+                            cRow += '<td class="text-right font-mono-num">' + formatTreeYoy(cVal, cLy) + '</td>';
                             cRow += '</tr>';
                             htmlRows.push(cRow);
 
@@ -6676,6 +6717,7 @@
                                     const p1Val = ph1Obj[ph1].val;
                                     const p1Target = prodPh1TargetMap[storage + '_' + cate + '_' + ph1] || prodPh1TargetMap[storage + '_' + ph1] || 0;
                                     const p1Share = totalSellin > 0 ? (p1Val / totalSellin) * 100 : 0;
+                                    const p1Ly = lyProdMap[storage + '_' + cate + '_' + ph1] || 0;
 
                                     let p1Row = '<tr class="bg-white hover:bg-slate-50 border-b border-slate-100 transition-colors">';
                                     p1Row += '<td class="tree-lvl-3 cursor-pointer select-none" onclick="toggleTreeNode(\'' + encodeURIComponent(p1Id) + '\')"><span class="tree-toggle font-bold">' + (p1Open ? '−' : '+') + '</span><span class="text-slate-700 font-medium">' + ph1 + '</span></td>';
@@ -6683,7 +6725,7 @@
                                     p1Row += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(p1Target) + '">' + (p1Target > 0 ? formatVND(p1Target) : '-') + '</td>';
                                     p1Row += '<td class="text-center font-mono-num">' + formatAchieveBadge(p1Val, p1Target) + '</td>';
                                     p1Row += '<td class="text-right font-mono-num text-slate-500">' + p1Share.toFixed(1) + '%</td>';
-                                    p1Row += '<td class="text-right font-mono-num text-slate-500">+2.9%</td>';
+                                    p1Row += '<td class="text-right font-mono-num">' + formatTreeYoy(p1Val, p1Ly) + '</td>';
                                     p1Row += '</tr>';
                                     htmlRows.push(p1Row);
 
@@ -6692,6 +6734,7 @@
                                         Object.keys(ph2Obj).sort().forEach(ph2 => {
                                             const p2Val = ph2Obj[ph2].val;
                                             const p2Share = totalSellin > 0 ? (p2Val / totalSellin) * 100 : 0;
+                                            const p2Ly = lyProdMap[storage + '_' + cate + '_' + ph1 + '_' + ph2] || 0;
 
                                             let p2Row = '<tr class="text-slate-600 text-xs bg-slate-50/40 hover:bg-slate-100/60 border-b border-slate-100">';
                                             p2Row += '<td class="tree-lvl-4 select-none"><span class="inline-block w-1.5 h-1.5 rounded-full bg-purple-500 mr-2"></span>' + ph2 + '</td>';
@@ -6699,7 +6742,7 @@
                                             p2Row += '<td class="text-right font-mono-num text-slate-400">-</td>';
                                             p2Row += '<td class="text-center font-mono-num"><span class="text-slate-400 font-normal">-</span></td>';
                                             p2Row += '<td class="text-right font-mono-num text-slate-500">' + p2Share.toFixed(1) + '%</td>';
-                                            p2Row += '<td class="text-right font-mono-num text-emerald-600 font-bold">+5.1%</td>';
+                                            p2Row += '<td class="text-right font-mono-num">' + formatTreeYoy(p2Val, p2Ly) + '</td>';
                                             p2Row += '</tr>';
                                             htmlRows.push(p2Row);
                                         });
@@ -6797,6 +6840,37 @@
                     });
                 }
 
+                // Map Sell-in cùng kỳ năm trước (LY) để tính YoY cho Channel Tree
+                const lyYear = (parseInt(state.year) - 1).toString();
+                const lyChanMap = {};
+                SELLIN_M.filter(d => {
+                    if (d.year !== lyYear) return false;
+                    if (!state.selectedMonths.includes(d.month_num)) return false;
+                    if (state.dashChannel !== 'ALL' && d.channel !== state.dashChannel) return false;
+                    if (state.dashSubChannel !== 'ALL' && d.sub_channel !== state.dashSubChannel) return false;
+                    if (state.dashAccount !== 'ALL' && d.account_name !== state.dashAccount && d.account_code !== state.dashAccount) return false;
+                    if (state.prodStorage !== 'ALL' && d.storage !== state.prodStorage) return false;
+                    if (state.prodCate !== 'ALL' && d.cate !== state.prodCate) return false;
+                    if (state.prodPh1 !== 'ALL' && d.ph1 !== state.prodPh1) return false;
+                    if (state.prodPh2 !== 'ALL' && d.ph2 !== state.prodPh2) return false;
+                    return true;
+                }).forEach(d => {
+                    const ch = d.channel || 'Khác';
+                    const sc = d.sub_channel || 'Khác';
+                    const accName = d.account_name;
+                    const accCode = d.account_code;
+                    const v = Number(d.sellin_val) || 0;
+
+                    lyChanMap[ch] = (lyChanMap[ch] || 0) + v;
+                    lyChanMap[ch + '_' + sc] = (lyChanMap[ch + '_' + sc] || 0) + v;
+                    if (accName) {
+                        lyChanMap[ch + '_' + sc + '_' + accName] = (lyChanMap[ch + '_' + sc + '_' + accName] || 0) + v;
+                    }
+                    if (accCode) {
+                        lyChanMap[ch + '_' + sc + '_' + accCode] = (lyChanMap[ch + '_' + sc + '_' + accCode] || 0) + v;
+                    }
+                });
+
                 const tbody = document.getElementById('tbody-tree-chan');
                 if (!tbody) return;
                 const htmlRows = [];
@@ -6807,6 +6881,7 @@
                     const chVal = tree[ch].val;
                     const chTarget = chanTargetMap[ch] || 0;
                     const chShare = totalSellin > 0 ? (chVal / totalSellin) * 100 : 0;
+                    const chLy = lyChanMap[ch] || 0;
 
                     let chRow = '<tr class="bg-slate-50 font-bold border-b border-slate-200 hover:bg-slate-100 transition-colors">';
                     chRow += '<td class="tree-lvl-1 cursor-pointer select-none" onclick="toggleTreeNode(\'' + encodeURIComponent(chId) + '\')"><span class="tree-toggle font-bold">' + (chOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + ch + '</span></td>';
@@ -6814,7 +6889,7 @@
                     chRow += '<td class="text-right font-mono-num font-bold text-slate-700" title="' + formatExactVND(chTarget) + '">' + (chTarget > 0 ? formatVND(chTarget) : '-') + '</td>';
                     chRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(chVal, chTarget) + '</td>';
                     chRow += '<td class="text-right font-mono-num text-emerald-600">' + chShare.toFixed(1) + '%</td>';
-                    chRow += '<td class="text-right font-mono-num text-sky-600">+4.2%</td>';
+                    chRow += '<td class="text-right font-mono-num">' + formatTreeYoy(chVal, chLy) + '</td>';
                     chRow += '</tr>';
                     htmlRows.push(chRow);
 
@@ -6826,6 +6901,7 @@
                             const scVal = scObj[sc].val;
                             const scTarget = chanScTargetMap[ch + '_' + sc] || chanScTargetMap[sc] || 0;
                             const scShare = totalSellin > 0 ? (scVal / totalSellin) * 100 : 0;
+                            const scLy = lyChanMap[ch + '_' + sc] || 0;
 
                             let scRow = '<tr class="bg-slate-100/60 font-semibold border-b border-slate-200/60 hover:bg-slate-200/50 transition-colors">';
                             scRow += '<td class="tree-lvl-2 cursor-pointer select-none" onclick="toggleTreeNode(\'' + encodeURIComponent(scId) + '\')"><span class="tree-toggle font-bold">' + (scOpen ? '−' : '+') + '</span><span class="text-slate-800 font-bold">' + sc + '</span></td>';
@@ -6833,7 +6909,7 @@
                             scRow += '<td class="text-right font-mono-num font-semibold text-slate-600" title="' + formatExactVND(scTarget) + '">' + (scTarget > 0 ? formatVND(scTarget) : '-') + '</td>';
                             scRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(scVal, scTarget) + '</td>';
                             scRow += '<td class="text-right font-mono-num text-slate-600">' + scShare.toFixed(1) + '%</td>';
-                            scRow += '<td class="text-right font-mono-num text-slate-500">+3.5%</td>';
+                            scRow += '<td class="text-right font-mono-num">' + formatTreeYoy(scVal, scLy) + '</td>';
                             scRow += '</tr>';
                             htmlRows.push(scRow);
 
@@ -6844,6 +6920,7 @@
                                     const accNode = accObj[acc] || {};
                                     const accTarget = chanAccTargetMap[accNode.code] || chanAccTargetMap[accNode.name] || chanAccTargetMap[acc] || 0;
                                     const accShare = totalSellin > 0 ? (accVal / totalSellin) * 100 : 0;
+                                    const accLy = (accNode.name && lyChanMap[ch + '_' + sc + '_' + accNode.name]) || (accNode.code && lyChanMap[ch + '_' + sc + '_' + accNode.code]) || lyChanMap[ch + '_' + sc + '_' + acc] || 0;
 
                                     let accRow = '<tr class="text-slate-600 text-xs bg-white hover:bg-slate-50 border-b border-slate-100">';
                                     accRow += '<td class="tree-lvl-3 select-none"><span class="inline-block w-1.5 h-1.5 rounded-full bg-sky-500 mr-2"></span>' + acc + '</td>';
@@ -6851,7 +6928,7 @@
                                     accRow += '<td class="text-right font-mono-num text-slate-600" title="' + formatExactVND(accTarget) + '">' + (accTarget > 0 ? formatVND(accTarget) : '-') + '</td>';
                                     accRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(accVal, accTarget) + '</td>';
                                     accRow += '<td class="text-right font-mono-num text-slate-500">' + accShare.toFixed(1) + '%</td>';
-                                    accRow += '<td class="text-right font-mono-num text-emerald-600 font-bold">+5.0%</td>';
+                                    accRow += '<td class="text-right font-mono-num">' + formatTreeYoy(accVal, accLy) + '</td>';
                                     accRow += '</tr>';
                                     htmlRows.push(accRow);
                                 });
@@ -6880,8 +6957,9 @@
                     return true;
                 });
 
+                const lyYear = (parseInt(state.year) - 1).toString();
                 const lyData = GT_TREE.filter(d => {
-                    if (d.year !== '2025') return false;
+                    if (d.year !== lyYear) return false;
                     if (!state.selectedMonths.includes(d.month_num)) return false;
                     if (state.geoMien !== 'ALL' && d.mien !== state.geoMien) return false;
                     if (state.geoVung !== 'ALL' && d.vung !== state.geoVung) return false;
@@ -6909,7 +6987,7 @@
                 });
 
                 const ytdGtData2025 = GT_TREE.filter(d => {
-                    if (d.year !== '2025' || !ytdMonths.includes(d.month_num)) return false;
+                    if (d.year !== lyYear || !ytdMonths.includes(d.month_num)) return false;
                     if (state.geoMien !== 'ALL' && d.mien !== state.geoMien) return false;
                     if (state.geoVung !== 'ALL' && d.vung !== state.geoVung) return false;
                     if (state.geoGsbh !== 'ALL' && d.gsbh_name !== state.geoGsbh) return false;
@@ -7000,13 +7078,13 @@
                 SELLIN_M.filter(d => filterGtSellin(d, state.year, state.selectedMonths)).forEach(d => totalSellinGT += (Number(d.sellin_val) || 0));
 
                 let lySellinGT = 0;
-                SELLIN_M.filter(d => filterGtSellin(d, '2025', state.selectedMonths)).forEach(d => lySellinGT += (Number(d.sellin_val) || 0));
+                SELLIN_M.filter(d => filterGtSellin(d, lyYear, state.selectedMonths)).forEach(d => lySellinGT += (Number(d.sellin_val) || 0));
 
                 let ytdSellinGT2026 = 0;
                 SELLIN_M.filter(d => filterGtSellin(d, state.year, ytdMonths)).forEach(d => ytdSellinGT2026 += (Number(d.sellin_val) || 0));
 
                 let ytdSellinGT2025 = 0;
-                SELLIN_M.filter(d => filterGtSellin(d, '2025', ytdMonths)).forEach(d => ytdSellinGT2025 += (Number(d.sellin_val) || 0));
+                SELLIN_M.filter(d => filterGtSellin(d, lyYear, ytdMonths)).forEach(d => ytdSellinGT2025 += (Number(d.sellin_val) || 0));
 
                 const siYoY = lySellinGT > 0 ? ((totalSellinGT - lySellinGT) / lySellinGT) * 100 : 0;
                 const siYtd = ytdSellinGT2025 > 0 ? ((ytdSellinGT2026 - ytdSellinGT2025) / ytdSellinGT2025) * 100 : 0;
@@ -8183,8 +8261,9 @@
                 let totalSellinMT = 0;
                 data.forEach(d => totalSellinMT += (Number(d.sellin_val) || 0));
 
+                const lyYear = (parseInt(state.year) - 1).toString();
                 let lyMT = 0;
-                MT_TREE.filter(d => filterMt(d, '2025', state.selectedMonths)).forEach(d => lyMT += (Number(d.sellin_val) || 0));
+                MT_TREE.filter(d => filterMt(d, lyYear, state.selectedMonths)).forEach(d => lyMT += (Number(d.sellin_val) || 0));
                 const yoyGrowth = lyMT > 0 ? ((totalSellinMT - lyMT) / lyMT) * 100 : 0;
 
                 // YTD Months: 1 to max selected month
@@ -8193,7 +8272,7 @@
                 MT_TREE.filter(d => filterMt(d, state.year, ytdMonths)).forEach(d => ytdMT2026 += (Number(d.sellin_val) || 0));
 
                 let ytdMT2025 = 0;
-                MT_TREE.filter(d => filterMt(d, '2025', ytdMonths)).forEach(d => ytdMT2025 += (Number(d.sellin_val) || 0));
+                MT_TREE.filter(d => filterMt(d, lyYear, ytdMonths)).forEach(d => ytdMT2025 += (Number(d.sellin_val) || 0));
 
                 const ytdGrowth = ytdMT2025 > 0 ? ((ytdMT2026 - ytdMT2025) / ytdMT2025) * 100 : 0;
 
@@ -8639,6 +8718,27 @@
                     });
                 }
 
+                // Map Sell-in MT cùng kỳ năm trước (LY) để tính YoY cho MT Tree
+                const lyYear = (parseInt(state.year) - 1).toString();
+                const lyMtMap = {};
+                MT_TREE.filter(d => {
+                    if (d.year !== lyYear || !state.selectedMonths.includes(d.month_num)) return false;
+                    if (state.mtSubChan !== 'ALL' && d.sub_channel !== state.mtSubChan) return false;
+                    if (state.mtChain !== 'ALL' && d.key_account !== state.mtChain) return false;
+                    if (state.mtCluster !== 'ALL' && d.cluster !== state.mtCluster) return false;
+                    if (!matchProductRecord(d)) return false;
+                    return true;
+                }).forEach(d => {
+                    const sc = d.sub_channel || 'MT)Other';
+                    const acc = d.key_account || 'Other';
+                    const c = d.cluster || t('lbl_other');
+                    const v = Number(d.sellin_val) || 0;
+
+                    lyMtMap[sc] = (lyMtMap[sc] || 0) + v;
+                    lyMtMap[sc + '_' + acc] = (lyMtMap[sc + '_' + acc] || 0) + v;
+                    lyMtMap[sc + '_' + acc + '_' + c] = (lyMtMap[sc + '_' + acc + '_' + c] || 0) + v;
+                });
+
                 const tbody = document.getElementById('tbody-tree-mt');
                 if (!tbody) return;
                 const htmlRows = [];
@@ -8649,6 +8749,7 @@
                     const scVal = tree[sc].val;
                     const scTarget = scTargetMap[sc] || 0;
                     const scShare = total > 0 ? (scVal / total) * 100 : 0;
+                    const scLy = lyMtMap[sc] || 0;
 
                     let scRow = '<tr class="bg-slate-50 font-bold border-b border-slate-200 hover:bg-slate-100 transition-colors">';
                     scRow += '<td class="tree-lvl-1 cursor-pointer select-none" onclick="toggleTreeNode(\'' + encodeURIComponent(scId) + '\')"><span class="tree-toggle font-bold">' + (scOpen ? '−' : '+') + '</span><span class="text-slate-900 font-black">' + sc + '</span></td>';
@@ -8656,7 +8757,7 @@
                     scRow += '<td class="text-right font-mono-num font-bold text-slate-700">' + (scTarget > 0 ? formatVND(scTarget) : '-') + '</td>';
                     scRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(scVal, scTarget) + '</td>';
                     scRow += '<td class="text-right font-mono-num text-emerald-600">' + scShare.toFixed(1) + '%</td>';
-                    scRow += '<td class="text-right font-mono-num text-sky-600">+4.1%</td>';
+                    scRow += '<td class="text-right font-mono-num">' + formatTreeYoy(scVal, scLy) + '</td>';
                     scRow += '</tr>';
                     htmlRows.push(scRow);
 
@@ -8668,6 +8769,7 @@
                             const accVal = accObj[acc].val;
                             const accTarget = mtTargetMap[acc] || 0;
                             const accShare = total > 0 ? (accVal / total) * 100 : 0;
+                            const accLy = lyMtMap[sc + '_' + acc] || 0;
 
                             let accRow = '<tr class="bg-slate-100/50 font-semibold border-b border-slate-200/60 hover:bg-slate-200/50 transition-colors">';
                             accRow += '<td class="tree-lvl-2 cursor-pointer select-none" onclick="toggleTreeNode(\'' + encodeURIComponent(accId) + '\')"><span class="tree-toggle font-bold">' + (accOpen ? '−' : '+') + '</span><span class="text-slate-800 font-bold">' + acc + '</span></td>';
@@ -8675,7 +8777,7 @@
                             accRow += '<td class="text-right font-mono-num font-semibold text-slate-600">' + (accTarget > 0 ? formatVND(accTarget) : '-') + '</td>';
                             accRow += '<td class="text-center font-mono-num">' + formatAchieveBadge(accVal, accTarget) + '</td>';
                             accRow += '<td class="text-right font-mono-num text-slate-600">' + accShare.toFixed(1) + '%</td>';
-                            accRow += '<td class="text-right font-mono-num text-slate-500">+3.2%</td>';
+                            accRow += '<td class="text-right font-mono-num">' + formatTreeYoy(accVal, accLy) + '</td>';
                             accRow += '</tr>';
                             htmlRows.push(accRow);
 
@@ -8684,6 +8786,7 @@
                                 Object.keys(cluObj).sort().forEach(c => {
                                     const cVal = cluObj[c].val;
                                     const cShare = total > 0 ? (cVal / total) * 100 : 0;
+                                    const cLy = lyMtMap[sc + '_' + acc + '_' + c] || 0;
 
                                     let cRow = '<tr class="text-slate-500 text-xs bg-white hover:bg-slate-50 border-b border-slate-100">';
                                     cRow += '<td class="tree-lvl-3 select-none"><span class="inline-block w-1.5 h-1.5 rounded-full bg-purple-500 mr-2"></span>' + c + '</td>';
@@ -8691,7 +8794,7 @@
                                     cRow += '<td class="text-right font-mono-num text-slate-400">-</td>';
                                     cRow += '<td class="text-center font-mono-num text-slate-400">-</td>';
                                     cRow += '<td class="text-right font-mono-num">' + cShare.toFixed(1) + '%</td>';
-                                    cRow += '<td class="text-right font-mono-num text-emerald-600 font-bold">+5.0%</td>';
+                                    cRow += '<td class="text-right font-mono-num">' + formatTreeYoy(cVal, cLy) + '</td>';
                                     cRow += '</tr>';
                                     htmlRows.push(cRow);
                                 });
@@ -8720,8 +8823,9 @@
                 const data = B2B_TREE.filter(d => filterB2b(d, state.year, state.selectedMonths));
                 let total = 0; data.forEach(d => total += (Number(d.sellin_val) || 0));
 
+                const lyYear = (parseInt(state.year) - 1).toString();
                 let lyB2b = 0;
-                B2B_TREE.filter(d => filterB2b(d, '2025', state.selectedMonths)).forEach(d => lyB2b += (Number(d.sellin_val) || 0));
+                B2B_TREE.filter(d => filterB2b(d, lyYear, state.selectedMonths)).forEach(d => lyB2b += (Number(d.sellin_val) || 0));
                 const yoy = lyB2b > 0 ? ((total - lyB2b) / lyB2b) * 100 : 0;
 
                 // YTD
@@ -8730,7 +8834,7 @@
                 B2B_TREE.filter(d => filterB2b(d, state.year, ytdMonths)).forEach(d => ytdB2b2026 += (Number(d.sellin_val) || 0));
 
                 let ytdB2b2025 = 0;
-                B2B_TREE.filter(d => filterB2b(d, '2025', ytdMonths)).forEach(d => ytdB2b2025 += (Number(d.sellin_val) || 0));
+                B2B_TREE.filter(d => filterB2b(d, lyYear, ytdMonths)).forEach(d => ytdB2b2025 += (Number(d.sellin_val) || 0));
 
                 const ytdGrowth = ytdB2b2025 > 0 ? ((ytdB2b2026 - ytdB2b2025) / ytdB2b2025) * 100 : 0;
 
@@ -8907,7 +9011,7 @@
                 });
 
                 const lyCustMap = {};
-                B2B_TREE.filter(d => filterB2b(d, '2025', state.selectedMonths)).forEach(d => {
+                B2B_TREE.filter(d => filterB2b(d, lyYear, state.selectedMonths)).forEach(d => {
                     const custKey = d.b2b_customer || d.b2b_account;
                     lyCustMap[custKey] = (lyCustMap[custKey] || 0) + (Number(d.sellin_val) || 0);
                 });
@@ -8933,10 +9037,7 @@
                     const share = total > 0 ? (val / total) * 100 : 0;
                     const tgt = b2bTargetMap[cust] || 0;
                     const lyVal = lyCustMap[cust] || 0;
-                    const custYoy = lyVal > 0 ? ((val - lyVal) / lyVal) * 100 : null;
-                    const yoyHtml = custYoy !== null
-                        ? (custYoy >= 0 ? '<span class="text-emerald-600 font-bold font-mono-num">+' + custYoy.toFixed(1) + '%</span>' : '<span class="text-rose-600 font-bold font-mono-num">' + custYoy.toFixed(1) + '%</span>')
-                        : '<span class="text-slate-400 font-mono-num">--</span>';
+                    const yoyHtml = formatTreeYoy(val, lyVal);
                     const tgtHtml = tgt > 0 ? formatVND(tgt) : '<span class="text-slate-400 font-mono-num">--</span>';
                     const achHtml = tgt > 0 ? formatAchieveBadge(val, tgt) : '<span class="text-slate-400 font-mono-num text-[10px]">--</span>';
 
@@ -8963,8 +9064,9 @@
                 const data = KR_TREE.filter(d => filterKr(d, state.year, state.selectedMonths));
                 let total = 0; data.forEach(d => total += (Number(d.sellin_val) || 0));
 
+                const lyYear = (parseInt(state.year) - 1).toString();
                 let lyKr = 0;
-                KR_TREE.filter(d => filterKr(d, '2025', state.selectedMonths)).forEach(d => lyKr += (Number(d.sellin_val) || 0));
+                KR_TREE.filter(d => filterKr(d, lyYear, state.selectedMonths)).forEach(d => lyKr += (Number(d.sellin_val) || 0));
                 const yoy = lyKr > 0 ? ((total - lyKr) / lyKr) * 100 : 0;
 
                 // YTD
@@ -8973,7 +9075,7 @@
                 KR_TREE.filter(d => filterKr(d, state.year, ytdMonths)).forEach(d => ytdKr2026 += (Number(d.sellin_val) || 0));
 
                 let ytdKr2025 = 0;
-                KR_TREE.filter(d => filterKr(d, '2025', ytdMonths)).forEach(d => ytdKr2025 += (Number(d.sellin_val) || 0));
+                KR_TREE.filter(d => filterKr(d, lyYear, ytdMonths)).forEach(d => ytdKr2025 += (Number(d.sellin_val) || 0));
 
                 const ytdGrowth = ytdKr2025 > 0 ? ((ytdKr2026 - ytdKr2025) / ytdKr2025) * 100 : 0;
 
@@ -9147,7 +9249,7 @@
                 data.forEach(d => chainMap[d.kr_chain] = (chainMap[d.kr_chain] || 0) + (Number(d.sellin_val) || 0));
 
                 const lyChainMap = {};
-                KR_TREE.filter(d => filterKr(d, '2025', state.selectedMonths)).forEach(d => {
+                KR_TREE.filter(d => filterKr(d, lyYear, state.selectedMonths)).forEach(d => {
                     lyChainMap[d.kr_chain] = (lyChainMap[d.kr_chain] || 0) + (Number(d.sellin_val) || 0);
                 });
 
@@ -9172,10 +9274,7 @@
                     const share = total > 0 ? (val / total) * 100 : 0;
                     const tgt = krTargetMap[chain] || 0;
                     const lyVal = lyChainMap[chain] || 0;
-                    const chainYoy = lyVal > 0 ? ((val - lyVal) / lyVal) * 100 : null;
-                    const yoyHtml = chainYoy !== null
-                        ? (chainYoy >= 0 ? '<span class="text-emerald-600 font-bold font-mono-num">+' + chainYoy.toFixed(1) + '%</span>' : '<span class="text-rose-600 font-bold font-mono-num">' + chainYoy.toFixed(1) + '%</span>')
-                        : '<span class="text-slate-400 font-mono-num">--</span>';
+                    const yoyHtml = formatTreeYoy(val, lyVal);
                     const tgtHtml = tgt > 0 ? formatVND(tgt) : '<span class="text-slate-400 font-mono-num">--</span>';
                     const achHtml = tgt > 0 ? formatAchieveBadge(val, tgt) : '<span class="text-slate-400 font-mono-num text-[10px]">--</span>';
 
@@ -9314,6 +9413,7 @@
                     const wb = XLSX.utils.book_new();
                     const tabId = state.activeTab;
                     const year = state.year;
+                    const lyYear = (parseInt(year) - 1).toString();
                     const months = state.selectedMonths;
                     const monthStr = 'Tháng ' + months.map(m => parseInt(m)).join(', Tháng ');
                     const nowStr = new Date().toLocaleString('vi-VN');
@@ -9346,7 +9446,7 @@
 
                         let totalLy = 0;
                         SELLIN_M.filter(d => {
-                            if (d.year !== '2025' || !months.includes(d.month_num)) return false;
+                            if (d.year !== lyYear || !months.includes(d.month_num)) return false;
                             if (!matchProductRecord(d)) return false;
                             return true;
                         }).forEach(d => totalLy += (Number(d.sellin_val) || 0));
@@ -9368,7 +9468,7 @@
                         rows1.push(["--- BẢNG TỔNG HỢP CHỈ SỐ KPI TOÀN CÔNG TY ---"]);
                         rows1.push(["Chỉ Số KPI", "Giá Trị Thực Hiện (VND)", "Kế Hoạch / Cùng Kỳ (VND)", "Tỷ Lệ Đạt / Tăng Trưởng (%)", "Đánh Giá"]);
                         rows1.push(["Doanh Số Sell-in MTD", totalSi, totalTgt, Number(achieveTgt.toFixed(1)), achieveTgt >= 100 ? 'Vượt kế hoạch' : (achieveTgt >= 80 ? 'Bám sát kế hoạch' : 'Cần tăng tốc')]);
-                        rows1.push(["So Với Cùng Kỳ LY (2025)", totalSi, totalLy, Number(growthYoY.toFixed(1)), growthYoY >= 0 ? 'Tăng trưởng dương' : 'Suy giảm cùng kỳ']);
+                        rows1.push(["So Với Cùng Kỳ LY (" + lyYear + ")", totalSi, totalLy, Number(growthYoY.toFixed(1)), growthYoY >= 0 ? 'Tăng trưởng dương' : 'Suy giảm cùng kỳ']);
                         rows1.push([]);
 
                         // 4 Channel breakdown table
@@ -9377,7 +9477,7 @@
                         ['GT', 'MT', 'B2B', 'KR'].forEach(ch => {
                             let chSi = 0, chLy = 0;
                             SELLIN_M.filter(d => filterOverview(d) && d.channel === ch).forEach(d => chSi += (Number(d.sellin_val) || 0));
-                            SELLIN_M.filter(d => d.year === '2025' && months.includes(d.month_num) && d.channel === ch && matchProductRecord(d)).forEach(d => chLy += (Number(d.sellin_val) || 0));
+                            SELLIN_M.filter(d => d.year === lyYear && months.includes(d.month_num) && d.channel === ch && matchProductRecord(d)).forEach(d => chLy += (Number(d.sellin_val) || 0));
                             const chGrowth = chLy > 0 ? ((chSi - chLy) / chLy) * 100 : 0;
                             const chShare = totalSi > 0 ? (chSi / totalSi) * 100 : 0;
                             rows1.push([ch, chSi, chLy, Number(chGrowth.toFixed(1)), Number(chShare.toFixed(1))]);
@@ -9406,7 +9506,7 @@
                         });
 
                         const prodLyMap = {};
-                        SELLIN_M.filter(d => d.year === '2025' && months.includes(d.month_num) && matchProductRecord(d)).forEach(d => {
+                        SELLIN_M.filter(d => d.year === lyYear && months.includes(d.month_num) && matchProductRecord(d)).forEach(d => {
                             const kSt = d.storage || 'Chưa phân loại';
                             const kCat = kSt + '||' + (d.cate || 'Khác');
                             const kP1 = kCat + '||' + (d.ph1 || 'Khác');
@@ -9795,7 +9895,7 @@
                         const mtFiltered = MT_TREE.filter(filterMt);
                         let mtSi = 0; mtFiltered.forEach(d => mtSi += (Number(d.sellin_val) || 0));
                         let mtLy = 0;
-                        MT_TREE.filter(d => d.year === '2025' && months.includes(d.month_num) && (state.mtSubChan === 'ALL' || d.sub_channel === state.mtSubChan) && (state.mtChain === 'ALL' || d.key_account === state.mtChain) && matchProductRecord(d)).forEach(d => mtLy += (Number(d.sellin_val) || 0));
+                        MT_TREE.filter(d => d.year === lyYear && months.includes(d.month_num) && (state.mtSubChan === 'ALL' || d.sub_channel === state.mtSubChan) && (state.mtChain === 'ALL' || d.key_account === state.mtChain) && matchProductRecord(d)).forEach(d => mtLy += (Number(d.sellin_val) || 0));
                         const mtGrowth = mtLy > 0 ? ((mtSi - mtLy) / mtLy) * 100 : 0;
 
                         let mtTgt = 0;
@@ -9805,7 +9905,7 @@
                         const mtAch = mtTgt > 0 ? (mtSi / mtTgt) * 100 : 0;
 
                         rows3.push(["Doanh Số Sell-in MT", mtSi, mtTgt, Number(mtAch.toFixed(1)), mtSi >= mtTgt ? 'Đạt' : 'Chưa đạt']);
-                        rows3.push(["So Với Cùng Kỳ LY (2025)", mtSi, mtLy, Number(mtGrowth.toFixed(1)), mtGrowth >= 0 ? 'Tăng trưởng' : 'Suy giảm']);
+                        rows3.push(["So Với Cùng Kỳ LY (" + lyYear + ")", mtSi, mtLy, Number(mtGrowth.toFixed(1)), mtGrowth >= 0 ? 'Tăng trưởng' : 'Suy giảm']);
                         rows3.push([]);
 
                         rows3.push(["--- CHI TIẾT THEO PHÂN KÊNH & CHUỖI SIÊU THỊ KEY ACCOUNTS MT ---"]);
@@ -9852,7 +9952,7 @@
                         const b2bFiltered = B2B_TREE.filter(filterB2b);
                         let b2bSi = 0; b2bFiltered.forEach(d => b2bSi += (Number(d.sellin_val) || 0));
                         let b2bLy = 0;
-                        B2B_TREE.filter(d => d.year === '2025' && months.includes(d.month_num) && matchProductRecord(d)).forEach(d => b2bLy += (Number(d.sellin_val) || 0));
+                        B2B_TREE.filter(d => d.year === lyYear && months.includes(d.month_num) && matchProductRecord(d)).forEach(d => b2bLy += (Number(d.sellin_val) || 0));
                         const b2bGrowth = b2bLy > 0 ? ((b2bSi - b2bLy) / b2bLy) * 100 : 0;
 
                         let b2bTgt = 0;
@@ -9862,9 +9962,10 @@
                         const b2bAch = b2bTgt > 0 ? (b2bSi / b2bTgt) * 100 : 0;
 
                         rows4.push(["Doanh Số Sell-in B2B", b2bSi, b2bTgt, Number(b2bAch.toFixed(1)), b2bSi >= b2bTgt ? 'Đạt' : 'Chưa đạt']);
-                        rows4.push(["So Với Cùng Kỳ LY (2025)", b2bSi, b2bLy, Number(b2bGrowth.toFixed(1)), b2bGrowth >= 0 ? 'Tăng trưởng' : 'Suy giảm']);
+                        rows4.push(["So Với Cùng Kỳ LY (" + lyYear + ")", b2bSi, b2bLy, Number(b2bGrowth.toFixed(1)), b2bGrowth >= 0 ? 'Tăng trưởng' : 'Suy giảm']);
                         rows4.push([]);
 
+                        // --- CHI TIẾT KHÁCH HÀNG DOANH NGHIỆP B2B FOOD SERVICE ---
                         rows4.push(["--- CHI TIẾT KHÁCH HÀNG DOANH NGHIỆP B2B FOOD SERVICE ---"]);
                         rows4.push(["Tên Khách Hàng / Account B2B", "Doanh Số Sell-in (VND)", "Cùng Kỳ LY (VND)", "Tăng Trưởng YoY (%)", "Tỷ Trọng (%)"]);
 
@@ -9874,7 +9975,7 @@
                             b2bCustMap[cKey] = (b2bCustMap[cKey] || 0) + (Number(d.sellin_val) || 0);
                         });
                         const b2bLyMap = {};
-                        B2B_TREE.filter(d => d.year === '2025' && months.includes(d.month_num) && matchProductRecord(d)).forEach(d => {
+                        B2B_TREE.filter(d => d.year === lyYear && months.includes(d.month_num) && matchProductRecord(d)).forEach(d => {
                             const cKey = d.b2b_customer || d.b2b_account || 'Khác';
                             b2bLyMap[cKey] = (b2bLyMap[cKey] || 0) + (Number(d.sellin_val) || 0);
                         });
@@ -9907,7 +10008,7 @@
                         const krFiltered = KR_TREE.filter(filterKr);
                         let krSi = 0; krFiltered.forEach(d => krSi += (Number(d.sellin_val) || 0));
                         let krLy = 0;
-                        KR_TREE.filter(d => d.year === '2025' && months.includes(d.month_num) && matchProductRecord(d)).forEach(d => krLy += (Number(d.sellin_val) || 0));
+                        KR_TREE.filter(d => d.year === lyYear && months.includes(d.month_num) && matchProductRecord(d)).forEach(d => krLy += (Number(d.sellin_val) || 0));
                         const krGrowth = krLy > 0 ? ((krSi - krLy) / krLy) * 100 : 0;
 
                         let krTgt = 0;
@@ -9917,9 +10018,10 @@
                         const krAch = krTgt > 0 ? (krSi / krTgt) * 100 : 0;
 
                         rows5.push(["Doanh Số Sell-in KR", krSi, krTgt, Number(krAch.toFixed(1)), krSi >= krTgt ? 'Đạt' : 'Chưa đạt']);
-                        rows5.push(["So Với Cùng Kỳ LY (2025)", krSi, krLy, Number(krGrowth.toFixed(1)), krGrowth >= 0 ? 'Tăng trưởng' : 'Suy giảm']);
+                        rows5.push(["So Với Cùng Kỳ LY (" + lyYear + ")", krSi, krLy, Number(krGrowth.toFixed(1)), krGrowth >= 0 ? 'Tăng trưởng' : 'Suy giảm']);
                         rows5.push([]);
 
+                        // --- CHI TIẾT CÁC ĐẠI LÝ & ĐỐI TÁC TRỌNG ĐIỂM KEY RETAILER (KR) ---
                         rows5.push(["--- CHI TIẾT CÁC ĐẠI LÝ & ĐỐI TÁC TRỌNG ĐIỂM KEY RETAILER (KR) ---"]);
                         rows5.push(["Tên Đại Lý / Đối Tác KR", "Doanh Số Sell-in (VND)", "Cùng Kỳ LY (VND)", "Tăng Trưởng YoY (%)", "Tỷ Trọng (%)"]);
 
@@ -9929,7 +10031,7 @@
                             krMap[cKey] = (krMap[cKey] || 0) + (Number(d.sellin_val) || 0);
                         });
                         const krLyMap = {};
-                        KR_TREE.filter(d => d.year === '2025' && months.includes(d.month_num) && matchProductRecord(d)).forEach(d => {
+                        KR_TREE.filter(d => d.year === lyYear && months.includes(d.month_num) && matchProductRecord(d)).forEach(d => {
                             const cKey = d.kr_chain || 'Khác';
                             krLyMap[cKey] = (krLyMap[cKey] || 0) + (Number(d.sellin_val) || 0);
                         });
