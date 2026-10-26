@@ -4000,7 +4000,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                         <span>📍</span> <span data-i18n="nav_gt">2. Kênh GT</span>
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <span class="gt-tree-badge text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700 transition-colors">6</span>
+                        <span class="gt-tree-badge text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700 transition-colors">7</span>
                         <svg id="nav-gt-chevron" class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                         </svg>
@@ -4032,6 +4032,10 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     <a onclick="selectGtSubMenu('gt-sub-freezer')" id="gt-subnav-freezer" class="gt-tree-subitem" title="Hiệu Quả POSM">
                         <span class="tree-icon">📦</span>
                         <span class="truncate" data-i18n="subnav_gt_freezer">Hiệu Quả POSM</span>
+                    </a>
+                    <a onclick="selectGtSubMenu('gt-sub-ctkm')" id="gt-subnav-ctkm" class="gt-tree-subitem" title="Theo Dõi CTKM GT">
+                        <span class="tree-icon">🎁</span>
+                        <span class="truncate" data-i18n="subnav_gt_ctkm">Theo Dõi CTKM</span>
                     </a>
                 </div>
             </div>
@@ -4736,6 +4740,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                         <option value="gt-sub-routemap">Bản Đồ Tuyến & Golden</option>
                         <option value="gt-sub-freezer">Hiệu Quả POSM - Tủ Đông</option>
                         <option value="gt-sub-standee">Hiệu Quả POSM - Standee (Kệ sắt)</option>
+                        <option value="gt-sub-ctkm">🎁 Theo Dõi CTKM GT</option>
                     </select>
                 </div>
             </div>
@@ -5694,6 +5699,44 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 </div>
             </div>
 
+
+<!-- ========================================================================= -->
+            <!-- 7. THEO DÕI CTKM KÊNH GT (MODULE NHÚNG TÍCH HỢP) -->
+            <!-- ========================================================================= -->
+            <div id="gt-subview-ctkm" class="gt-subview-panel hidden space-y-3">
+                <!-- THANH ĐIỀU KHIỂN MODULE THEO DÕI CTKM -->
+                <div id="gt-ctkm-toolbar" class="bg-white rounded-xl shadow-xs border border-slate-200/90 p-3 flex flex-wrap justify-between items-center gap-3">
+                    <div id="gt-ctkm-header-title" class="flex items-center gap-3">
+                        <span class="text-2xl p-1.5 bg-rose-50 text-rose-600 rounded-lg border border-rose-100 flex items-center justify-center w-10 h-10 shadow-2xs">🎁</span>
+                        <div>
+                            <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                                <span>THEO DÕI CHỨNG TỪ & TRẢ KHUYẾN MÃI KÊNH GT</span>
+                                <span class="text-[11px] bg-rose-50 text-rose-700 border border-rose-200 px-2 py-0.5 rounded-full font-mono font-bold">CTKM RTM</span>
+                            </h3>
+                            <p class="text-[11px] text-slate-500 mt-0.5">Theo dõi hồ sơ chứng từ CTKM • Đối soát nợ tiền & hàng NPP Kênh GT • Cập nhật tự động liên tục</p>
+                        </div>
+                    </div>
+                    <div id="gt-ctkm-actions" class="flex items-center gap-2">
+                        <button type="button" onclick="toggleDashboardSidebar()" id="btn-toggle-dash-sidebar-ctkm" class="px-2.5 py-1.5 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold transition flex items-center gap-1.5 border border-purple-200" title="Ẩn/Hiện thanh menu Dashboard bên trái để xem rộng hơn">
+                            <span id="icon-toggle-dash-sidebar-ctkm">◀</span> <span id="text-toggle-dash-sidebar-ctkm">Thu gọn Menu Trái</span>
+                        </button>
+                        <button type="button" onclick="reloadGtCtkm()" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-1.5 border border-slate-300" title="Tải lại báo cáo CTKM">
+                            <span>🔄</span> Tải lại
+                        </button>
+                        <button type="button" onclick="toggleGtCtkmFullscreen()" class="px-2.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold transition flex items-center gap-1.5 border border-blue-200" title="Xem toàn màn hình">
+                            <span>⛶</span> Toàn màn hình
+                        </button>
+                        <a href="https://cjfood.github.io/theo_doi_KM/" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs" title="Mở trong tab mới độc lập">
+                            <span>🚀</span> Mở Tab Mới
+                        </a>
+                    </div>
+                </div>
+
+                <!-- KHUNG CHỨA BÁO CÁO CTKM (IFRAME) -->
+                <div id="gt-ctkm-card" class="bg-white rounded-xl shadow-xs border border-slate-200/90 overflow-hidden relative" style="height: calc(100vh - 120px); min-height: 750px;">
+                    <iframe id="iframe-gt-ctkm" src="https://cjfood.github.io/theo_doi_KM/" class="w-full h-full border-0" allow="fullscreen" loading="lazy"></iframe>
+                </div>
+            </div>
 
             <!-- ========================================================================= -->
             <div id="gt-subview-freezer" class="gt-subview-panel hidden space-y-5">
@@ -9065,6 +9108,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             sub_route_tracker: "Track visit plan completion rate and revenue by route cycle",
             sub_route_zero_sales: "Require Sup & Rep reactivation action",
             subnav_gt_freezer: "POSM Performance",
+            subnav_gt_ctkm: "Promo & Claim Tracking",
             subtab_posm_freezer: "Freezer Performance",
             subtab_posm_standee: "Standee (Rack) Performance", 
             subnav_gt_freezer_short: "Freezer Performance",
@@ -13885,7 +13929,8 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 'gt-subnav-productivity': (currentSub === 'gt-sub-productivity'),
                 'gt-subnav-route': (currentSub === 'gt-sub-route'),
                 'gt-subnav-routemap': (currentSub === 'gt-sub-routemap'),
-                'gt-subnav-freezer': (currentSub === 'gt-sub-freezer' || currentSub === 'gt-sub-standee')
+                'gt-subnav-freezer': (currentSub === 'gt-sub-freezer' || currentSub === 'gt-sub-standee'),
+                'gt-subnav-ctkm': (currentSub === 'gt-sub-ctkm')
             };
             Object.keys(subNavItems).forEach(id => {
                 const isActive = subNavItems[id];
@@ -13989,7 +14034,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 const topFilter = document.getElementById('top-header-filter') || document.querySelector('.top-header-filter');
                 const gtBreadcrumb = document.getElementById('gt-header-breadcrumb-row');
                 const tabGtView = document.getElementById('tab-gt-view');
-                const isRouteMap = (state.gtSubTab === 'gt-sub-routemap');
+                const isRouteMap = (state.gtSubTab === 'gt-sub-routemap' || state.gtSubTab === 'gt-sub-ctkm');
 
                 if (topFilter) {
                     if (isRouteMap) topFilter.classList.add('hidden');
@@ -14026,7 +14071,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 updatePosmSubtabButtonsUI(currentPosmTab);
 
                 const targetContainerId = state.gtSubTab.replace('gt-sub-', 'gt-subview-');
-                ['gt-subview-fundamental', 'gt-subview-productivity', 'gt-subview-route', 'gt-subview-routemap', 'gt-subview-overview', 'gt-subview-freezer', 'gt-subview-standee'].forEach(id => {
+                ['gt-subview-fundamental', 'gt-subview-productivity', 'gt-subview-route', 'gt-subview-routemap', 'gt-subview-overview', 'gt-subview-freezer', 'gt-subview-standee', 'gt-subview-ctkm'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) {
                         if (isPosm) {
@@ -14073,6 +14118,27 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             const iframe = document.getElementById('iframe-gt-routemap');
             if (iframe && !iframe.getAttribute('src')) {
                 iframe.setAttribute('src', 'https://cjfood.github.io/Route_digital/');
+            }
+        }
+
+        function reloadGtCtkm() {
+            const iframe = document.getElementById('iframe-gt-ctkm');
+            if (iframe) {
+                const currentSrc = iframe.src || 'https://cjfood.github.io/theo_doi_KM/';
+                iframe.src = '';
+                setTimeout(() => { iframe.src = currentSrc; }, 100);
+            }
+        }
+
+        function toggleGtCtkmFullscreen() {
+            const card = document.getElementById('gt-ctkm-card');
+            if (!card) return;
+            if (!document.fullscreenElement) {
+                card.requestFullscreen().catch(err => {
+                    console.warn("Fullscreen request error:", err);
+                });
+            } else {
+                document.exitFullscreen();
             }
         }
 
@@ -32998,6 +33064,10 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
                                 <a onclick="selectMobileGtSubMenu('gt-sub-freezer')" id="m-gt-subnav-freezer" class="m-tree-subitem" title="Hiệu Quả POSM">
                                     <span class="m-tree-icon">📦</span>
                                     <span class="truncate" data-i18n="subnav_gt_freezer">Hiệu Quả POSM</span>
+                                </a>
+                                <a onclick="selectMobileGtSubMenu('gt-sub-ctkm')" id="m-gt-subnav-ctkm" class="m-tree-subitem" title="Theo Dõi CTKM GT">
+                                    <span class="m-tree-icon">🎁</span>
+                                    <span class="truncate" data-i18n="subnav_gt_ctkm">Theo Dõi CTKM</span>
                                 </a>
                             </div>
                         </div>
