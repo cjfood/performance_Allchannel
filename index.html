@@ -3270,22 +3270,43 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
         #table-gt-standee tr[data-level="5"] td:first-child { background-color: #ffffff !important; }
         #table-gt-standee tr:hover td:first-child { background-color: #faf5ff !important; }
 
-        /* Sticky rank / customer for Detail tables */
+        /* Sticky rank / customer for Detail tables (STT column strictly compact) */
         #table-gt-freezer-detail th:first-child,
         #table-gt-freezer-detail td:first-child,
         #table-gt-standee-detail th:first-child,
         #table-gt-standee-detail td:first-child {
             position: sticky !important;
             left: 0 !important;
-            z-index: 15 !important;
-            background-color: #f8fafc !important;
+            z-index: 18 !important;
+            width: 40px !important;
+            min-width: 36px !important;
+            max-width: 44px !important;
+            text-align: center !important;
+            padding-left: 2px !important;
+            padding-right: 2px !important;
+            box-sizing: border-box !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            background-color: #ffffff !important;
             box-shadow: 2px 0 4px -1px rgba(0, 0, 0, 0.08) !important;
         }
 
         #table-gt-freezer-detail thead th:first-child,
         #table-gt-standee-detail thead th:first-child {
-            z-index: 35 !important;
-            background-color: #e2e8f0 !important;
+            position: sticky !important;
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 38 !important;
+            background-color: #f1f5f9 !important;
+            width: 40px !important;
+            min-width: 36px !important;
+            max-width: 44px !important;
+            text-align: center !important;
+            padding-left: 2px !important;
+            padding-right: 2px !important;
+            box-sizing: border-box !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
         }
 
         #modal-chart-zoom {
@@ -4937,14 +4958,14 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     <span id="gt-header-subscreen-title" class="text-sm font-extrabold text-slate-800 tracking-tight">Tổng quan GT</span>
 
                     <!-- SUB-TABS DÀNH CHO POSM (Hiển thị khi ở chuyên mục Hiệu Quả POSM) -->
-                    <div id="gt-posm-subtabs-bar" class="hidden inline-flex items-center gap-1.5 p-1 bg-slate-100/90 rounded-xl border border-slate-200 ml-1">
+                    <div id="gt-posm-subtabs-bar" class="hidden inline-flex items-center gap-1.5 p-1 bg-slate-100/95 rounded-2xl border-2 border-slate-300 shadow-inner ml-1">
                         <button type="button" id="btn-subtab-posm-freezer" onclick="switchPosmSubTab('freezer')" 
-                            class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs bg-white text-blue-700 border border-blue-200">
-                            <span>❄️</span> <span data-i18n="subtab_posm_freezer">Hiệu Quả Tủ Đông</span>
+                            class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 shadow-md bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-600 text-white border border-blue-500 ring-2 ring-blue-400/50 scale-[1.02]">
+                            <span class="text-sm">❄️</span> <span data-i18n="subtab_posm_freezer">Hiệu Quả Tủ Đông</span>
                         </button>
                         <button type="button" id="btn-subtab-posm-standee" onclick="switchPosmSubTab('standee')" 
-                            class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all flex items-center gap-1.5 border border-transparent">
-                            <span>🧺</span> <span data-i18n="subtab_posm_standee">Hiệu Quả Standee (Kệ sắt)</span>
+                            class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 bg-purple-50/90 text-purple-900 border-2 border-purple-200/90 hover:bg-purple-100 shadow-2xs">
+                            <span class="text-sm">🧺</span> <span data-i18n="subtab_posm_standee">Hiệu Quả Standee (Kệ sắt)</span>
                         </button>
                     </div>
                 </div>
@@ -5959,11 +5980,11 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             <!-- ========================================================================= -->
             <div id="gt-subview-freezer" class="gt-subview-panel hidden space-y-4 sm:space-y-5">
                 <!-- Mobile POSM Subtab Switcher -->
-                <div class="sm:hidden flex items-center p-1 bg-slate-100 rounded-xl border border-slate-200 shadow-2xs">
-                    <button type="button" onclick="switchPosmSubTab('freezer')" class="btn-m-posm-freezer flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 bg-white text-blue-700 shadow-2xs border border-blue-200">
+                <div class="sm:hidden flex items-center p-1 bg-slate-100/95 rounded-xl border-2 border-slate-300 shadow-inner gap-1.5">
+                    <button type="button" onclick="switchPosmSubTab('freezer')" class="btn-m-posm-freezer flex-1 py-2 px-3 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1.5 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-600 text-white shadow-md border border-blue-500 ring-2 ring-blue-400/50">
                         <span>❄️</span> <span data-i18n="subtab_posm_freezer">Tủ Đông & Tủ Mát</span>
                     </button>
-                    <button type="button" onclick="switchPosmSubTab('standee')" class="btn-m-posm-standee flex-1 py-2 px-3 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 border border-transparent">
+                    <button type="button" onclick="switchPosmSubTab('standee')" class="btn-m-posm-standee flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 bg-purple-50/90 text-purple-900 border-2 border-purple-200/90 hover:bg-purple-100 shadow-2xs">
                         <span>🧺</span> <span data-i18n="subtab_posm_standee">Standee (Kệ Sắt)</span>
                     </button>
                 </div>
@@ -6240,11 +6261,11 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             <!-- ========================================================================= -->
             <div id="gt-subview-standee" class="gt-subview-panel hidden space-y-4 sm:space-y-5">
                 <!-- Mobile POSM Subtab Switcher -->
-                <div class="sm:hidden flex items-center p-1 bg-slate-100 rounded-xl border border-slate-200 shadow-2xs">
-                    <button type="button" onclick="switchPosmSubTab('freezer')" class="btn-m-posm-freezer flex-1 py-2 px-3 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 border border-transparent">
+                <div class="sm:hidden flex items-center p-1 bg-slate-100/95 rounded-xl border-2 border-slate-300 shadow-inner gap-1.5">
+                    <button type="button" onclick="switchPosmSubTab('freezer')" class="btn-m-posm-freezer flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 bg-blue-50/90 text-blue-900 border-2 border-blue-200/90 hover:bg-blue-100 shadow-2xs">
                         <span>❄️</span> <span data-i18n="subtab_posm_freezer">Tủ Đông & Tủ Mát</span>
                     </button>
-                    <button type="button" onclick="switchPosmSubTab('standee')" class="btn-m-posm-standee flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 bg-white text-purple-700 shadow-2xs border border-purple-200">
+                    <button type="button" onclick="switchPosmSubTab('standee')" class="btn-m-posm-standee flex-1 py-2 px-3 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1.5 bg-gradient-to-r from-purple-600 via-purple-700 to-fuchsia-600 text-white shadow-md border border-purple-500 ring-2 ring-purple-400/50">
                         <span>🧺</span> <span data-i18n="subtab_posm_standee">Standee (Kệ Sắt)</span>
                     </button>
                 </div>
@@ -8444,6 +8465,8 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             sub_route_tracker: "Theo dõi tỷ lệ hoàn thành kế hoạch viếng thăm và doanh số theo chu kỳ tuyến bán hàng",
             sub_route_zero_sales: "Cần GSBH & NVBH rà soát tái kích hoạt",
             subnav_gt_freezer: "Hiệu Quả POSM",
+            subnav_gt_ctkm: "Theo Dõi CTKM",
+            subnav_gt_ctkm_short: "Theo Dõi CTKM",
             subtab_posm_freezer: "Hiệu Quả Tủ Đông",
             subtab_posm_standee: "Hiệu Quả Standee (Kệ sắt)", 
             subnav_gt_freezer_short: "Hiệu Quả POSM",
@@ -10369,6 +10392,8 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             sub_route_tracker: "노선 주기별 방문 계획 완료율 및 매출 진행 현황 추적",
             sub_route_zero_sales: "지점장/영업사원 재방문 활성화 필요",
             subnav_gt_freezer: "POSM 효율",
+            subnav_gt_ctkm: "프로모션 추적",
+            subnav_gt_ctkm_short: "프로모션 추적",
             subtab_posm_freezer: "냉동고 효율",
             subtab_posm_standee: "스탠디 (철제 매대) 효율", 
             subnav_gt_freezer_short: "냉동고 효율",
@@ -14263,6 +14288,8 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 if (optRouteMap) optRouteMap.textContent = t('subnav_gt_routemap') || 'Bản Đồ Tuyến & Golden';
                 const optFreezer = mSelect.querySelector('option[value="gt-sub-freezer"]');
                 if (optFreezer) optFreezer.textContent = t('subnav_gt_freezer') || 'Hiệu Quả Tủ Đông';
+                const optCtkm = mSelect.querySelector('option[value="gt-sub-ctkm"]');
+                if (optCtkm) optCtkm.textContent = '🎁 ' + (t('subnav_gt_ctkm') || 'Theo Dõi CTKM');
             }
 
             const headerTitle = document.getElementById('gt-header-subscreen-title');
@@ -14273,6 +14300,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 'gt-sub-route': t('subnav_gt_route') || 'Thực Thi Tuyến',
                 'gt-sub-routemap': t('subnav_gt_routemap') || 'Bản Đồ Tuyến & Golden',
                 'gt-sub-freezer': t('subnav_gt_freezer') || 'Hiệu Quả POSM',
+                'gt-sub-ctkm': t('subnav_gt_ctkm') || 'Theo Dõi CTKM',
                 'gt-sub-standee': t('subnav_gt_freezer') || 'Hiệu Quả POSM'
             };
             if (headerTitle) {
@@ -23401,33 +23429,38 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
         function updatePosmSubtabButtonsUI(activeTab) {
             const btnFrz = document.getElementById('btn-subtab-posm-freezer');
             const btnStd = document.getElementById('btn-subtab-posm-standee');
-            if (!btnFrz || !btnStd) return;
-            const frzSpan = btnFrz.querySelector('[data-i18n="subtab_posm_freezer"]') || btnFrz.querySelector('span:last-child');
-            const stdSpan = btnStd.querySelector('[data-i18n="subtab_posm_standee"]') || btnStd.querySelector('span:last-child');
-            if (frzSpan) frzSpan.textContent = t('subtab_posm_freezer') || 'Hiệu Quả Tủ Đông';
-            if (stdSpan) stdSpan.textContent = t('subtab_posm_standee') || 'Hiệu Quả Standee (Kệ sắt)';
+            if (btnFrz && btnStd) {
+                const frzSpan = btnFrz.querySelector('[data-i18n="subtab_posm_freezer"]') || btnFrz.querySelector('span:last-child');
+                const stdSpan = btnStd.querySelector('[data-i18n="subtab_posm_standee"]') || btnStd.querySelector('span:last-child');
+                if (frzSpan) frzSpan.textContent = t('subtab_posm_freezer') || 'Hiệu Quả Tủ Đông';
+                if (stdSpan) stdSpan.textContent = t('subtab_posm_standee') || 'Hiệu Quả Standee (Kệ sắt)';
 
-            if (activeTab === 'standee') {
-                btnStd.className = "px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs bg-white text-purple-700 border border-purple-200";
-                btnFrz.className = "px-3 py-1 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all flex items-center gap-1.5 border border-transparent";
-            } else {
-                btnFrz.className = "px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs bg-white text-blue-700 border border-blue-200";
-                btnStd.className = "px-3 py-1 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all flex items-center gap-1.5 border border-transparent";
+                if (activeTab === 'standee') {
+                    // Standee Active: Vibrant Gradient Purple with White text & glowing ring
+                    btnStd.className = "px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 shadow-md bg-gradient-to-r from-purple-600 via-purple-700 to-fuchsia-600 text-white border border-purple-500 ring-2 ring-purple-400/50 scale-[1.02]";
+                    // Freezer Inactive: Clear Light Blue tint with border
+                    btnFrz.className = "px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 bg-blue-50/90 text-blue-900 border-2 border-blue-200/90 hover:bg-blue-100 hover:text-blue-950 shadow-2xs";
+                } else {
+                    // Freezer Active: Vibrant Gradient Blue with White text & glowing ring
+                    btnFrz.className = "px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 shadow-md bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-600 text-white border border-blue-500 ring-2 ring-blue-400/50 scale-[1.02]";
+                    // Standee Inactive: Clear Light Purple tint with border
+                    btnStd.className = "px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 bg-purple-50/90 text-purple-900 border-2 border-purple-200/90 hover:bg-purple-100 hover:text-purple-950 shadow-2xs";
+                }
             }
 
             // Sync Mobile Switcher Buttons
             document.querySelectorAll('.btn-m-posm-freezer').forEach(btn => {
                 if (activeTab === 'standee') {
-                    btn.className = "btn-m-posm-freezer flex-1 py-2 px-3 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 border border-transparent";
+                    btn.className = "btn-m-posm-freezer flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 bg-blue-50/90 text-blue-900 border-2 border-blue-200/90 hover:bg-blue-100 shadow-2xs";
                 } else {
-                    btn.className = "btn-m-posm-freezer flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 bg-white text-blue-700 shadow-2xs border border-blue-200";
+                    btn.className = "btn-m-posm-freezer flex-1 py-2 px-3 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1.5 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-600 text-white shadow-md border border-blue-500 ring-2 ring-blue-400/50";
                 }
             });
             document.querySelectorAll('.btn-m-posm-standee').forEach(btn => {
                 if (activeTab === 'standee') {
-                    btn.className = "btn-m-posm-standee flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 bg-white text-purple-700 shadow-2xs border border-purple-200";
+                    btn.className = "btn-m-posm-standee flex-1 py-2 px-3 text-xs font-black rounded-lg transition-all flex items-center justify-center gap-1.5 bg-gradient-to-r from-purple-600 via-purple-700 to-fuchsia-600 text-white shadow-md border border-purple-500 ring-2 ring-purple-400/50";
                 } else {
-                    btn.className = "btn-m-posm-standee flex-1 py-2 px-3 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 border border-transparent";
+                    btn.className = "btn-m-posm-standee flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 bg-purple-50/90 text-purple-900 border-2 border-purple-200/90 hover:bg-purple-100 shadow-2xs";
                 }
             });
         }
@@ -24747,7 +24780,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
                 // Headers
                 thead.innerHTML = '<tr class="bg-slate-100 text-slate-800 border-b border-slate-200 text-[11px]">' +
-                    '<th class="px-2 py-2 text-center font-bold" style="width: 40px;">STT</th>' +
+                    '<th class="th-rank-col px-1.5 py-2 text-center font-bold" style="width: 38px; min-width: 36px; max-width: 44px;">STT</th>' +
                     '<th class="px-2 py-2 text-left font-bold" style="width: 80px;">Miền</th>' +
                     '<th class="px-2 py-2 text-left font-bold" style="width: 70px;">Vùng</th>' +
                     '<th class="px-2 py-2 text-left font-bold" style="width: 140px;">NPP</th>' +
@@ -24794,7 +24827,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     const m2 = (d.l3m_data && d.l3m_data[l3mMonths[2]]) ? d.l3m_data[l3mMonths[2]].ambient_so : 0;
 
                     rowsHtml += `<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                        <td class="px-2 py-1.5 text-center text-slate-400 font-mono">${stt}</td>
+                        <td class="td-rank-col px-1.5 py-1.5 text-center text-slate-400 font-mono text-[10px]">${stt}</td>
                         <td class="px-2 py-1.5 font-semibold text-slate-800">${d.mien || ''}</td>
                         <td class="px-2 py-1.5 text-slate-600">${d.vung || ''}</td>
                         <td class="px-2 py-1.5 text-slate-800 font-medium truncate max-w-[140px]" title="${d.npp_name || ''}">${d.npp_name || ''}</td>
