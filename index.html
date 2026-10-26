@@ -378,7 +378,7 @@
             table-layout: fixed !important;
         }
         #table-gt-route-daily {
-            min-width: 1750px !important;
+            min-width: 2100px !important;
             width: max-content !important;
             table-layout: fixed !important;
         }
@@ -5501,7 +5501,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                             <span class="text-teal-700 font-bold animate-pulse">↔️</span>
                         </div>
                         <div class="route-table-scroll-container max-h-[440px]">
-                            <table class="text-xs text-left text-slate-700 border-collapse table-fixed route-data-table" id="table-gt-route-daily" style="min-width: 1600px; width: max-content;">
+                            <table class="text-xs text-left text-slate-700 border-collapse table-fixed route-data-table" id="table-gt-route-daily" style="min-width: 2100px; width: max-content;">
                                 <thead id="thead-gt-route-daily">
                                     <!-- Populated dynamically by JS -->
                                 </thead>
@@ -18462,7 +18462,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             function createNode(name, type, level, extra = {}) {
                 const daily_map = {};
                 gtRouteMonthDays.forEach(d => {
-                    daily_map[d.dayNum] = { plan: 0, visit: 0, order: 0, sales: 0, visit_pct: 0, visit_out: 0, work_mins: 0 };
+                    daily_map[d.dayNum] = { plan: 0, visit: 0, order: 0, sales: 0, visit_pct: 0, visit_out: 0, work_mins: 0, active_nv: 0 };
                 });
 
                 return {
@@ -18674,6 +18674,9 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     nvNode.daily_map[dayNum].work_mins = (nvNode.daily_map[dayNum].work_mins || 0) + workMins;
                     nvNode.daily_map[dayNum].order += orders;
                     nvNode.daily_map[dayNum].sales += sales;
+                    if (plan > 0 || visit > 0 || visitOut > 0 || workMins > 0) {
+                        nvNode.daily_map[dayNum].active_nv = 1;
+                    }
                 }
 
                 // Cập nhật nvbh_set cho các cấp cha
@@ -18691,7 +18694,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 if (node.level < 5 && node.children && Object.keys(node.children).length > 0) {
                     // Reset daily_map và mtd_daily của node cha
                     gtRouteMonthDays.forEach(d => {
-                        node.daily_map[d.dayNum] = { plan: 0, visit: 0, order: 0, sales: 0, visit_pct: 0, visit_out: 0, work_mins: 0 };
+                        node.daily_map[d.dayNum] = { plan: 0, visit: 0, order: 0, sales: 0, visit_pct: 0, visit_out: 0, work_mins: 0, active_nv: 0 };
                     });
                     node.mtd_daily = { plan: 0, visit: 0, order: 0, sales: 0, visit_pct: 0 };
                     node.plan_visits = 0;
@@ -18712,6 +18715,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                                 node.daily_map[d.dayNum].visit += cdm.visit;
                                 node.daily_map[d.dayNum].visit_out = (node.daily_map[d.dayNum].visit_out || 0) + (cdm.visit_out || 0);
                                 node.daily_map[d.dayNum].work_mins = (node.daily_map[d.dayNum].work_mins || 0) + (cdm.work_mins || 0);
+                                node.daily_map[d.dayNum].active_nv = (node.daily_map[d.dayNum].active_nv || 0) + (cdm.active_nv || 0);
                                 node.daily_map[d.dayNum].order += cdm.order;
                                 node.daily_map[d.dayNum].sales += cdm.sales;
                             }
@@ -18827,7 +18831,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 mtd_daily: { plan: 0, visit: 0, order: 0, sales: 0, visit_pct: 0 }
             };
             gtRouteMonthDays.forEach(d => {
-                rootNode.daily_map[d.dayNum] = { plan: 0, visit: 0, order: 0, sales: 0, visit_pct: 0 };
+                rootNode.daily_map[d.dayNum] = { plan: 0, visit: 0, order: 0, sales: 0, visit_pct: 0, visit_out: 0, work_mins: 0, active_nv: 0 };
             });
 
             Object.values(tree).forEach(mn => {
@@ -18869,6 +18873,9 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     if (mdm) {
                         rootNode.daily_map[d.dayNum].plan += mdm.plan;
                         rootNode.daily_map[d.dayNum].visit += mdm.visit;
+                        rootNode.daily_map[d.dayNum].visit_out = (rootNode.daily_map[d.dayNum].visit_out || 0) + (mdm.visit_out || 0);
+                        rootNode.daily_map[d.dayNum].work_mins = (rootNode.daily_map[d.dayNum].work_mins || 0) + (mdm.work_mins || 0);
+                        rootNode.daily_map[d.dayNum].active_nv = (rootNode.daily_map[d.dayNum].active_nv || 0) + (mdm.active_nv || 0);
                         rootNode.daily_map[d.dayNum].order += mdm.order;
                         rootNode.daily_map[d.dayNum].sales += mdm.sales;
                     }
@@ -19635,13 +19642,13 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     <tr class="bg-slate-100/95 text-slate-800 font-bold sticky top-0 z-20 text-[11px] uppercase tracking-wider border-b border-slate-300 shadow-xs">
                         ${thFirstColRow1}
                         <th colspan="5" class="p-1.5 text-center bg-teal-100/80 border-r border-teal-300 text-teal-950 font-extrabold" title="${t('title_mtd_total') || 'Lũy kế thực hiện cả tháng (MTD)'}">${t('th_mtd_total') || 'LŨY KẾ THÁNG (MTD)'}</th>
-                        <th colspan="4" class="p-1.5 text-center bg-amber-100/90 border-r-2 border-teal-500 text-amber-950 font-black tracking-wide uppercase" title="Kết quả thực thi kỷ luật viếng thăm lũy kế MTD">THỰC THI KỶ LUẬT THỰC TẾ</th>
+                        <th colspan="3" class="p-1.5 text-center bg-amber-100/90 border-r-2 border-teal-500 text-amber-950 font-black tracking-wide uppercase" title="Kết quả thực thi kỷ luật viếng thăm lũy kế MTD">THỰC THI KỶ LUẬT THỰC TẾ</th>
                 `;
                 visibleDays.forEach(d => {
                     const dayBg = d.isOddWeek ? 'bg-sky-50 text-sky-950' : 'bg-purple-50 text-purple-950';
                     const localizedDayCode = t('dow_' + d.dayCode.toLowerCase()) || d.dayCode;
                     theadRow1 += `
-                        <th colspan="5" class="p-1.5 text-center ${dayBg} border-r border-slate-300 font-extrabold" title="${t('lbl_day') || 'Ngày'} ${d.dayStr} (${localizedDayCode}) - ${t('lbl_week') || 'Tuần'} ${d.weekNum}">
+                        <th colspan="8" class="p-1.5 text-center ${dayBg} border-r border-slate-300 font-extrabold" title="${t('lbl_day') || 'Ngày'} ${d.dayStr} (${localizedDayCode}) - ${t('lbl_week') || 'Tuần'} ${d.weekNum}">
                             ${d.dayStr} (${localizedDayCode})
                         </th>
                     `;
@@ -19656,19 +19663,21 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                         <th class="p-1 text-right border-r border-slate-200" style="min-width: 48px;" title="${t('title_visit_compl_mtd') || '% Tuân thủ viếng thăm MTD'}">${t('th_pct_visit') || '%visit'}</th>
                         <th class="p-1 text-right border-r border-slate-200" style="min-width: 44px;" title="${t('title_order_success_mtd') || 'Số đơn hàng thành công MTD'}">${t('th_order') || 'Order'}</th>
                         <th class="p-1 text-right border-r border-teal-300" style="min-width: 68px;" title="${t('title_sales_actual_mtd') || 'Doanh số thực tế MTD'}">${t('th_sales') || 'Doanh số'}</th>
-                        <!-- Kỷ Luật Thực Tế (4 cột) -->
-                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 58px;" title="Tỷ lệ tuân thủ viếng thăm theo kế hoạch">% Compl</th>
-                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 68px;" title="Tỷ lệ viếng thăm ngoài tuyến bán hàng">% Ngoài Route</th>
-                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 72px;" title="Thời gian dừng trung bình tại mỗi điểm bán (phút)">TB Phút/Shop</th>
-                        <th class="p-1 text-right border-r-2 border-teal-500" style="min-width: 72px;" title="Số giờ làm việc trung bình mỗi ngày trên một nhân viên bán hàng (giờ)">TB Giờ LV/Ngày</th>
+                        <!-- Kỷ Luật Thực Tế MTD (3 cột) -->
+                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 68px;" title="Tỷ lệ viếng thăm ngoài tuyến bán hàng lũy kế MTD">% Ngoài Route</th>
+                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 72px;" title="Thời gian dừng trung bình tại mỗi điểm bán (phút) lũy kế MTD">TB Phút/Shop</th>
+                        <th class="p-1 text-right border-r-2 border-teal-500" style="min-width: 72px;" title="Số giờ làm việc trung bình mỗi ngày trên một nhân viên bán hàng (giờ) lũy kế MTD">TB Giờ LV/Ngày</th>
                 `;
                 visibleDays.forEach(() => {
                     theadRow2 += `
-                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 48px;">${t('th_call_plan') || 'Call plan'}</th>
-                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 44px;">${t('th_visit') || 'Visit'}</th>
-                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 48px;">${t('th_pct_visit') || '%visit'}</th>
-                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 44px;">${t('th_order') || 'Order'}</th>
-                        <th class="p-1 text-right border-r border-slate-300" style="min-width: 60px;">${t('th_sales') || 'Doanh số'}</th>
+                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 48px;" title="Kế hoạch cuộc gọi trong ngày">${t('th_call_plan') || 'Call plan'}</th>
+                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 44px;" title="Số lượt viếng thăm thực tế trong tuyến">${t('th_visit') || 'Visit'}</th>
+                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 48px;" title="Tỷ lệ tuân thủ viếng thăm trong ngày">${t('th_pct_visit') || '%visit'}</th>
+                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 44px;" title="Số đơn hàng thành công trong ngày">${t('th_order') || 'Order'}</th>
+                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 60px;" title="Doanh số thực tế trong ngày">${t('th_sales') || 'Doanh số'}</th>
+                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 60px;" title="Tỷ lệ viếng thăm ngoài tuyến trong ngày">% Ngoài Route</th>
+                        <th class="p-1 text-right border-r border-slate-200" style="min-width: 62px;" title="Thời gian dừng trung bình tại mỗi điểm bán trong ngày">TB Phút/Shop</th>
+                        <th class="p-1 text-right border-r border-slate-300" style="min-width: 62px;" title="Số giờ làm việc trung bình trong ngày">TB Giờ /Ngày</th>
                     `;
                 });
                 theadRow2 += `</tr>`;
@@ -19789,15 +19798,12 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 <td class="p-1 text-right border-r border-teal-300 font-mono-num font-bold text-emerald-800" title="${mtd.sales > 0 ? formatNumVn(Math.round(mtd.sales)) + ' VNĐ' : '0 VNĐ'}">${mtdSalesText}</td>
             `;
 
-            // 4 Cột Thực Thi Kỷ Luật Thực Tế
-            const complPct = (node.compliance_pct !== undefined && node.compliance_pct !== null) ? node.compliance_pct : (mtd.visit_pct || 0);
-            const complClass = complPct < 85 ? 'text-rose-600 font-bold' : 'text-emerald-700 font-bold';
+            // 3 Cột Thực Thi Kỷ Luật Thực Tế MTD
             const outRoutePct = node.out_route_pct || 0;
             const avgTimePerShop = node.avg_time_per_shop || 0;
             const avgDailyHours = node.avg_daily_hours || 0;
 
             let disciplineCols = `
-                <td class="p-1.5 text-right border-r border-slate-200 font-mono-num ${complClass}">${complPct.toFixed(1)}%</td>
                 <td class="p-1.5 text-right border-r border-slate-200 font-mono-num text-slate-700">${outRoutePct.toFixed(1)}%</td>
                 <td class="p-1.5 text-right border-r border-slate-200 font-mono-num text-teal-800 font-medium">${avgTimePerShop.toFixed(1)}${t('unit_min_short') || 'p'}</td>
                 <td class="p-1.5 text-right border-r-2 border-teal-500 font-mono-num text-indigo-900 font-bold">${avgDailyHours.toFixed(1)}${t('unit_hour_short') || 'h'}</td>
@@ -19807,7 +19813,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             let dayCols = '';
             visibleDays.forEach(d => {
                 const isFutureDay = (gtRouteActiveMonth === '2026-10' && d.dayNum > gtRouteCutoffDay);
-                const dm = (node.daily_map && node.daily_map[d.dayNum]) ? node.daily_map[d.dayNum] : { plan: 0, visit: 0, order: 0, sales: 0, visit_pct: 0 };
+                const dm = (node.daily_map && node.daily_map[d.dayNum]) ? node.daily_map[d.dayNum] : { plan: 0, visit: 0, order: 0, sales: 0, visit_pct: 0, visit_out: 0, work_mins: 0, active_nv: 0 };
                 
                 let planText = dm.plan > 0 ? formatNumVn(dm.plan) : '-';
                 let visitText = '-';
@@ -19816,6 +19822,10 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 let orderText = '-';
                 let salesText = '-';
                 let salesClass = 'text-slate-400';
+
+                let dOutRouteText = '-';
+                let dAvgMinText = '-';
+                let dAvgHourText = '-';
 
                 if (!isFutureDay) {
                     if (dm.visit > 0) visitText = formatNumVn(dm.visit);
@@ -19834,6 +19844,27 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                         else salesText = formatNumVn(Math.round(dm.sales));
                         salesClass = 'text-emerald-700 font-medium';
                     }
+
+                    // 3 Chỉ số Thực thi kỷ luật Daily
+                    const hasDailyActivity = (dm.plan > 0 || dm.visit > 0 || (dm.visit_out || 0) > 0 || (dm.work_mins || 0) > 0);
+                    if (hasDailyActivity) {
+                        // 1. % Ngoài Route
+                        const outRoutePct = dm.plan > 0 ? ((dm.visit_out || 0) / dm.plan * 100) : (dm.visit > 0 ? ((dm.visit_out || 0) / dm.visit * 100) : 0);
+                        dOutRouteText = outRoutePct.toFixed(1) + '%';
+
+                        // 2. TB Phút/Shop
+                        if (dm.visit > 0 && (dm.work_mins || 0) > 0) {
+                            const avgMin = (dm.work_mins / dm.visit);
+                            dAvgMinText = avgMin.toFixed(1) + (t('unit_min_short') || 'p');
+                        }
+
+                        // 3. TB Giờ LV/Ngày
+                        const activeNv = (dm.active_nv && dm.active_nv > 0) ? dm.active_nv : (level === 5 ? 1 : Math.max(1, node.nvbh_set ? node.nvbh_set.size : 1));
+                        if ((dm.work_mins || 0) > 0 && activeNv > 0) {
+                            const avgHour = (dm.work_mins / 60 / activeNv);
+                            dAvgHourText = avgHour.toFixed(1) + (t('unit_hour_short') || 'h');
+                        }
+                    }
                 }
 
                 dayCols += `
@@ -19841,7 +19872,10 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     <td class="p-1 text-right border-r border-slate-200 font-mono-num text-slate-800 font-medium">${visitText}</td>
                     <td class="p-1 text-right border-r border-slate-200 font-mono-num ${complClass}">${complText}</td>
                     <td class="p-1 text-right border-r border-slate-200 font-mono-num text-slate-700">${orderText}</td>
-                    <td class="p-1 text-right border-r border-slate-300 font-mono-num ${salesClass}" title="${(!isFutureDay && dm.sales > 0) ? formatNumVn(Math.round(dm.sales)) + ' VNĐ' : ''}">${salesText}</td>
+                    <td class="p-1 text-right border-r border-slate-200 font-mono-num ${salesClass}" title="${(!isFutureDay && dm.sales > 0) ? formatNumVn(Math.round(dm.sales)) + ' VNĐ' : ''}">${salesText}</td>
+                    <td class="p-1 text-right border-r border-slate-200 font-mono-num text-slate-700">${dOutRouteText}</td>
+                    <td class="p-1 text-right border-r border-slate-200 font-mono-num text-teal-800 font-medium">${dAvgMinText}</td>
+                    <td class="p-1 text-right border-r border-slate-300 font-mono-num text-indigo-900 font-bold">${dAvgHourText}</td>
                 `;
             });
 
