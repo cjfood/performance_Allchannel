@@ -4261,9 +4261,34 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     <select id="sel-mt-chain" class="header-dropdown font-bold text-sky-800" style="width: 130px; max-width: 130px;" onchange="onMtChainChange()">
                         <option value="ALL" data-i18n="opt_all_chains_mt">Tất cả Chuỗi MT</option>
                     </select>
-                    <select id="sel-mt-cluster" class="header-dropdown" style="width: 120px; max-width: 120px;" onchange="onFilterChange()">
+                    <select id="sel-mt-cluster" class="header-dropdown" style="width: 120px; max-width: 120px;" onchange="onMtClusterChange()">
                         <option value="ALL" data-i18n="opt_all_clusters_mt">Tất cả Khu Vực</option>
                     </select>
+                    <!-- Cấp 4: Tên Siêu Thị (Searchable Combobox) -->
+                    <div class="relative inline-flex items-center" id="wrap-global-mt-store">
+                        <div class="relative flex items-center">
+                            <input type="text" id="inp-mt-store" 
+                                   placeholder="-- Tất cả Siêu Thị --" 
+                                   autocomplete="off"
+                                   onfocus="openMtStoreDropdown()"
+                                   onclick="openMtStoreDropdown()"
+                                   oninput="handleMtStoreInput(this.value)"
+                                   onkeydown="handleMtStoreKeydown(event)"
+                                   class="header-dropdown text-xs pl-2 pr-6 py-1 border border-slate-300 rounded bg-white font-medium text-slate-700 cursor-pointer focus:outline-none focus:ring-1 focus:ring-sky-500 hover:border-slate-400 transition-all truncate"
+                                   style="width: 160px; max-width: 180px;" 
+                                   title="Chọn hoặc nhập tìm kiếm tên/mã siêu thị" />
+                            <span id="icon-mt-store-arrow" class="pointer-events-none absolute right-1.5 text-slate-400 flex items-center">
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                            </span>
+                            <button type="button" id="btn-clear-global-mt-store" 
+                                    onmousedown="event.stopPropagation(); event.preventDefault(); clearGlobalMtStore(event);"
+                                    onclick="event.stopPropagation(); clearGlobalMtStore(event);" 
+                                    class="hidden absolute right-1.5 top-1/2 -translate-y-1/2 z-20 w-3.5 h-3.5 rounded-full bg-rose-100 hover:bg-rose-600 text-rose-600 hover:text-white flex items-center justify-center transition-colors cursor-pointer select-none" 
+                                    title="Xóa chọn Siêu Thị">
+                                <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- [TAB 4 DYNAMIC]: KHÁCH HÀNG B2B (Food Service) -->
@@ -10449,6 +10474,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             mtSubChan: 'ALL',
             mtChain: 'ALL',
             mtCluster: 'ALL',
+            mtStore: 'ALL',
 
             // Tab 4 (B2B) Filters
             b2bAcc: 'ALL',
@@ -11402,12 +11428,14 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
         function populateMtFilters() {
             const selSub = document.getElementById('sel-mt-subchan');
             const selChain = document.getElementById('sel-mt-chain');
+            const selCluster = document.getElementById('sel-mt-cluster');
             if (!selSub || !selChain) return;
 
             const c = (typeof window !== 'undefined' && window.userScopeConstraint) ? window.userScopeConstraint : null;
 
             const scSet = new Set();
             const chSet = new Set();
+            const clSet = new Set();
 
             MT_TREE.forEach(d => {
                 if (d.sub_channel) scSet.add(d.sub_channel);
@@ -11419,6 +11447,17 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 }
             });
 
+            // Extract Clusters from MT_STORE_DATA
+            if (typeof MT_STORE_DATA !== 'undefined' && Array.isArray(MT_STORE_DATA)) {
+                MT_STORE_DATA.forEach(d => {
+                    const matchSub = (state.mtSubChan === 'ALL' || d.sc === state.mtSubChan);
+                    const matchChain = (state.mtChain === 'ALL' || d.acc === state.mtChain);
+                    if (matchSub && matchChain && d.cl && d.cl !== 'Khác') {
+                        clSet.add(d.cl);
+                    }
+                });
+            }
+
             // Subchannel options
             if (c && c.mtSubChan) {
                 selSub.innerHTML = `<option value="${c.mtSubChan}">${c.mtSubChan}</option>`;
@@ -11426,7 +11465,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 selSub.disabled = true;
                 state.mtSubChan = c.mtSubChan;
             } else {
-                selSub.innerHTML = '<option value="ALL">' + t('opt_all_subchannel') + '</option>' + Array.from(scSet).sort().map(sc => '<option value="' + sc + '">' + sc + '</option>').join('');
+                selSub.innerHTML = '<option value="ALL">' + (t('opt_all_subchannel') || 'Tất cả Phân Khúc') + '</option>' + Array.from(scSet).sort().map(sc => '<option value="' + sc + '">' + sc + '</option>').join('');
                 selSub.disabled = false;
                 selSub.value = state.mtSubChan;
             }
@@ -11438,7 +11477,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 selChain.disabled = true;
                 state.mtChain = c.mtChain;
             } else {
-                selChain.innerHTML = '<option value="ALL">' + t('opt_all_chains_mt') + '</option>' + Array.from(chSet).sort().map(ch => '<option value="' + ch + '">' + ch + '</option>').join('');
+                selChain.innerHTML = '<option value="ALL">' + (t('opt_all_chains_mt') || 'Tất cả Chuỗi MT') + '</option>' + Array.from(chSet).sort().map(ch => '<option value="' + ch + '">' + ch + '</option>').join('');
                 selChain.disabled = false;
                 if (chSet.has(state.mtChain)) {
                     selChain.value = state.mtChain;
@@ -11448,8 +11487,16 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 }
             }
 
-            // Cluster filter removed from header - keep state.mtCluster as 'ALL'
-            state.mtCluster = 'ALL';
+            // Cluster options
+            if (selCluster) {
+                selCluster.innerHTML = '<option value="ALL">' + (t('opt_all_clusters_mt') || 'Tất cả Khu Vực') + '</option>' + Array.from(clSet).sort().map(cl => '<option value="' + cl + '">' + cl + '</option>').join('');
+                if (clSet.has(state.mtCluster)) {
+                    selCluster.value = state.mtCluster;
+                } else {
+                    state.mtCluster = 'ALL';
+                    selCluster.value = 'ALL';
+                }
+            }
 
             populateGlobalMtStoreList();
         }
@@ -11874,7 +11921,11 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
             if (tabId === 'tab-overview') document.getElementById('filter-cluster-tab1')?.classList.remove('hidden');
             else if (tabId === 'tab-gt') document.getElementById('filter-cluster-tab2')?.classList.remove('hidden');
-            else if (tabId === 'tab-mt') document.getElementById('filter-cluster-tab3')?.classList.remove('hidden');
+            else if (tabId === 'tab-mt') {
+                document.getElementById('filter-cluster-tab3')?.classList.remove('hidden');
+                if (typeof populateMtFilters === 'function') populateMtFilters();
+                if (typeof updateGlobalMtStoreUI === 'function') updateGlobalMtStoreUI();
+            }
             else if (tabId === 'tab-b2b') document.getElementById('filter-cluster-tab4')?.classList.remove('hidden');
             else if (tabId === 'tab-kr') document.getElementById('filter-cluster-tab5')?.classList.remove('hidden');
             else if (tabId === 'tab-reports') document.getElementById('filter-cluster-tab6')?.classList.remove('hidden');
@@ -26004,6 +26055,20 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
         // =========================================================================
         // TAB 3: KÊNH MT
         // =========================================================================
+        if (typeof state.treeOpen === 'undefined') state.treeOpen = {};
+        if (typeof state.mtStore === 'undefined') state.mtStore = 'ALL';
+
+        let mtStoreState = {
+            searchQuery: '',
+            filterSubChan: 'ALL',
+            filterCluster: 'ALL',
+            filterChain: 'ALL',
+            sortCol: 'val',
+            sortAsc: false,
+            currentPage: 1,
+            pageSize: 25
+        };
+
         function renderTabMt() {
             try {
                 const validPh1s = getValidPh1SetForCurrentFilter();
@@ -32966,5 +33031,6 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
             </div>
         </div>
     </div>
+<div id="dropdown-global-mt-store" class="hidden bg-white border border-slate-300 rounded-lg shadow-2xl text-xs py-1 divide-y divide-slate-100 overflow-y-auto max-h-72" style="position: fixed; z-index: 99999;"></div>
 </body>
 </html>
