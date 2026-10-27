@@ -43644,9 +43644,20 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
                     if (state.geoVung && state.geoVung !== 'ALL' && d.vung !== state.geoVung) return false;
 
-                    if (state.geoGsbh && state.geoGsbh !== 'ALL' && d.gsbh !== state.geoGsbh && d.gsbh_code !== state.geoGsbh) return false;
+                    if (state.geoGsbh && state.geoGsbh !== 'ALL') {
+                        const sGsbh = String(state.geoGsbh).trim().toLowerCase();
+                        const matchOffice = d.office && String(d.office).trim().toLowerCase() === sGsbh;
+                        const matchGsbh = d.gsbh && String(d.gsbh).trim().toLowerCase() === sGsbh;
+                        const matchGsbhCode = d.gsbh_code && String(d.gsbh_code).trim().toLowerCase() === sGsbh;
+                        if (!matchOffice && !matchGsbh && !matchGsbhCode) return false;
+                    }
 
-                    if (state.geoNpp && state.geoNpp !== 'ALL' && d.npp_code !== state.geoNpp && d.npp_name !== state.geoNpp) return false;
+                    if (state.geoNpp && state.geoNpp !== 'ALL') {
+                        const sNpp = String(state.geoNpp).trim().toLowerCase();
+                        const matchNppCode = d.npp_code && String(d.npp_code).trim().toLowerCase() === sNpp;
+                        const matchNppName = d.npp_name && String(d.npp_name).trim().toLowerCase() === sNpp;
+                        if (!matchNppCode && !matchNppName) return false;
+                    }
 
                     if (state.geoNvbh && state.geoNvbh !== 'ALL' && d.emp_name !== state.geoNvbh && d.emp_code !== state.geoNvbh) return false;
 
@@ -46866,9 +46877,20 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
                     if (state.geoVung && state.geoVung !== 'ALL' && d.vung !== state.geoVung) return false;
 
-                    if (state.geoGsbh && state.geoGsbh !== 'ALL' && d.gsbh !== state.geoGsbh && d.gsbh_code !== state.geoGsbh) return false;
+                    if (state.geoGsbh && state.geoGsbh !== 'ALL') {
+                        const sGsbh = String(state.geoGsbh).trim().toLowerCase();
+                        const matchOffice = d.office && String(d.office).trim().toLowerCase() === sGsbh;
+                        const matchGsbh = d.gsbh && String(d.gsbh).trim().toLowerCase() === sGsbh;
+                        const matchGsbhCode = d.gsbh_code && String(d.gsbh_code).trim().toLowerCase() === sGsbh;
+                        if (!matchOffice && !matchGsbh && !matchGsbhCode) return false;
+                    }
 
-                    if (state.geoNpp && state.geoNpp !== 'ALL' && d.npp_code !== state.geoNpp && d.npp_name !== state.geoNpp) return false;
+                    if (state.geoNpp && state.geoNpp !== 'ALL') {
+                        const sNpp = String(state.geoNpp).trim().toLowerCase();
+                        const matchNppCode = d.npp_code && String(d.npp_code).trim().toLowerCase() === sNpp;
+                        const matchNppName = d.npp_name && String(d.npp_name).trim().toLowerCase() === sNpp;
+                        if (!matchNppCode && !matchNppName) return false;
+                    }
 
                     if (state.geoNvbh && state.geoNvbh !== 'ALL' && d.emp_name !== state.geoNvbh && d.emp_code !== state.geoNvbh) return false;
 
@@ -47034,7 +47056,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
                 const uniqueOutlets = new Set(gtFilteredStandees.map(d => d.c_code)).size;
 
-                const activeRacks = gtFilteredStandees.filter(d => Number(d.is_active) === 1).length;
+                const activeRacks = gtFilteredStandees.filter(d => Number(d.is_active) === 1).reduce((s, d) => s + (Number(d.qty) || 1), 0);
 
                 const zeroRacks = Math.max(0, totalRacks - activeRacks);
 
@@ -47054,7 +47076,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
                 const vpoPerRack = activeRacks > 0 ? Math.round(totalAmbientSo / activeRacks / mCount) : 0;
 
-                const l3mZeroRacks = gtFilteredStandees.filter(d => Number(d.l3m_ambient_sum) === 0).length;
+                const l3mZeroRacks = gtFilteredStandees.filter(d => Number(d.l3m_ambient_sum) === 0).reduce((s, d) => s + (Number(d.qty) || 1), 0);
 
 
 
@@ -47566,9 +47588,9 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
                     if (!grp[ch]) grp[ch] = { channel: ch, channel_name: d.channel_name || ch, total: 0, active: 0, ambient_so: 0 };
 
-                    grp[ch].total += 1;
-
-                    if (Number(d.is_active) === 1) grp[ch].active += 1;
+                    const rQty = Number(d.qty) || 1;
+                grp[ch].total += rQty;
+                if (Number(d.is_active) === 1) grp[ch].active += rQty;
 
                     grp[ch].ambient_so += (Number(d.calc_ambient_so) || 0);
 
@@ -48772,7 +48794,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
                 const totalList = dataList || [];
 
-                const totalRacks = totalList.length;
+                const totalRacks = totalList.reduce((s, d) => s + (Number(d.qty) || 1), 0);
 
 
 
@@ -48781,8 +48803,8 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     const avgM = (Number(d.calc_ambient_so) || 0) / mCount;
 
                     const idx = getStandeeSalesTierIndex(avgM);
-
-                    tierCounts[idx]++;
+                const rQty = Number(d.qty) || 1;
+                tierCounts[idx] += rQty;
 
                     tierSums[idx] += (Number(d.calc_ambient_so) || 0);
 
@@ -49162,25 +49184,17 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                    function acc(node) {
-
-                        node.total += 1;
-
-                        node.active += isAct;
-
-                        node.zero += (1 - isAct);
-
-                        node.l3m_zero += isL3mZero;
-
-                        node.ambient_so += amb;
-
-                        node.snack_so += snk;
-
-                        node.l3m_avg += l3m;
-
-                        node.tiers[tierIdx] += 1;
-
-                    }
+                    const rQty = Number(d.qty) || 1;
+            function acc(node) {
+                node.total += rQty;
+                node.active += (isAct ? rQty : 0);
+                node.zero += (isAct ? 0 : rQty);
+                node.l3m_zero += (isL3mZero ? rQty : 0);
+                node.ambient_so += amb;
+                node.snack_so += snk;
+                node.l3m_avg += l3m;
+                node.tiers[tierIdx] += rQty;
+            }
 
 
 
@@ -49323,8 +49337,16 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 // Default expand ROOT
 
                 if (gtStandeeExpandedNodes['ROOT'] === undefined) gtStandeeExpandedNodes['ROOT'] = true;
-
-                renderNode(root, true);
+            if (state.geoMien !== 'ALL' || state.geoVung !== 'ALL' || state.geoGsbh !== 'ALL' || state.geoNpp !== 'ALL') {
+                function autoExpandStandee(node) {
+                    gtStandeeExpandedNodes[node.id] = true;
+                    if (node.children) {
+                        Object.values(node.children).forEach(child => autoExpandStandee(child));
+                    }
+                }
+                autoExpandStandee(root);
+            }
+            renderNode(root, true);
 
                 tbody.innerHTML = rowsHtml;
 
@@ -49394,7 +49416,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
                     if (!search) return true;
 
-                    const str = ((d.c_code || '') + ' ' + (d.c_name || '') + ' ' + (d.addr || '') + ' ' + (d.dev_name || '') + ' ' + (d.emp_name || '') + ' ' + (d.npp_name || '') + ' ' + (d.gsbh || '') + ' ' + (d.vung || '')).toLowerCase();
+                    const str = ((d.c_code || '') + ' ' + (d.c_name || '') + ' ' + (d.addr || '') + ' ' + (d.dev_name || '') + ' ' + (d.emp_name || '') + ' ' + (d.npp_name || '') + ' ' + (d.office || '') + ' ' + (d.gsbh || '') + ' ' + (d.vung || '')).toLowerCase();
 
                     return str.includes(search);
 
@@ -49630,7 +49652,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
                         if (!search) return true;
 
-                        const str = ((d.c_code || '') + ' ' + (d.c_name || '') + ' ' + (d.addr || '') + ' ' + (d.dev_name || '') + ' ' + (d.emp_name || '') + ' ' + (d.npp_name || '') + ' ' + (d.gsbh || '') + ' ' + (d.vung || '')).toLowerCase();
+                        const str = ((d.c_code || '') + ' ' + (d.c_name || '') + ' ' + (d.addr || '') + ' ' + (d.dev_name || '') + ' ' + (d.emp_name || '') + ' ' + (d.npp_name || '') + ' ' + (d.office || '') + ' ' + (d.gsbh || '') + ' ' + (d.vung || '')).toLowerCase();
 
                         return str.includes(search);
 
