@@ -308,5 +308,10 @@
       "width": "121px",
       "align": "center"
     }
+  },
+  "table-tree-gt": {
+    "col_sell_in_gross": {
+      "title": "Sell-in"
+    }
   }
 }
