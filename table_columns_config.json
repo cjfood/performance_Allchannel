@@ -311,7 +311,87 @@
   },
   "table-tree-gt": {
     "col_sell_in_gross": {
-      "title": "Sell-in"
+      "title": "Sell-in",
+      "width": "95px",
+      "align": "right"
+    },
+    "col_c__c_u_t__ch_c": {
+      "title": "Cơ Cấu Tổ Chức",
+      "width": "200px"
+    },
+    "col_target__si_": {
+      "title": "Target (SI)",
+      "width": "95px",
+      "align": "right"
+    },
+    "col_____t__si_": {
+      "title": "% Đạt (SI)",
+      "width": "75px",
+      "align": "right"
+    },
+    "col_sell_in_ytd": {
+      "title": "Sell-in YTD",
+      "width": "95px",
+      "align": "right"
+    },
+    "col___tt_si__ytd_": {
+      "title": "% TT SI (YTD)",
+      "width": "85px",
+      "align": "right"
+    },
+    "col_sell_out": {
+      "title": "Sell-out",
+      "width": "95px",
+      "align": "right"
+    },
+    "col_target__so_": {
+      "title": "Target (SO)",
+      "width": "95px",
+      "align": "right"
+    },
+    "col_____t__so_": {
+      "title": "% Đạt (SO)",
+      "width": "75px"
+    },
+    "col_sell_out_ytd": {
+      "title": "Sell-out YTD",
+      "width": "95px"
+    },
+    "col___tt_so__ytd_": {
+      "title": "% TT SO (YTD)",
+      "width": "86px"
+    },
+    "col_t_n_kho": {
+      "title": "Tồn Kho",
+      "width": "90px"
+    },
+    "col_doi": {
+      "title": "DOI",
+      "width": "75px"
+    },
+    "col_aso": {
+      "title": "ASO",
+      "width": "75px"
+    },
+    "col_mcp": {
+      "title": "MCP",
+      "width": "75px"
+    },
+    "col_strike_rate": {
+      "title": "Strike Rate",
+      "width": "81px"
+    },
+    "col_drop_size": {
+      "title": "Drop Size",
+      "width": "85px"
+    },
+    "col_sku___n": {
+      "title": "SKU/Đơn",
+      "width": "75px"
+    },
+    "col_sku_ch": {
+      "title": "SKU/CH",
+      "width": "75px"
     }
   }
 }
