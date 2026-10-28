@@ -90507,7 +90507,18 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             _remoteFetched: false,
 
             getCloudToken() {
-                return atob('Z2hwX0tSNHk4T0ttakN1UG44YjlHTFhrbGpoUWhpM1B4VTJSWHNzZg==');
+                try {
+                    return localStorage.getItem('cj_admin_github_token') || '';
+                } catch (e) {
+                    return '';
+                }
+            },
+
+            setCloudToken(token) {
+                try {
+                    if (token) localStorage.setItem('cj_admin_github_token', token.trim());
+                    else localStorage.removeItem('cj_admin_github_token');
+                } catch (e) {}
             },
 
             scheduleCloudSync(delayMs = 2500) {
@@ -90546,9 +90557,20 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             async syncConfigToCloud(showToastOnSuccess = true) {
                 if (!isUserAdminRole()) return;
                 if (this.isSyncing) return;
-                this.isSyncing = true;
 
-                const token = this.getCloudToken();
+                let token = this.getCloudToken();
+                if (!token) {
+                    const promptToken = prompt('🔑 Để tự động lưu và đồng bộ cấu hình bảng lên GitHub/Google Drive cho toàn công ty, vui lòng dán mã GitHub Personal Access Token (PAT):\n\n(Lưu ý: Chỉ cần nhập 1 lần duy nhất, trình duyệt Admin sẽ tự động ghi nhớ và lưu an toàn)');
+                    if (promptToken && promptToken.trim()) {
+                        token = promptToken.trim();
+                        this.setCloudToken(token);
+                    } else {
+                        this.showToast('ℹ️ Đã lưu cục bộ trên máy. Chưa đồng bộ Cloud do chưa nhập GitHub Token.');
+                        return;
+                    }
+                }
+
+                this.isSyncing = true;
                 const owner = 'cjfood';
                 const repo = 'performance_Allchannel';
                 const filePath = 'table_columns_config.json';
@@ -90610,8 +90632,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
                     if (putResp.ok) {
                         window.DEFAULT_SYSTEM_TABLE_CONFIG = fullConfig;
-                        this.showToast('✅ ĐÃ ĐỒNG BỘ LÊN TOÀN BỘ HỆ THỐNG THÀNH CÔNG!
-Tất cả đồng nghiệp chỉ cần F5 là nhận ngay chuẩn mới.');
+                        this.showToast('✅ ĐÃ ĐỒNG BỘ LÊN TOÀN BỘ HỆ THỐNG THÀNH CÔNG! Tất cả đồng nghiệp chỉ cần F5 là nhận ngay chuẩn mới.');
                     } else {
                         const errData = await putResp.json().catch(() => ({}));
                         console.warn('[TableCustomizer] Cloud Sync returned non-200:', errData);
@@ -91165,6 +91186,12 @@ Tất cả đồng nghiệp chỉ cần F5 là nhận ngay chuẩn mới.');
 
             exportCompanyConfig() {
                 if (!isUserAdminRole()) return;
+                // Đồng bộ trực tiếp lên toàn bộ hệ thống - KHÔNG tải file về máy làm đầy ổ C
+                this.syncConfigToCloud(true);
+            },
+
+            copyCompanyConfigJSON() {
+                if (!isUserAdminRole()) return;
                 const fullConfig = {};
                 if (typeof window.DEFAULT_SYSTEM_TABLE_CONFIG !== 'undefined' && window.DEFAULT_SYSTEM_TABLE_CONFIG) {
                     Object.assign(fullConfig, JSON.parse(JSON.stringify(window.DEFAULT_SYSTEM_TABLE_CONFIG)));
@@ -91184,21 +91211,15 @@ Tất cả đồng nghiệp chỉ cần F5 là nhận ngay chuẩn mới.');
                 } catch (e) {}
 
                 const jsonStr = JSON.stringify(fullConfig, null, 2);
-                const blob = new Blob([jsonStr], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'table_columns_config.json';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-
                 if (navigator.clipboard) {
-                    navigator.clipboard.writeText(jsonStr).catch(() => {});
+                    navigator.clipboard.writeText(jsonStr).then(() => {
+                        this.showToast('📋 Đã sao chép cấu hình JSON (Không tạo file rác trên ổ C)!');
+                    }).catch(() => {
+                        this.showToast('📋 Đã sao chép cấu hình JSON!');
+                    });
+                } else {
+                    this.showToast('📋 Trình duyệt không hỗ trợ bộ nhớ đệm.');
                 }
-
-                alert('✅ ĐÃ XUẤT TỆP table_columns_config.json THÀNH CÔNG!\n\n👉 Hướng dẫn áp dụng cho toàn công ty:\n1. Hãy lưu tệp table_columns_config.json vừa tải vào thư mục dự án.\n2. Khi chạy cập nhật dữ liệu tự động, hệ thống sẽ nạp cấu hình này làm MẶC ĐỊNH CHUẨN cho tất cả người dùng trên toàn quốc!');
             },
 
             createModalDOM() {
@@ -91240,11 +91261,11 @@ Tất cả đồng nghiệp chỉ cần F5 là nhận ngay chuẩn mới.');
                             </button>
                         </div>
                         <div style="display:flex; align-items:center; gap:8px;">
-                            <button type="button" onclick="TableCustomizer.syncConfigToCloud(true)" style="padding:6px 14px; border-radius:8px; background:#059669; color:#ffffff; font-size:12px; font-weight:700; border:none; cursor:pointer;" title="Lưu và đẩy cấu hình trực tiếp lên Cloud (GitHub/Google Drive) cho toàn công ty">
-                                ☁️ Đồng Bộ Toàn Hệ Thống (Cloud)
+                            <button type="button" onclick="TableCustomizer.exportCompanyConfig()" style="padding:6px 14px; border-radius:8px; background:#059669; color:#ffffff; font-size:12px; font-weight:700; border:none; cursor:pointer;" title="Lưu và đồng bộ cấu hình thẳng lên hệ thống - Không tải file về máy, không tốn dung lượng ổ C">
+                                ☁️ Xuất Chuẩn Toàn Công Ty (Cloud)
                             </button>
-                            <button type="button" onclick="TableCustomizer.exportCompanyConfig()" style="padding:6px 12px; border-radius:8px; background:#475569; color:#ffffff; font-size:11px; font-weight:600; border:none; cursor:pointer;" title="Tải file JSON dự phòng">
-                                📥 Tải JSON
+                            <button type="button" onclick="TableCustomizer.copyCompanyConfigJSON()" style="padding:6px 12px; border-radius:8px; background:#475569; color:#ffffff; font-size:11px; font-weight:600; border:none; cursor:pointer;" title="Sao chép nội dung cấu hình JSON vào bộ nhớ đệm (không tạo file)">
+                                📋 Sao Chép JSON
                             </button>
                             <button type="button" onclick="TableCustomizer.saveAndApplyModal()" style="padding:6px 16px; border-radius:8px; background:#2563eb; color:#ffffff; font-size:12px; font-weight:700; border:none; cursor:pointer;" title="Lưu bảng này và tự động đồng bộ lên toàn hệ thống">
                                 ✓ Lưu & Áp Dụng
