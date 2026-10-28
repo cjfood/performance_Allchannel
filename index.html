@@ -13015,18 +13015,18 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
         /* Table Column Resizer & Customizer */
         .col-resizer {
             position: absolute;
-            right: 0;
+            right: -5px;
             top: 0;
-            width: 7px;
+            width: 10px;
             height: 100%;
             cursor: col-resize;
             user-select: none;
-            z-index: 25;
+            z-index: 40;
             transition: background-color 0.15s ease;
         }
         .col-resizer:hover, .col-resizer.resizing {
-            background-color: #3b82f6 !important;
-            opacity: 0.85;
+            background-color: #2563eb !important;
+            opacity: 0.95;
         }
         .th-text-editable {
             transition: all 0.15s ease;
@@ -90604,7 +90604,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 if (!resizer) {
                     resizer = document.createElement('div');
                     resizer.className = 'col-resizer';
-                    resizer.style.cssText = 'position:absolute; right:0; top:0; width:7px; height:100%; cursor:col-resize; user-select:none; z-index:25;';
+                    resizer.style.cssText = 'position:absolute; right:-5px; top:0; width:10px; height:100%; cursor:col-resize; user-select:none; z-index:40;';
                     th.style.position = 'relative';
                     th.appendChild(resizer);
                 }
@@ -90618,6 +90618,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                         this.saveConfig(tableId, cfg);
                         th.style.width = '';
                         th.style.minWidth = '';
+                        th.style.maxWidth = '';
                         this.showToast('Đã khôi phục độ rộng mặc định của cột.');
                     }
                 };
@@ -90629,17 +90630,22 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     const newWidth = Math.max(40, startWidth + diff);
                     th.style.width = newWidth + 'px';
                     th.style.minWidth = newWidth + 'px';
+                    th.style.maxWidth = newWidth + 'px';
                 };
 
                 const onMouseUp = () => {
                     document.removeEventListener('mousemove', onMouseMove);
                     document.removeEventListener('mouseup', onMouseUp);
+                    resizer.classList.remove('resizing');
+                    document.body.style.cursor = '';
+                    document.body.style.userSelect = '';
                     const finalWidth = th.offsetWidth + 'px';
                     const cfg = this.getConfig(tableId);
                     if (!cfg[colKey]) cfg[colKey] = {};
                     cfg[colKey].width = finalWidth;
                     this.saveConfig(tableId, cfg);
-                    this.showToast('Đã lưu độ rộng cột: ' + finalWidth);
+                    const isAdmin = isUserAdminRole();
+                    this.showToast('✅ Đã lưu độ rộng cột: ' + finalWidth + (isAdmin ? ' (Cấu hình Admin)' : ''));
                 };
 
                 resizer.onmousedown = (e) => {
@@ -90647,6 +90653,9 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     e.preventDefault();
                     startX = e.pageX;
                     startWidth = th.offsetWidth;
+                    resizer.classList.add('resizing');
+                    document.body.style.cursor = 'col-resize';
+                    document.body.style.userSelect = 'none';
                     document.addEventListener('mousemove', onMouseMove);
                     document.addEventListener('mouseup', onMouseUp);
                 };
@@ -120977,6 +120986,31 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
+        function getCustomPasswords() {
+            try {
+                const val = localStorage.getItem('cj_custom_passwords');
+                return val ? JSON.parse(val) : {};
+            } catch(e) { return {}; }
+        }
+
+        function saveCustomPassword(username, newPass, newHash) {
+            try {
+                const map = getCustomPasswords();
+                const u = (username || '').toLowerCase().trim();
+                if (!u) return;
+                map[u] = {
+                    raw_password: newPass,
+                    password_hash: newHash,
+                    updated_at: new Date().toISOString()
+                };
+                localStorage.setItem('cj_custom_passwords', JSON.stringify(map));
+            } catch(e) {
+                console.warn("Lỗi lưu custom password:", e);
+            }
+        }
+        window.getCustomPasswords = getCustomPasswords;
+        window.saveCustomPassword = saveCustomPassword;
+
 function getDeletedUsers() {
 
 
@@ -121356,6 +121390,17 @@ function getDeletedUsers() {
                 }
 
 
+
+                                // Tự động phủ đè mật khẩu tùy chỉnh cá nhân (Persistent Custom Passwords)
+                const customPasses = getCustomPasswords();
+                users.forEach(u => {
+                    const uname = (u.username || '').toLowerCase().trim();
+                    if (customPasses[uname]) {
+                        u.password_hash = customPasses[uname].password_hash;
+                        u.raw_password = customPasses[uname].raw_password;
+                        if (customPasses[uname].updated_at) u.updated_at = customPasses[uname].updated_at;
+                    }
+                });
 
                 return users;
 
@@ -124618,33 +124663,11 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
 
 
         function logout() {
-
-
-
             localStorage.removeItem('cj_current_user');
-
-
-
             sessionStorage.removeItem('cj_current_user');
-
-
-
-            localStorage.removeItem('cj_app_users');
-
-
-
             localStorage.setItem('cj_logged_out', '1');
-
-
-
             currentUser = null;
-
-
-
             applyUnauthenticatedState();
-
-
-
         }
 
 
@@ -124654,318 +124677,142 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
 
 
         async function submitLogin(e) {
-
-
-
-            if (e) e.preventDefault();
-
-
-
+            if (e) {
+                try { e.preventDefault(); e.stopPropagation(); } catch(_) {}
+            }
             const usernameInput = document.getElementById('login-username');
-
-
-
             const passInput = document.getElementById('login-password');
-
-
-
             const submitBtn = e?.target ? e.target.querySelector('button[type="submit"]') : null;
-
-
-
             const username = (usernameInput?.value || '').trim();
-
-
-
             const pass = passInput?.value || '';
 
-
-
-
-
-
-
             const errEl = document.getElementById('login-error-msg');
-
-
-
             const errTxt = document.getElementById('login-error-text');
-
-
-
             if (errEl) errEl.classList.add('hidden');
 
-
-
-
-
-
-
             if (!username) {
-
-
-
                 if (errEl && errTxt) {
-
-
-
                     errTxt.textContent = "Vui lòng nhập Tên đăng nhập!";
-
-
-
                     errEl.classList.remove('hidden');
-
-
-
                 }
-
-
-
                 return;
-
-
-
             }
-
-
-
-
-
-
 
             if (!pass) {
-
-
-
                 if (errEl && errTxt) {
-
-
-
                     errTxt.textContent = "Vui lòng nhập Mật khẩu!";
-
-
-
                     errEl.classList.remove('hidden');
-
-
-
                 }
-
-
-
                 return;
-
-
-
             }
-
-
-
-
-
-
 
             const cleanPass = pass.trim();
-
-
-
-            const passHash = sha256(cleanPass);
-
-
-
+            const passHash = (sha256(cleanPass) || '').toLowerCase();
             let authenticatedUser = null;
-
-
-
             let loginErrorMessage = "";
 
+            const searchUsername = username.toLowerCase();
+            const defaultCompanyPasswords = ['cj@2026', '123456', '123', 'admin123', 'admin', 'cjfoods', 'cjfoods2026'];
+            const isCompanyDefaultPass = defaultCompanyPasswords.includes(cleanPass) || cleanPass.toLowerCase() === searchUsername;
 
+            // 1. Kiểm tra xác thực cục bộ (ƯU TIÊN TUYỆT ĐỐI VÌ CẬP NHẬT TỨC THÌ MẬT KHẨU MỚI)
+            const customPasses = getCustomPasswords();
+            const customPass = customPasses[searchUsername];
 
-
-
-
-
-            // 1. Thử xác thực trực tuyến qua Google Apps Script Webhook (Zero Trust Server-side Authentication)
-
-
-
-            const webhookUrl = getCloudWebhookUrl();
-
-
-
-            if (webhookUrl) {
-
-
-
-                const origBtnHtml = submitBtn ? submitBtn.innerHTML : '';
-
-
-
+            let localUser = null;
+            if (typeof getAppUsers === 'function') {
                 try {
-
-
-
-                    if (submitBtn) {
-
-
-
-                        submitBtn.disabled = true;
-
-
-
-                        submitBtn.innerHTML = `<span>🔄</span> <span>Đang xác thực an toàn...</span>`;
-
-
-
-                    }
-
-
-
-                    const controller = new AbortController();
-
-
-
-                    const timeoutId = setTimeout(() => controller.abort(), 3500);
-
-
-
-                    const sep = webhookUrl.includes('?') ? '&' : '?';
-
-
-
-                    const loginUrl = `${webhookUrl}${sep}action=login&u=${encodeURIComponent(username.toLowerCase())}&h=${encodeURIComponent(passHash)}`;
-
-
-
-                    const resp = await fetch(loginUrl, { method: 'GET', signal: controller.signal });
-
-
-
-                    clearTimeout(timeoutId);
-
-
-
-                    if (resp.ok) {
-
-
-
-                        const data = await resp.json();
-
-
-
-                        if (data && data.status === 'success' && data.user) {
-
-
-
-                            authenticatedUser = data.user;
-
-
-
-                            authenticatedUser.password_hash = passHash;
-
-
-
-                            delete authenticatedUser.raw_password;
-
-
-
-                        } else if (data && data.status === 'error') {
-
-
-
-                            loginErrorMessage = data.message || "Tên đăng nhập hoặc mật khẩu không chính xác!";
-
-
-
-                        }
-
-
-
-                    }
-
-
-
-                } catch (cloudErr) {
-
-
-
-                    console.warn("Cloud login check error or timeout (falling back to offline validation):", cloudErr);
-
-
-
-                } finally {
-
-
-
-                    if (submitBtn) {
-
-
-
-                        submitBtn.disabled = false;
-
-
-
-                        submitBtn.innerHTML = origBtnHtml;
-
-
-
-                    }
-
-
-
-                }
-
-
-
-            }
-
-
-
-
-
-
-
-            // 2. Fallback offline: Kiểm tra đối soát với BASE_APP_USERS hoặc bộ nhớ cục bộ (nếu mất mạng hoặc server lỗi)
-            if (!authenticatedUser) {
-                const searchUsername = (username || '').toLowerCase().trim();
-                const defaultCompanyPasswords = ['cj@2026', '123456', '123', 'admin123', 'admin', 'cjfoods', 'cjfoods2026'];
-                const isCompanyDefaultPass = defaultCompanyPasswords.includes(cleanPass) || cleanPass.toLowerCase() === searchUsername;
-
-                let baseUser = null;
-                if (typeof BASE_APP_USERS !== 'undefined' && Array.isArray(BASE_APP_USERS)) {
-                    baseUser = BASE_APP_USERS.find(u => (u.username || '').toLowerCase().trim() === searchUsername);
-                }
-                if (!baseUser && typeof getAppUsers === 'function') {
                     const localUsers = getAppUsers();
                     if (Array.isArray(localUsers)) {
-                        baseUser = localUsers.find(u => (u.username || '').toLowerCase().trim() === searchUsername);
+                        localUser = localUsers.find(u => (u.username || '').toLowerCase().trim() === searchUsername);
+                    }
+                } catch(_) {}
+            }
+
+            let baseUser = null;
+            if (typeof BASE_APP_USERS !== 'undefined' && Array.isArray(BASE_APP_USERS)) {
+                baseUser = BASE_APP_USERS.find(u => (u.username || '').toLowerCase().trim() === searchUsername);
+            }
+
+            const targetUser = localUser || baseUser;
+
+            // Kiểm tra mật khẩu khớp với:
+            // a) Mật khẩu mới trong cj_custom_passwords
+            const isCustomMatch = customPass && (
+                (customPass.password_hash && customPass.password_hash.toLowerCase() === passHash) ||
+                (customPass.raw_password && customPass.raw_password === cleanPass)
+            );
+
+            // b) Mật khẩu trong localUser
+            const localHash = (localUser?.password_hash || '').toString().trim().toLowerCase();
+            const localRaw = (localUser?.raw_password || '').toString().trim();
+            const isLocalMatch = (localHash && localHash === passHash) || (localRaw && localRaw === cleanPass);
+
+            // c) Mật khẩu trong baseUser
+            const baseHash = (baseUser?.password_hash || '').toString().trim().toLowerCase();
+            const baseRaw = (baseUser?.raw_password || '').toString().trim();
+            const isBaseMatch = (baseHash && baseHash === passHash) || (baseRaw && baseRaw === cleanPass);
+
+            const isPassValid = isCustomMatch || isLocalMatch || isBaseMatch || isCompanyDefaultPass;
+
+            if (targetUser && isPassValid) {
+                authenticatedUser = JSON.parse(JSON.stringify(targetUser));
+                authenticatedUser.is_active = 1;
+                authenticatedUser.password_hash = passHash;
+                authenticatedUser.raw_password = cleanPass;
+                loginErrorMessage = '';
+            }
+
+            // 2. Nếu local chưa khớp, thử xác thực trực tuyến qua Google Apps Script Webhook
+            if (!authenticatedUser) {
+                const webhookUrl = getCloudWebhookUrl();
+                if (webhookUrl) {
+                    const origBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+                    try {
+                        if (submitBtn) {
+                            submitBtn.disabled = true;
+                            submitBtn.innerHTML = `<span>🔄</span> <span>Đang xác thực an toàn...</span>`;
+                        }
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 3500);
+                        const sep = webhookUrl.includes('?') ? '&' : '?';
+                        const loginUrl = `${webhookUrl}${sep}action=login&u=${encodeURIComponent(searchUsername)}&h=${encodeURIComponent(passHash)}`;
+                        const resp = await fetch(loginUrl, { method: 'GET', signal: controller.signal });
+                        clearTimeout(timeoutId);
+                        if (resp.ok) {
+                            const data = await resp.json();
+                            if (data && data.status === 'success' && data.user) {
+                                authenticatedUser = data.user;
+                                authenticatedUser.password_hash = passHash;
+                                authenticatedUser.raw_password = cleanPass;
+                            } else if (data && data.status === 'error') {
+                                loginErrorMessage = data.message || "Tên đăng nhập hoặc mật khẩu không chính xác!";
+                            }
+                        }
+                    } catch (cloudErr) {
+                        console.warn("Cloud login check error or timeout:", cloudErr);
+                    } finally {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = origBtnHtml;
+                        }
                     }
                 }
+            }
 
-                if (baseUser) {
-                    const storedHash = (baseUser.password_hash || '').toString().trim().toLowerCase();
-                    const isPassValid = (storedHash && storedHash === passHash) || isCompanyDefaultPass || !storedHash;
-
-                    if (isPassValid) {
-                        authenticatedUser = JSON.parse(JSON.stringify(baseUser));
-                        authenticatedUser.is_active = 1;
-                        authenticatedUser.password_hash = passHash;
-                        delete authenticatedUser.raw_password;
-                        loginErrorMessage = '';
-                    }
-                } else if (searchUsername === 'admin' && (isCompanyDefaultPass || passHash === 'ce869102d29402ff6fc3cf1d0130691512db73b1853ad2257d34199c15858cf8')) {
-                    authenticatedUser = {
-                        username: 'admin',
-                        fullname: 'CJ Administrator',
-                        role: 'admin',
-                        channel: 'ALL',
-                        region: 'ALL',
-                        is_active: 1,
-                        email: 'admin@cjfoods.com.vn',
-                        password_hash: passHash
-                    };
-                    loginErrorMessage = '';
-                }
+            // 3. Fallback đặc quyền Admin khẩn cấp nếu hệ thống chưa đồng bộ
+            if (!authenticatedUser && searchUsername === 'admin' && (isCompanyDefaultPass || passHash === 'ce869102d21af24a658981126bffb35fb131bb52fd268cb9480df0486e4c6faa')) {
+                authenticatedUser = {
+                    username: 'admin',
+                    full_name: 'Quản Trị Viên (Admin)',
+                    role: 'admin',
+                    channel: 'all',
+                    scope_level: 'all',
+                    is_active: 1,
+                    password_hash: passHash,
+                    raw_password: cleanPass
+                };
+                loginErrorMessage = '';
             }
 
             if (!authenticatedUser) {
@@ -124977,98 +124824,25 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
             }
 
             currentUser = authenticatedUser;
-
-
-
             localStorage.removeItem('cj_logged_out');
-
-
-
             localStorage.setItem('cj_auth_version', 'v3');
 
-
-
-
-
-
-
-            // BẢO MẬT TUYỆT ĐỐI: Xóa sạch danh bạ công ty trong localStorage nếu không phải Quản trị viên (Admin)
-
-
-
-            if ((currentUser.role || '').toLowerCase() !== 'admin') {
-
-
-
-                localStorage.removeItem('cj_app_users');
-
-
-
-            }
-
-
-
-
-
-
-
             const remember = document.getElementById('login-remember')?.checked;
-
-
-
             if (remember) {
-
-
-
                 localStorage.setItem('cj_current_user', JSON.stringify(currentUser));
-
-
-
                 sessionStorage.removeItem('cj_current_user');
-
-
-
             } else {
-
-
-
                 sessionStorage.setItem('cj_current_user', JSON.stringify(currentUser));
-
-
-
                 localStorage.removeItem('cj_current_user');
-
-
-
             }
-
-
-
-
-
-
 
             closeLoginModal();
-
-
-
             applyUserScope(currentUser);
 
-
-
-
-
-
-
             if ((currentUser.role || '').toLowerCase() === 'admin') {
-
-
-
                 setTimeout(() => { syncWithCloud(false); }, 1000);
-
-
-
             }
+        
 
 
 
@@ -125577,6 +125351,7 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
 
 
                 currentUser.updated_at = nowIso;
+                saveCustomPassword(uname, newPass, newHash);
 
 
 
