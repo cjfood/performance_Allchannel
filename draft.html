@@ -90525,11 +90525,14 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             },
 
             init(tableId) {
-                const table = document.getElementById(tableId);
-                if (!table) return;
+                const table = (typeof tableId === 'string') ? document.getElementById(tableId) : tableId;
+                if (!table || table.tagName !== 'TABLE') return;
+
+                const actualId = table.id || ('table_gen_' + Math.random().toString(36).substr(2, 6));
+                if (!table.id) table.id = actualId;
 
                 table.style.position = 'relative';
-                const cfg = this.getConfig(tableId);
+                const cfg = this.getConfig(actualId);
                 const isAdmin = isUserAdminRole();
 
                 const thList = table.querySelectorAll('thead th');
@@ -90561,16 +90564,16 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                         th.style.minWidth = colCfg.width;
                     }
 
-                    // TÍNH NĂNG KÉO CỘT CHO TẤT CẢ TÀI KHOẢN (ALL ACCOUNTS)
+                    // Kéo cột cho tất cả tài khoản
                     if (!isGroup) {
-                        this.attachColResizer(th, tableId, colKey);
+                        this.attachColResizer(th, actualId, colKey);
                     }
 
-                    // TÍNH NĂNG SỬA TIÊU ĐỀ TRỰC TIẾP CHO ADMIN (DOUBLE CLICK)
+                    // Sửa tiêu đề trực tiếp cho admin (double-click)
                     if (isAdmin && textSpan) {
                         textSpan.classList.add('th-text-editable');
                         textSpan.title = 'Double-click để đổi tên cột (Quyền Admin)';
-                        this.attachInlineRename(textSpan, th, tableId, colKey);
+                        this.attachInlineRename(textSpan, th, actualId, colKey);
                     } else if (textSpan) {
                         textSpan.classList.remove('th-text-editable');
                         textSpan.removeAttribute('title');
@@ -90579,7 +90582,20 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 });
 
                 if (isAdmin) {
-                    this.injectAdminToolbarBtn(tableId);
+                    this.injectAdminToolbarBtn(actualId);
+                }
+            },
+
+            initAll() {
+                try {
+                    const tables = document.querySelectorAll('table');
+                    tables.forEach(tbl => {
+                        if (tbl.querySelector('thead th')) {
+                            this.init(tbl);
+                        }
+                    });
+                } catch (e) {
+                    console.error('TableCustomizer.initAll error:', e);
                 }
             },
 
@@ -90600,42 +90616,37 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     if (cfg[colKey] && cfg[colKey].width) {
                         delete cfg[colKey].width;
                         this.saveConfig(tableId, cfg);
+                        th.style.width = '';
+                        th.style.minWidth = '';
+                        this.showToast('Đã khôi phục độ rộng mặc định của cột.');
                     }
-                    th.style.width = '';
-                    th.style.minWidth = '';
-                    this.showToast('Đã khôi phục độ rộng mặc định cho cột này.');
+                };
+
+                let startX, startWidth;
+
+                const onMouseMove = (e) => {
+                    const diff = e.pageX - startX;
+                    const newWidth = Math.max(40, startWidth + diff);
+                    th.style.width = newWidth + 'px';
+                    th.style.minWidth = newWidth + 'px';
+                };
+
+                const onMouseUp = () => {
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                    const finalWidth = th.offsetWidth + 'px';
+                    const cfg = this.getConfig(tableId);
+                    if (!cfg[colKey]) cfg[colKey] = {};
+                    cfg[colKey].width = finalWidth;
+                    this.saveConfig(tableId, cfg);
+                    this.showToast('Đã lưu độ rộng cột: ' + finalWidth);
                 };
 
                 resizer.onmousedown = (e) => {
-                    e.preventDefault();
                     e.stopPropagation();
-                    resizer.classList.add('resizing');
-
-                    const startX = e.pageX;
-                    const startWidth = th.offsetWidth;
-                    document.body.style.userSelect = 'none';
-                    document.body.style.cursor = 'col-resize';
-
-                    const onMouseMove = (moveEvent) => {
-                        const diff = moveEvent.pageX - startX;
-                        const newWidth = Math.max(40, startWidth + diff);
-                        th.style.width = newWidth + 'px';
-                        th.style.minWidth = newWidth + 'px';
-                    };
-
-                    const onMouseUp = () => {
-                        document.removeEventListener('mousemove', onMouseMove);
-                        document.removeEventListener('mouseup', onMouseUp);
-                        resizer.classList.remove('resizing');
-                        document.body.style.userSelect = '';
-                        document.body.style.cursor = '';
-
-                        const cfg = TableCustomizer.getConfig(tableId);
-                        if (!cfg[colKey]) cfg[colKey] = {};
-                        cfg[colKey].width = th.offsetWidth + 'px';
-                        TableCustomizer.saveConfig(tableId, cfg);
-                    };
-
+                    e.preventDefault();
+                    startX = e.pageX;
+                    startWidth = th.offsetWidth;
                     document.addEventListener('mousemove', onMouseMove);
                     document.addEventListener('mouseup', onMouseUp);
                 };
@@ -90643,56 +90654,64 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
             attachInlineRename(textSpan, th, tableId, colKey) {
                 textSpan.ondblclick = (e) => {
-                    if (!isUserAdminRole()) return;
                     e.stopPropagation();
                     e.preventDefault();
 
-                    const currentText = textSpan.textContent.trim();
+                    const currentTitle = textSpan.textContent.trim();
                     const input = document.createElement('input');
                     input.type = 'text';
-                    input.value = currentText;
-                    input.className = 'px-1.5 py-0.5 text-[11px] font-bold text-blue-950 bg-white border-2 border-blue-600 rounded-md shadow-md focus:outline-none w-full';
-                    input.style.minWidth = '70px';
+                    input.value = currentTitle;
+                    input.style.cssText = 'width:100%; min-width:60px; font-size:inherit; font-weight:inherit; color:#1e293b; background:#ffffff; border:1px solid #3b82f6; border-radius:4px; padding:1px 4px; outline:none; box-sizing:border-box;';
 
-                    let isFinished = false;
-                    const finishEdit = () => {
-                        if (isFinished) return;
-                        isFinished = true;
-                        const val = input.value.trim() || currentText;
-                        textSpan.textContent = val;
-                        input.remove();
-                        textSpan.style.display = '';
-
-                        const cfg = TableCustomizer.getConfig(tableId);
-                        if (!cfg[colKey]) cfg[colKey] = {};
-                        cfg[colKey].title = val;
-                        TableCustomizer.saveConfig(tableId, cfg);
-                        TableCustomizer.showToast('Đã lưu tên tiêu đề cột: ' + val);
+                    const finishEdit = (save) => {
+                        if (!input.parentElement) return;
+                        const newTitle = input.value.trim();
+                        if (save && newTitle && newTitle !== currentTitle) {
+                            textSpan.textContent = newTitle;
+                            const cfg = this.getConfig(tableId);
+                            if (!cfg[colKey]) cfg[colKey] = {};
+                            cfg[colKey].title = newTitle;
+                            this.saveConfig(tableId, cfg);
+                            this.showToast('Đã cập nhật tên cột: ' + newTitle);
+                        } else {
+                            textSpan.textContent = currentTitle;
+                        }
                     };
 
-                    input.onblur = finishEdit;
-                    input.onkeydown = (ev) => {
-                        if (ev.key === 'Enter') { finishEdit(); }
-                        if (ev.key === 'Escape') { input.value = currentText; finishEdit(); }
+                    input.onblur = () => finishEdit(true);
+                    input.onkeydown = (ke) => {
+                        if (ke.key === 'Enter') finishEdit(true);
+                        else if (ke.key === 'Escape') finishEdit(false);
                     };
 
-                    textSpan.style.display = 'none';
-                    th.insertBefore(input, textSpan);
+                    textSpan.textContent = '';
+                    textSpan.appendChild(input);
                     input.focus();
                     input.select();
                 };
             },
 
             injectAdminToolbarBtn(tableId) {
-                const btnId = 'btn-customizer-' + tableId;
+                const btnId = 'btn-table-customizer-' + tableId;
                 if (document.getElementById(btnId)) return;
 
                 const table = document.getElementById(tableId);
                 if (!table) return;
-                const container = table.closest('.card-theme') || table.parentElement.parentElement;
+
+                let container = table.closest('.overflow-x-auto') || table.parentElement;
+                while (container && container !== document.body) {
+                    if (container.querySelector('.btn-table-export-excel') || container.querySelector('button[onclick*="export"]') || container.querySelector('button[onclick*="Export"]')) {
+                        break;
+                    }
+                    if (container.parentElement && container.parentElement !== document.body && container.parentElement.classList.contains('bg-white')) {
+                        container = container.parentElement;
+                        break;
+                    }
+                    container = container.parentElement;
+                }
                 if (!container) return;
 
-                const exportBtn = container.querySelector('.btn-table-export-excel') || container.querySelector('button[onclick*="exportTableToExcel"]');
+                const exportBtn = container.querySelector('.btn-table-export-excel') || container.querySelector('button[onclick*="export"]') || container.querySelector('button[onclick*="Export"]');
                 if (exportBtn && exportBtn.parentElement) {
                     const btn = document.createElement('button');
                     btn.type = 'button';
@@ -90727,8 +90746,8 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 const cfg = this.getConfig(tableId);
                 const thList = table.querySelectorAll('thead th');
 
-                let html = '<div class="text-[11px] text-slate-500 mb-2">💡 Bạn có thể sửa trực tiếp tên cột, xem/nhập độ rộng (px). Bấm <b>"Lưu & Áp Dụng"</b> để cập nhật hoặc <b>"Xuất Chuẩn Toàn Công Ty"</b> để tải file cấu hình mặc định.</div>';
-                html += '<div class="space-y-2">';
+                let html = '<div style="font-size:12px; color:#64748b; margin-bottom:12px; line-height:1.5;">💡 Bạn có thể sửa trực tiếp tên cột, xem/nhập độ rộng (px). Bấm <b>"Lưu & Áp Dụng"</b> để cập nhật hoặc <b>"Xuất Chuẩn Toàn Công Ty"</b> để tải file cấu hình mặc định.</div>';
+                html += '<div style="display:flex; flex-direction:column; gap:8px;">';
 
                 let count = 0;
                 thList.forEach(th => {
@@ -90742,20 +90761,20 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     const isLeaf = th.hasAttribute('data-col-key');
                     const curWidth = colCfg.width ? parseInt(colCfg.width) : th.offsetWidth;
 
-                    html += '<div class="flex items-center gap-3 p-2 rounded-lg bg-slate-50 border border-slate-200 text-xs">';
-                    html += '<span class="w-6 text-center font-bold text-slate-400">' + count + '</span>';
-                    html += '<div class="flex-1">';
-                    html += '<label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">' + (isLeaf ? 'Cột dữ liệu' : 'Nhóm tiêu đề gộp') + ' (' + colKey + ')</label>';
-                    html += '<input type="text" data-cfg-key="' + colKey + '" class="cfg-input-title w-full px-2.5 py-1 text-xs font-bold text-slate-800 bg-white border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-500" value="' + curTitle.split('"').join('&quot;') + '">';
+                    html += '<div style="display:flex; align-items:center; gap:10px; padding:8px 12px; border-radius:8px; background:#f8fafc; border:1px solid #e2e8f0; font-size:12px;">';
+                    html += '<span style="width:24px; text-align:center; font-weight:bold; color:#94a3b8;">' + count + '</span>';
+                    html += '<div style="flex:1;">';
+                    html += '<label style="display:block; font-size:10px; font-weight:bold; color:#64748b; text-transform:uppercase; margin-bottom:2px;">' + (isLeaf ? 'Cột dữ liệu' : 'Nhóm tiêu đề gộp') + ' (' + colKey + ')</label>';
+                    html += '<input type="text" data-cfg-key="' + colKey + '" class="cfg-input-title" style="width:100%; box-sizing:border-box; padding:4px 8px; font-size:12px; font-weight:bold; color:#1e293b; background:#ffffff; border:1px solid #cbd5e1; border-radius:6px;" value="' + curTitle.split('"').join('&quot;') + '">';
                     html += '</div>';
 
                     if (isLeaf) {
-                        html += '<div class="w-28">';
-                        html += '<label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Độ rộng (px)</label>';
-                        html += '<input type="number" min="40" max="800" data-cfg-key="' + colKey + '" class="cfg-input-width w-full px-2 py-1 text-xs font-mono font-bold text-slate-800 bg-white border border-slate-300 rounded-md text-right focus:ring-1 focus:ring-blue-500" value="' + curWidth + '">';
+                        html += '<div style="width:110px;">';
+                        html += '<label style="display:block; font-size:10px; font-weight:bold; color:#64748b; text-transform:uppercase; margin-bottom:2px;">Độ rộng (px)</label>';
+                        html += '<input type="number" min="40" max="800" data-cfg-key="' + colKey + '" class="cfg-input-width" style="width:100%; box-sizing:border-box; padding:4px 8px; font-size:12px; font-family:monospace; font-weight:bold; color:#1e293b; background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; text-align:right;" value="' + curWidth + '">';
                         html += '</div>';
                     } else {
-                        html += '<div class="w-28 text-center text-slate-400 text-[11px] pt-3 font-semibold">Tự động</div>';
+                        html += '<div style="width:110px; text-align:center; color:#94a3b8; font-size:11px; padding-top:12px; font-weight:600;">Tự động</div>';
                     }
 
                     html += '</div>';
@@ -90764,12 +90783,14 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 html += '</div>';
                 bodyEl.innerHTML = html;
 
-                modal.classList.remove('hidden');
+                modal.style.setProperty('display', 'flex', 'important');
             },
 
             closeModal() {
                 const modal = document.getElementById('modal-table-customizer');
-                if (modal) modal.classList.add('hidden');
+                if (modal) {
+                    modal.style.setProperty('display', 'none', 'important');
+                }
             },
 
             saveAndApplyModal() {
@@ -90806,25 +90827,42 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     try {
                         localStorage.removeItem(this.getStorageKey(tableId));
                     } catch (e) {}
+                    const table = document.getElementById(tableId);
+                    if (table) {
+                        const thList = table.querySelectorAll('thead th');
+                        thList.forEach(th => {
+                            th.style.width = '';
+                            th.style.minWidth = '';
+                        });
+                    }
                     this.closeModal();
                     this.showToast('Đã khôi phục cài đặt mặc định.');
-                    if (tableId === 'table-gt-standee' && typeof renderGtStandeeTreeTable === 'function') renderGtStandeeTreeTable();
-                    else if (tableId === 'table-gt-freezer' && typeof renderGtFreezerTreeTable === 'function') renderGtFreezerTreeTable();
-                    else location.reload();
+                    if (typeof renderActiveTab === 'function') {
+                        try { renderActiveTab(); } catch (e) {}
+                    }
                 }
             },
 
             exportCompanyConfig() {
                 const fullConfig = {};
-                ['table-gt-standee', 'table-gt-freezer', 'table-gt-standee-detail', 'table-gt-freezer-detail'].forEach(tId => {
-                    const c = this.getConfig(tId);
-                    if (Object.keys(c).length > 0) {
-                        fullConfig[tId] = c;
+                if (typeof window.DEFAULT_SYSTEM_TABLE_CONFIG !== 'undefined' && window.DEFAULT_SYSTEM_TABLE_CONFIG) {
+                    Object.assign(fullConfig, JSON.parse(JSON.stringify(window.DEFAULT_SYSTEM_TABLE_CONFIG)));
+                }
+
+                try {
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key && key.startsWith('cj_tbl_cfg_')) {
+                            const tId = key.replace('cj_tbl_cfg_', '');
+                            const cfg = this.getConfig(tId);
+                            if (cfg && Object.keys(cfg).length > 0) {
+                                fullConfig[tId] = cfg;
+                            }
+                        }
                     }
-                });
+                } catch (e) {}
 
                 const jsonStr = JSON.stringify(fullConfig, null, 2);
-
                 const blob = new Blob([jsonStr], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -90839,52 +90877,68 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     navigator.clipboard.writeText(jsonStr).catch(() => {});
                 }
 
-                alert('✅ ĐÃ XUẤT TỆP table_columns_config.json THÀNH CÔNG!
-
-' +
-                      '👉 Hướng dẫn áp dụng cho toàn công ty:
-' +
-                      '1. Hãy lưu hoặc copy tệp table_columns_config.json vừa tải vào thư mục dự án.
-' +
-                      '2. Khi chạy cập nhật dữ liệu tự động, hệ thống sẽ nạp cấu hình này làm MẶC ĐỊNH CHUẨN cho tất cả người dùng trên toàn quốc!');
+                alert('✅ ĐÃ XUẤT TỆP table_columns_config.json THÀNH CÔNG!\n\n👉 Hướng dẫn áp dụng cho toàn công ty:\n1. Hãy lưu tệp table_columns_config.json vừa tải vào thư mục dự án.\n2. Khi chạy cập nhật dữ liệu tự động, hệ thống sẽ nạp cấu hình này làm MẶC ĐỊNH CHUẨN cho tất cả người dùng trên toàn quốc!');
             },
 
             createModalDOM() {
                 if (document.getElementById('modal-table-customizer')) return;
 
-                const modalHtml = `
-                <div id="modal-table-customizer" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs hidden p-4">
-                    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-                        <div class="px-5 py-3.5 bg-gradient-to-r from-slate-900 to-indigo-900 text-white flex items-center justify-between">
-                            <div class="flex items-center gap-2.5">
-                                <span class="text-xl">⚙️</span>
-                                <div>
-                                    <h3 class="text-sm font-bold tracking-tight" id="modal-customizer-title">Tùy Biến Tiêu Đề & Độ Rộng Cột Bảng</h3>
-                                    <p class="text-[11px] text-slate-300">Admin có thể chỉnh sửa tiêu đề, độ rộng và xuất làm tiêu chuẩn cho toàn công ty</p>
-                                </div>
+                const modal = document.createElement('div');
+                modal.id = 'modal-table-customizer';
+                modal.className = 'cj-modal-backdrop';
+                modal.style.cssText = 'position:fixed !important; top:0 !important; left:0 !important; right:0 !important; bottom:0 !important; width:100vw !important; height:100vh !important; background:rgba(15,23,42,0.75) !important; z-index:999999 !important; display:none; align-items:center !important; justify-content:center !important; padding:16px !important; box-sizing:border-box !important;';
+                modal.onclick = (e) => {
+                    if (e.target === modal) TableCustomizer.closeModal();
+                };
+
+                modal.innerHTML = `
+                <div class="bg-white rounded-2xl shadow-2xl border border-slate-200" style="width:100%; max-width:680px; max-height:86vh; height:86vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); z-index:1000000; background:#ffffff; border-radius:16px;" onclick="event.stopPropagation()">
+                    <!-- Header (Sticky Top) -->
+                    <div style="flex-shrink:0; background:linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color:#ffffff; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; border-top-left-radius:15px; border-top-right-radius:15px;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span style="font-size:20px;">⚙️</span>
+                            <div>
+                                <h3 style="margin:0; font-size:14px; font-weight:700; color:#ffffff;" id="modal-customizer-title">Tùy Biến Tiêu Đề & Độ Rộng Cột Bảng</h3>
+                                <p style="margin:2px 0 0 0; font-size:11px; color:#cbd5e1;">Admin có thể chỉnh sửa tiêu đề, độ rộng và xuất làm tiêu chuẩn cho toàn công ty</p>
                             </div>
-                            <button type="button" onclick="TableCustomizer.closeModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1 cursor-pointer">&times;</button>
                         </div>
-                        <div class="p-4 overflow-y-auto flex-1" id="modal-customizer-body"></div>
-                        <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
-                            <button type="button" onclick="TableCustomizer.resetCurrentTable()" class="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer">
-                                <span>🔄</span> <span>Đặt lại mặc định</span>
+                        <button type="button" onclick="TableCustomizer.closeModal()" title="Đóng bảng tùy biến (Esc)" style="width:34px; height:34px; border-radius:8px; background:rgba(255,255,255,0.18); color:#ffffff; font-size:24px; font-weight:bold; cursor:pointer; border:none; display:flex; align-items:center; justify-content:center; line-height:1; transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(255,255,255,0.18)'">&times;</button>
+                    </div>
+
+                    <!-- Body (Scrollable Only) -->
+                    <div id="modal-customizer-body" style="flex:1 1 auto; min-height:0; overflow-y:auto; padding:16px; background:#ffffff;"></div>
+
+                    <!-- Footer (Sticky Bottom) -->
+                    <div style="flex-shrink:0; background:#f8fafc; border-top:1px solid #e2e8f0; padding:12px 20px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; border-bottom-left-radius:15px; border-bottom-right-radius:15px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button type="button" onclick="TableCustomizer.resetCurrentTable()" style="padding:6px 12px; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-size:12px; font-weight:600; cursor:pointer;">
+                                🔄 Đặt lại mặc định
                             </button>
-                            <div class="flex items-center gap-2">
-                                <button type="button" onclick="TableCustomizer.exportCompanyConfig()" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer" title="Tải file table_columns_config.json để tích hợp làm chuẩn toàn công ty">
-                                    <span>📥</span> <span>Xuất Chuẩn Toàn Công Ty (JSON)</span>
-                                </button>
-                                <button type="button" onclick="TableCustomizer.saveAndApplyModal()" class="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer">
-                                    <span>✓</span> <span>Lưu & Áp Dụng</span>
-                                </button>
-                            </div>
+                            <button type="button" onclick="TableCustomizer.closeModal()" style="padding:6px 12px; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#475569; font-size:12px; font-weight:600; cursor:pointer;">
+                                ✕ Đóng
+                            </button>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button type="button" onclick="TableCustomizer.exportCompanyConfig()" style="padding:6px 14px; border-radius:8px; background:#059669; color:#ffffff; font-size:12px; font-weight:700; border:none; cursor:pointer;" title="Tải file table_columns_config.json để tích hợp làm chuẩn toàn công ty">
+                                📥 Xuất Chuẩn Toàn Công Ty (JSON)
+                            </button>
+                            <button type="button" onclick="TableCustomizer.saveAndApplyModal()" style="padding:6px 16px; border-radius:8px; background:#2563eb; color:#ffffff; font-size:12px; font-weight:700; border:none; cursor:pointer;">
+                                ✓ Lưu & Áp Dụng
+                            </button>
                         </div>
                     </div>
                 </div>`;
 
-                const div = document.createElement('div');
-                div.innerHTML = modalHtml;
-                document.body.appendChild(div.firstElementChild);
+                document.body.appendChild(modal);
+
+                if (!window._tableCustomizerEscBound) {
+                    window._tableCustomizerEscBound = true;
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape') {
+                            TableCustomizer.closeModal();
+                        }
+                    });
+                }
             },
 
             showToast(msg) {
@@ -90907,6 +90961,34 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
         };
 
         window.TableCustomizer = TableCustomizer;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => TableCustomizer.initAll(), 400);
+        });
+
+        try {
+            const tableObserver = new MutationObserver((mutations) => {
+                let shouldInit = false;
+                for (let i = 0; i < mutations.length; i++) {
+                    const mut = mutations[i];
+                    if (mut.addedNodes && mut.addedNodes.length > 0) {
+                        for (let j = 0; j < mut.addedNodes.length; j++) {
+                            const node = mut.addedNodes[j];
+                            if (node.nodeType === 1 && (node.tagName === 'TABLE' || (node.querySelector && node.querySelector('table')))) {
+                                shouldInit = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (shouldInit) break;
+                }
+                if (shouldInit) {
+                    clearTimeout(window._tblCustomizerTimer);
+                    window._tblCustomizerTimer = setTimeout(() => TableCustomizer.initAll(), 150);
+                }
+            });
+            tableObserver.observe(document.body, { childList: true, subtree: true });
+        } catch (e) {}
 
 
 
