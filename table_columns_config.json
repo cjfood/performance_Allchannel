@@ -271,5 +271,10 @@
       "title": "> 2M",
       "width": "75px"
     }
+  },
+  "table-tree-chan": {
+    "col_doanh_s__sell_in__b_m_": {
+      "title": "Sell-in"
+    }
   }
 }
