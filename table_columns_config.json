@@ -351,27 +351,33 @@
     },
     "col_____t__so_": {
       "title": "% Đạt (SO)",
-      "width": "75px"
+      "width": "75px",
+      "align": "right"
     },
     "col_sell_out_ytd": {
       "title": "Sell-out YTD",
-      "width": "95px"
+      "width": "95px",
+      "align": "right"
     },
     "col___tt_so__ytd_": {
       "title": "% TT SO (YTD)",
-      "width": "86px"
+      "width": "86px",
+      "align": "right"
     },
     "col_t_n_kho": {
       "title": "Tồn Kho",
-      "width": "90px"
+      "width": "90px",
+      "align": "right"
     },
     "col_doi": {
       "title": "DOI",
-      "width": "75px"
+      "width": "75px",
+      "align": "right"
     },
     "col_aso": {
       "title": "ASO",
-      "width": "75px"
+      "width": "75px",
+      "align": "right"
     },
     "col_mcp": {
       "title": "MCP",
@@ -379,19 +385,23 @@
     },
     "col_strike_rate": {
       "title": "Strike Rate",
-      "width": "81px"
+      "width": "81px",
+      "align": "right"
     },
     "col_drop_size": {
       "title": "Drop Size",
-      "width": "85px"
+      "width": "85px",
+      "align": "right"
     },
     "col_sku___n": {
       "title": "SKU/Đơn",
-      "width": "75px"
+      "width": "75px",
+      "align": "right"
     },
     "col_sku_ch": {
       "title": "SKU/CH",
-      "width": "75px"
+      "width": "75px",
+      "align": "right"
     }
   }
 }
