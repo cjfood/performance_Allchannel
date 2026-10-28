@@ -90478,15 +90478,17 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
         function isUserAdminRole() {
             try {
+                let u = null;
                 if (typeof currentUser !== 'undefined' && currentUser) {
-                    const r = String(currentUser.role || '').toLowerCase();
-                    const u = String(currentUser.username || '').toLowerCase();
-                    if (r === 'admin' || u === 'admin') return true;
+                    u = currentUser;
+                } else {
+                    const raw = localStorage.getItem('cj_current_user') || sessionStorage.getItem('cj_current_user');
+                    if (raw) u = JSON.parse(raw);
                 }
-                if (typeof state !== 'undefined' && state.currentUser) {
-                    const r = String(state.currentUser.role || '').toLowerCase();
-                    const u = String(state.currentUser.username || '').toLowerCase();
-                    if (r === 'admin' || u === 'admin') return true;
+                if (u && typeof u === 'object') {
+                    const r = String(u.role || '').toLowerCase().trim();
+                    const uname = String(u.username || '').toLowerCase().trim();
+                    return (r === 'admin' || uname === 'admin');
                 }
             } catch (e) {}
             return false;
@@ -90562,6 +90564,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     if (!isGroup && colCfg.width) {
                         th.style.width = colCfg.width;
                         th.style.minWidth = colCfg.width;
+                        th.style.maxWidth = colCfg.width;
                     }
 
                     // Kéo cột cho tất cả tài khoản
@@ -90569,7 +90572,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                         this.attachColResizer(th, actualId, colKey);
                     }
 
-                    // Sửa tiêu đề trực tiếp cho admin (double-click)
+                    // Sửa tiêu đề trực tiếp CHỈ DÀNH CHO ADMIN (double-click)
                     if (isAdmin && textSpan) {
                         textSpan.classList.add('th-text-editable');
                         textSpan.title = 'Double-click để đổi tên cột (Quyền Admin)';
@@ -90581,13 +90584,22 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     }
                 });
 
+                // NÚT TÙY BIẾN BẢNG: CHỈ HIỂN THỊ KHI LÀ ADMIN
                 if (isAdmin) {
                     this.injectAdminToolbarBtn(actualId);
+                } else {
+                    const existingBtn = document.getElementById('btn-table-customizer-' + actualId);
+                    if (existingBtn) existingBtn.remove();
                 }
             },
 
             initAll() {
                 try {
+                    const isAdmin = isUserAdminRole();
+                    if (!isAdmin) {
+                        const allBtns = document.querySelectorAll('[id^="btn-table-customizer-"]');
+                        allBtns.forEach(b => b.remove());
+                    }
                     const tables = document.querySelectorAll('table');
                     tables.forEach(tbl => {
                         if (tbl.querySelector('thead th')) {
@@ -90663,6 +90675,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
             attachInlineRename(textSpan, th, tableId, colKey) {
                 textSpan.ondblclick = (e) => {
+                    if (!isUserAdminRole()) return;
                     e.stopPropagation();
                     e.preventDefault();
 
@@ -90701,6 +90714,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             },
 
             injectAdminToolbarBtn(tableId) {
+                if (!isUserAdminRole()) return;
                 const btnId = 'btn-table-customizer-' + tableId;
                 if (document.getElementById(btnId)) return;
 
@@ -90734,6 +90748,10 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             },
 
             openModal(tableId) {
+                if (!isUserAdminRole()) {
+                    alert('Tính năng tùy biến bảng và sửa tiêu đề chỉ dành riêng cho Quản trị viên (Admin)!');
+                    return;
+                }
                 this.currentTableId = tableId;
                 let modal = document.getElementById('modal-table-customizer');
                 if (!modal) {
@@ -90803,6 +90821,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             },
 
             saveAndApplyModal() {
+                if (!isUserAdminRole()) return;
                 const tableId = this.currentTableId;
                 if (!tableId) return;
 
@@ -90830,6 +90849,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             },
 
             resetCurrentTable() {
+                if (!isUserAdminRole()) return;
                 const tableId = this.currentTableId;
                 if (!tableId) return;
                 if (confirm('Khôi phục toàn bộ tiêu đề và độ rộng của bảng này về mặc định ban đầu?')) {
@@ -90842,6 +90862,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                         thList.forEach(th => {
                             th.style.width = '';
                             th.style.minWidth = '';
+                            th.style.maxWidth = '';
                         });
                     }
                     this.closeModal();
@@ -90853,6 +90874,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             },
 
             exportCompanyConfig() {
+                if (!isUserAdminRole()) return;
                 const fullConfig = {};
                 if (typeof window.DEFAULT_SYSTEM_TABLE_CONFIG !== 'undefined' && window.DEFAULT_SYSTEM_TABLE_CONFIG) {
                     Object.assign(fullConfig, JSON.parse(JSON.stringify(window.DEFAULT_SYSTEM_TABLE_CONFIG)));
@@ -122647,6 +122669,10 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
 
 
             if (adminBtn) adminBtn.style.setProperty('display', 'none', 'important');
+            try {
+                const allCustomizerBtns = document.querySelectorAll('[id^="btn-table-customizer-"]');
+                allCustomizerBtns.forEach(b => b.remove());
+            } catch (e) {}
 
 
 
@@ -123675,6 +123701,17 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
 
 
             }
+
+            try {
+                const allCustomizerBtns = document.querySelectorAll('[id^="btn-table-customizer-"]');
+                allCustomizerBtns.forEach(b => {
+                    if (!isAdmin) b.remove();
+                    else b.style.setProperty('display', 'inline-flex', 'important');
+                });
+                if (isAdmin && window.TableCustomizer && typeof TableCustomizer.initAll === 'function') {
+                    TableCustomizer.initAll();
+                }
+            } catch (e) {}
 
 
 
