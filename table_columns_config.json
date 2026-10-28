@@ -274,10 +274,33 @@
   },
   "table-tree-chan": {
     "col_doanh_s__sell_in__b_m_": {
-      "title": "Sell-in"
+      "title": "Sell-in",
+      "width": "147px",
+      "align": "center"
     },
     "col_t_ng_tr__ng_yoy": {
-      "title": "YoY"
+      "title": "YoY",
+      "width": "132px",
+      "align": "center"
+    },
+    "col_k_nh___kh_ch_h_ng": {
+      "title": "Kênh / Khách Hàng",
+      "width": "235px"
+    },
+    "col_target": {
+      "title": "Target",
+      "width": "124px",
+      "align": "center"
+    },
+    "col_____t": {
+      "title": "% Đạt",
+      "width": "93px",
+      "align": "center"
+    },
+    "col_t__tr_ng__": {
+      "title": "Tỷ Trọng %",
+      "width": "121px",
+      "align": "center"
     }
   }
 }
