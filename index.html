@@ -124899,7 +124899,7 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
             const defaultCompanyPasswords = ['cj@2026', '123456', '123', 'admin123', 'admin', 'cjfoods', 'cjfoods2026'];
             const isCompanyDefaultPass = defaultCompanyPasswords.includes(cleanPass) || cleanPass.toLowerCase() === searchUsername;
 
-            // 1. Kiểm tra xác thực cục bộ (ƯU TIÊN TUYỆT ĐỐI VÌ CẬP NHẬT TỨC THÌ MẬT KHẨU MỚI)
+            // Kiem tra thong tin nguoi dung cuc bo & custom password
             const customPasses = getCustomPasswords();
             const customPass = customPasses[searchUsername];
 
@@ -124920,26 +124920,32 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
 
             const targetUser = localUser || baseUser;
 
-            // Kiểm tra mật khẩu khớp với:
-            // a) Mật khẩu mới trong cj_custom_passwords
-            const isCustomMatch = customPass && (
-                (customPass.password_hash && customPass.password_hash.toLowerCase() === passHash) ||
-                (customPass.raw_password && customPass.raw_password === cleanPass)
+            // KIEM TRA XEM TAI KHOAN DA TUNG DOI MAT KHAU CHUA (CUSTOM PASSWORD):
+            const baseHash = (baseUser?.password_hash || '').toString().trim().toLowerCase();
+            const localHash = (localUser?.password_hash || '').toString().trim().toLowerCase();
+            const hasCustomPassword = Boolean(
+                (customPass && (customPass.password_hash || customPass.raw_password)) ||
+                (localHash && baseHash && localHash !== baseHash)
             );
 
-            // b) Mật khẩu trong localUser
-            const localHash = (localUser?.password_hash || '').toString().trim().toLowerCase();
-            const localRaw = (localUser?.raw_password || '').toString().trim();
-            const isLocalMatch = (localHash && localHash === passHash) || (localRaw && localRaw === cleanPass);
+            // BAO MAT TUYET DOI CAO NHAT:
+            // 1. NEU DA DOI MAT KHAU: TUYET DOI CAM VA VO HIEU HOA HOAN TOAN MAT KHAU CU & MAT KHAU MAC DINH!
+            // 2. CHI KHI CHUA TUNG DOI MAT KHAU THI MOI CHAP NHAN MAT KHAU MAC DINH KHOI TAO BAN DAU.
+            let isPassValidLocally = false;
+            if (hasCustomPassword) {
+                const isCustomMatch = customPass && (
+                    (customPass.password_hash && customPass.password_hash.toLowerCase() === passHash) ||
+                    (customPass.raw_password && customPass.raw_password === cleanPass)
+                );
+                const isLocalMatch = localHash && localHash === passHash;
+                isPassValidLocally = Boolean(isCustomMatch || isLocalMatch);
+            } else {
+                const baseRaw = (baseUser?.raw_password || '').toString().trim();
+                const isBaseMatch = (baseHash && baseHash === passHash) || (baseRaw && baseRaw === cleanPass);
+                isPassValidLocally = Boolean(isBaseMatch || isCompanyDefaultPass);
+            }
 
-            // c) Mật khẩu trong baseUser
-            const baseHash = (baseUser?.password_hash || '').toString().trim().toLowerCase();
-            const baseRaw = (baseUser?.raw_password || '').toString().trim();
-            const isBaseMatch = (baseHash && baseHash === passHash) || (baseRaw && baseRaw === cleanPass);
-
-            const isPassValid = isCustomMatch || isLocalMatch || isBaseMatch || isCompanyDefaultPass;
-
-            if (targetUser && isPassValid) {
+            if (targetUser && isPassValidLocally) {
                 authenticatedUser = JSON.parse(JSON.stringify(targetUser));
                 authenticatedUser.is_active = 1;
                 authenticatedUser.password_hash = passHash;
@@ -124947,48 +124953,51 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
                 loginErrorMessage = '';
             }
 
-            // 2. Nếu local chưa khớp, thử xác thực trực tuyến qua Google Apps Script Webhook
-            if (!authenticatedUser) {
-                const webhookUrl = getCloudWebhookUrl();
-                if (webhookUrl) {
-                    const origBtnHtml = submitBtn ? submitBtn.innerHTML : '';
-                    try {
-                        if (submitBtn) {
-                            submitBtn.disabled = true;
-                            submitBtn.innerHTML = `<span>🔄</span> <span>Đang xác thực an toàn...</span>`;
+            // 2. DONG BO & XAC THUC TRUC TUYEN QUA GOOGLE APPS SCRIPT WEBHOOK:
+            // Uu tien xac thuc Cloud khi co mang de dam bao neu doi mat khau o may khac thi may nay cap nhat ngay!
+            const webhookUrl = getCloudWebhookUrl();
+            if (webhookUrl && navigator.onLine) {
+                const origBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+                try {
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = `<span>🔒</span> <span>Dang xac thuc an toan...</span>`;
+                    }
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 4500);
+                    const sep = webhookUrl.includes('?') ? '&' : '?';
+                    const loginUrl = `${webhookUrl}${sep}action=login&u=${encodeURIComponent(searchUsername)}&h=${encodeURIComponent(passHash)}`;
+                    const resp = await fetch(loginUrl, { method: 'GET', signal: controller.signal });
+                    clearTimeout(timeoutId);
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        if (data && data.status === 'success' && data.user) {
+                            authenticatedUser = data.user;
+                            authenticatedUser.password_hash = passHash;
+                            authenticatedUser.raw_password = cleanPass;
+                            loginErrorMessage = '';
+                            saveCustomPassword(searchUsername, cleanPass, passHash);
+                        } else if (data && data.status === 'error') {
+                            // Cloud tu choi (sai mat khau tren Sheet): TUYET DOI KHONG CHO DUNG MAT KHAU CU
+                            authenticatedUser = null;
+                            loginErrorMessage = data.message || "Ten dang nhap hoac mat khau khong chinh xac!";
                         }
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 3500);
-                        const sep = webhookUrl.includes('?') ? '&' : '?';
-                        const loginUrl = `${webhookUrl}${sep}action=login&u=${encodeURIComponent(searchUsername)}&h=${encodeURIComponent(passHash)}`;
-                        const resp = await fetch(loginUrl, { method: 'GET', signal: controller.signal });
-                        clearTimeout(timeoutId);
-                        if (resp.ok) {
-                            const data = await resp.json();
-                            if (data && data.status === 'success' && data.user) {
-                                authenticatedUser = data.user;
-                                authenticatedUser.password_hash = passHash;
-                                authenticatedUser.raw_password = cleanPass;
-                            } else if (data && data.status === 'error') {
-                                loginErrorMessage = data.message || "Tên đăng nhập hoặc mật khẩu không chính xác!";
-                            }
-                        }
-                    } catch (cloudErr) {
-                        console.warn("Cloud login check error or timeout:", cloudErr);
-                    } finally {
-                        if (submitBtn) {
-                            submitBtn.disabled = false;
-                            submitBtn.innerHTML = origBtnHtml;
-                        }
+                    }
+                } catch (cloudErr) {
+                    console.warn("Cloud login warning/offline:", cloudErr);
+                } finally {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = origBtnHtml;
                     }
                 }
             }
 
-            // 3. Fallback đặc quyền Admin khẩn cấp nếu hệ thống chưa đồng bộ
-            if (!authenticatedUser && searchUsername === 'admin' && (isCompanyDefaultPass || passHash === 'ce869102d21af24a658981126bffb35fb131bb52fd268cb9480df0486e4c6faa')) {
+            // 3. Fallback Admin khan cap CHI KHI CHUA TUNG DOI MAT KHAU & HE THONG CHUA KET NOI
+            if (!authenticatedUser && searchUsername === 'admin' && !hasCustomPassword && (isCompanyDefaultPass || passHash === 'ce869102d21af24a658981126bffb35fb131bb52fd268cb9480df0486e4c6faa')) {
                 authenticatedUser = {
                     username: 'admin',
-                    full_name: 'Quản Trị Viên (Admin)',
+                    full_name: 'Quan Tri Vien (Admin)',
                     role: 'admin',
                     channel: 'all',
                     scope_level: 'all',
@@ -125001,7 +125010,9 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
 
             if (!authenticatedUser) {
                 if (errEl && errTxt) {
-                    errTxt.textContent = loginErrorMessage || 'Tên đăng nhập hoặc mật khẩu không chính xác!';
+                    errTxt.textContent = loginErrorMessage || (hasCustomPassword 
+                        ? 'Mat khau khong chinh xac! (Mat khau cu hoac mac dinh da bi vo hieu hoa)' 
+                        : 'Ten dang nhap hoac mat khau khong chinh xac!');
                     errEl.classList.remove('hidden');
                 }
                 return;
@@ -125426,408 +125437,134 @@ Dữ liệu đã được đồng nhất hoàn toàn!`
 
 
 
-            const isCurrValid = (userHash && cleanCurrHash === userHash)
+            // Kiem tra xem tai khoan da tung doi mat khau chua:
+            const customPasses = getCustomPasswords();
+            const customPass = customPasses[uname];
+            const hasCustomPassword = Boolean(
+                (customPass && (customPass.password_hash || customPass.raw_password)) ||
+                (userHash && baseHash && userHash !== baseHash)
+            );
 
-
-
-                || (baseHash && cleanCurrHash === baseHash)
-
-
-
-                || (knownPass && currPass === knownPass)
-
-
-
-                || defaultCompanyPasswords.includes(currPass)
-
-
-
-                || (currPass.toLowerCase() === uname)
-
-
-
-                || (uname === 'admin' && (currPass === 'cj@2026' || currPass === '123456' || currPass === '123' || currPass === 'admin123' || currPass === 'admin'))
-
-
-
-                || (!userHash && !baseHash);
-
-
-
-
-
-
+            let isCurrValid = false;
+            if (hasCustomPassword) {
+                // Da tung doi mat khau: Bat buoc mat khau hien tai phai khop voi mat khau moi da doi!
+                isCurrValid = (customPass && (
+                    (customPass.password_hash && customPass.password_hash.toLowerCase() === cleanCurrHash) ||
+                    (customPass.raw_password && customPass.raw_password === currPass)
+                )) || (userHash && cleanCurrHash === userHash);
+            } else {
+                // Chua tung doi mat khau: Chap nhan mat khau ban dau hoac mac dinh cong ty
+                isCurrValid = (userHash && cleanCurrHash === userHash)
+                    || (baseHash && cleanCurrHash === baseHash)
+                    || (knownPass && currPass === knownPass)
+                    || defaultCompanyPasswords.includes(currPass)
+                    || (currPass.toLowerCase() === uname)
+                    || (uname === 'admin' && (currPass === 'cj@2026' || currPass === '123456' || currPass === '123' || currPass === 'admin123' || currPass === 'admin'))
+                    || (!userHash && !baseHash);
+            }
 
             if (!isCurrValid) {
-
-
-
-                if (errTxt) errTxt.textContent = "Mật khẩu hiện tại không đúng!";
-
-
-
+                if (errTxt) errTxt.textContent = "Mat khau hien tai khong dung!";
                 if (errEl) errEl.classList.remove('hidden');
-
-
-
                 return;
-
-
-
             }
 
-
-
-
-
-
-
-            // Phản hồi trực quan tức thì trên nút bấm
-
-
-
+            // Phan hoi truc quan tuc thi tren nut bam
             if (submitBtn) {
-
-
-
                 submitBtn.disabled = true;
-
-
-
-                if (btnText) btnText.textContent = "Đang lưu...";
-
-
-
+                if (btnText) btnText.textContent = "Dang luu & dong bo Cloud...";
+                submitBtn.style.setProperty('background-color', '#2563eb', 'important');
             }
-
-
-
-
-
-
 
             try {
-
-
-
                 const newHash = sha256(newPass);
-
-
-
                 const nowIso = new Date().toISOString();
 
-
-
-
-
-
-
-                // 1. Cập nhật đối tượng phiên hiện tại
-
-
-
+                // 1. Cap nhat doi tuong phien hien tai & luu custom password
                 currentUser.password_hash = newHash;
-
-
-
                 currentUser.raw_password = newPass;
-
-
-
                 currentUser.updated_at = nowIso;
                 saveCustomPassword(uname, newPass, newHash);
 
-
-
-
-
-
-
-                // 2. Cập nhật mảng người dùng cục bộ
-
-
-
+                // 2. Cap nhat mang nguoi dung cuc bo
                 let users = getAppUsers();
-
-
-
                 if (Array.isArray(users)) {
-
-
-
                     const idx = users.findIndex(u => (u.username || '').toLowerCase().trim() === uname);
-
-
-
                     if (idx !== -1) {
-
-
-
                         users[idx].password_hash = newHash;
-
-
-
                         users[idx].raw_password = newPass;
-
-
-
                         users[idx].updated_at = nowIso;
-
-
-
                     } else {
-
-
-
                         users.push({
-
-
-
                             ...currentUser,
-
-
-
                             password_hash: newHash,
-
-
-
                             raw_password: newPass,
-
-
-
                             updated_at: nowIso
-
-
-
                         });
-
-
-
                     }
-
-
-
                     saveAppUsers(users);
-
-
-
                     try {
-
-
-
                         if (typeof renderAdminUserTable === 'function') {
-
-
-
                             renderAdminUserTable();
-
-
-
                         }
-
-
-
                     } catch(tableErr) {
-
-
-
                         console.warn("Table refresh ignored:", tableErr);
-
-
-
                     }
-
-
-
                 }
 
-
-
-
-
-
-
-                // 3. Lưu vào Storage
-
-
-
+                // 3. Luu vao Storage
                 localStorage.setItem('cj_current_user', JSON.stringify(currentUser));
-
-
-
                 if (sessionStorage.getItem('cj_current_user')) {
-
-
-
                     sessionStorage.setItem('cj_current_user', JSON.stringify(currentUser));
-
-
-
                 }
 
-
-
-
-
-
-
-                // 4. Đồng bộ nền lên Cloud Webhook
-
-
-
+                // 4. Dong bo len Cloud Webhook voi AWAIT de dam bao ghi thanh cong vao Google Sheet
                 const webhookUrl = getCloudWebhookUrl();
-
-
-
                 if (webhookUrl) {
-
-
-
                     try {
-
-
-
-                        fetch(webhookUrl, {
-
-
-
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 8000);
+                        const resp = await fetch(webhookUrl, {
                             method: 'POST',
-
-
-
                             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-
-
-
                             body: JSON.stringify({
-
-
-
                                 action: 'change_password',
-
-
-
                                 username: currentUser.username,
-
-
-
-                                current_hash: (userHash || baseHash || cleanCurrHash),
-
-
-
+                                current_hash: (cleanCurrHash || userHash || baseHash),
                                 new_hash: newHash,
-
-
-
                                 raw_password: newPass,
-
-
-
                                 full_name: currentUser.full_name,
-
-
-
                                 updated_at: nowIso,
-
-
-
                                 user_agent: navigator.userAgent
-
-
-
                             }),
-
-
-
-                            mode: 'no-cors'
-
-
-
-                        }).catch(err => console.warn("Sync password change to cloud error:", err));
-
-
-
+                            signal: controller.signal
+                        });
+                        clearTimeout(timeoutId);
                     } catch(netErr) {
-
-
-
-                        console.warn("Webhook dispatch error:", netErr);
-
-
-
+                        console.warn("Webhook dispatch warning:", netErr);
                     }
-
-
-
                 }
 
-
-
-
-
-
-
-                // 5. Hiển thị thông báo thành công
-
-
-
-                if (btnText) btnText.textContent = "Đã lưu thành công!";
-
-
-
+                // 5. Hien thi thong bao thanh cong
+                if (btnText) btnText.textContent = "Da doi mat khau & dong bo Cloud!";
                 if (submitBtn) {
-
-
-
                     submitBtn.style.setProperty('background-color', '#059669', 'important');
-
-
-
                 }
-
-
-
                 if (succEl) succEl.classList.remove('hidden');
 
-
-
-
-
-
-
                 setTimeout(() => {
-
-
-
                     closeChangePasswordModal();
-
-
-
                     if (submitBtn) {
-
-
-
                         submitBtn.disabled = false;
-
-
-
-                        if (btnText) btnText.textContent = "Lưu Mật Khẩu";
-
-
-
+                        if (btnText) btnText.textContent = "Luu Mat Khau";
                         submitBtn.style.setProperty('background-color', '#004B91', 'important');
-
-
-
                     }
+                                        alert(`DOI MAT KHAU THANH CONG!
 
-
-
-                    alert("✅ Đổi mật khẩu thành công! Mật khẩu mới: " + newPass + " đã được áp dụng.");
-
-
-
-                }, 600);
+- Mat khau moi: ${newPass}
+- Da tu dong dong bo len Google Sheets Cloud.
+- MAT KHAU CU VA MAC DINH DA BI VO HIEU HOA HOAN TOAN!`);
+                }, 800);
 
 
 
