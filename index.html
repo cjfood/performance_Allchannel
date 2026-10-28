@@ -90567,6 +90567,34 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                         th.style.maxWidth = colCfg.width;
                     }
 
+                    // Định dạng hiển thị nâng cao: Căn lề, In đậm, Cỡ chữ, Màu sắc
+                    if (colCfg.align) {
+                        th.style.setProperty('text-align', colCfg.align, 'important');
+                        if (textSpan) {
+                            textSpan.style.setProperty('text-align', colCfg.align, 'important');
+                            textSpan.style.display = 'block';
+                            textSpan.style.width = '100%';
+                        }
+                    }
+
+                    if (colCfg.weight === 'bold') {
+                        th.style.setProperty('font-weight', '700', 'important');
+                        if (textSpan) textSpan.style.setProperty('font-weight', '700', 'important');
+                    } else if (colCfg.weight === 'normal') {
+                        th.style.setProperty('font-weight', '400', 'important');
+                        if (textSpan) textSpan.style.setProperty('font-weight', '400', 'important');
+                    }
+
+                    if (colCfg.fontSize) {
+                        th.style.setProperty('font-size', colCfg.fontSize, 'important');
+                        if (textSpan) textSpan.style.setProperty('font-size', colCfg.fontSize, 'important');
+                    }
+
+                    if (colCfg.color) {
+                        th.style.setProperty('color', colCfg.color, 'important');
+                        if (textSpan) textSpan.style.setProperty('color', colCfg.color, 'important');
+                    }
+
                     // Kéo cột cho tất cả tài khoản
                     if (!isGroup) {
                         this.attachColResizer(th, actualId, colKey);
@@ -90583,6 +90611,27 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                         textSpan.ondblclick = null;
                     }
                 });
+
+                // Căn lề đồng bộ cho các ô dữ liệu (tbody cells) tương ứng
+                try {
+                    const leafThs = Array.from(table.querySelectorAll('thead tr:last-child th')).concat(
+                        Array.from(table.querySelectorAll('thead tr:first-child th[rowspan]'))
+                    );
+                    leafThs.sort((a, b) => a.offsetLeft - b.offsetLeft);
+
+                    leafThs.forEach((th, leafIdx) => {
+                        const colKey = th.getAttribute('data-col-key') || th.getAttribute('data-group-key');
+                        const colCfg = cfg[colKey] || {};
+                        if (colCfg.align) {
+                            const tbodyRows = table.querySelectorAll('tbody tr');
+                            tbodyRows.forEach(row => {
+                                if (row.cells && row.cells[leafIdx]) {
+                                    row.cells[leafIdx].style.setProperty('text-align', colCfg.align, 'important');
+                                }
+                            });
+                        }
+                    });
+                } catch (e) {}
 
                 // NÚT TÙY BIẾN BẢNG: CHỈ HIỂN THỊ KHI LÀ ADMIN
                 if (isAdmin) {
@@ -90764,7 +90813,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
                 const titleEl = document.getElementById('modal-customizer-title');
                 if (titleEl) {
-                    titleEl.textContent = 'Tùy Biến Tiêu Đề & Độ Rộng Bảng: ' + tableId;
+                    titleEl.textContent = 'Tùy Biến Định Dạng & Độ Rộng Bảng: ' + tableId;
                 }
 
                 const bodyEl = document.getElementById('modal-customizer-body');
@@ -90773,8 +90822,8 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 const cfg = this.getConfig(tableId);
                 const thList = table.querySelectorAll('thead th');
 
-                let html = '<div style="font-size:12px; color:#64748b; margin-bottom:12px; line-height:1.5;">💡 Bạn có thể sửa trực tiếp tên cột, xem/nhập độ rộng (px). Bấm <b>"Lưu & Áp Dụng"</b> để cập nhật hoặc <b>"Xuất Chuẩn Toàn Công Ty"</b> để tải file cấu hình mặc định.</div>';
-                html += '<div style="display:flex; flex-direction:column; gap:8px;">';
+                let html = '<div style="font-size:12px; color:#64748b; margin-bottom:12px; line-height:1.5;">💡 Bạn có thể sửa trực tiếp tên cột, xem/nhập độ rộng (px), căn lề (trái/giữa/phải), kiểu chữ (đậm/thường), cỡ chữ và màu sắc. Bấm <b>"Lưu & Áp Dụng"</b> để cập nhật hoặc <b>"Xuất Chuẩn Toàn Công Ty"</b> để ban hành mặc định.</div>';
+                html += '<div style="display:flex; flex-direction:column; gap:10px;">';
 
                 let count = 0;
                 thList.forEach(th => {
@@ -90787,8 +90836,15 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     const curTitle = colCfg.title || (textSpan ? textSpan.textContent.trim() : th.innerText.trim());
                     const isLeaf = th.hasAttribute('data-col-key');
                     const curWidth = colCfg.width ? parseInt(colCfg.width) : th.offsetWidth;
+                    const curAlign = colCfg.align || '';
+                    const curWeight = colCfg.weight || '';
+                    const curSize = colCfg.fontSize || '';
+                    const curColor = colCfg.color || '';
 
-                    html += '<div style="display:flex; align-items:center; gap:10px; padding:8px 12px; border-radius:8px; background:#f8fafc; border:1px solid #e2e8f0; font-size:12px;">';
+                    html += '<div style="display:flex; flex-direction:column; gap:8px; padding:10px 12px; border-radius:10px; background:#f8fafc; border:1px solid #e2e8f0; font-size:12px;">';
+                    
+                    // Row 1: STT, Tiêu đề, Độ rộng
+                    html += '<div style="display:flex; align-items:center; gap:10px;">';
                     html += '<span style="width:24px; text-align:center; font-weight:bold; color:#94a3b8;">' + count + '</span>';
                     html += '<div style="flex:1;">';
                     html += '<label style="display:block; font-size:10px; font-weight:bold; color:#64748b; text-transform:uppercase; margin-bottom:2px;">' + (isLeaf ? 'Cột dữ liệu' : 'Nhóm tiêu đề gộp') + ' (' + colKey + ')</label>';
@@ -90803,6 +90859,59 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     } else {
                         html += '<div style="width:110px; text-align:center; color:#94a3b8; font-size:11px; padding-top:12px; font-weight:600;">Tự động</div>';
                     }
+                    html += '</div>';
+
+                    // Row 2: Định dạng (Căn lề, Kiểu chữ, Cỡ chữ, Màu sắc)
+                    html += '<div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding-left:34px; padding-top:6px; border-top:1px solid #e2e8f0; font-size:11px;">';
+                    
+                    // Căn lề
+                    html += '<div style="display:flex; align-items:center; gap:4px;">';
+                    html += '<span style="color:#64748b; font-weight:600;">Căn lề:</span>';
+                    html += '<select data-cfg-key="' + colKey + '" class="cfg-input-align" style="font-size:11px; padding:2px 6px; border-radius:4px; border:1px solid #cbd5e1; background:#ffffff;">';
+                    html += '<option value=""' + (curAlign === '' ? ' selected' : '') + '>Mặc định</option>';
+                    html += '<option value="left"' + (curAlign === 'left' ? ' selected' : '') + '>⬅️ Trái</option>';
+                    html += '<option value="center"' + (curAlign === 'center' ? ' selected' : '') + '>↔️ Giữa</option>';
+                    html += '<option value="right"' + (curAlign === 'right' ? ' selected' : '') + '>➡️ Phải</option>';
+                    html += '</select>';
+                    html += '</div>';
+
+                    // Kiểu chữ (Bold / Normal)
+                    html += '<div style="display:flex; align-items:center; gap:4px;">';
+                    html += '<span style="color:#64748b; font-weight:600;">Kiểu:</span>';
+                    html += '<select data-cfg-key="' + colKey + '" class="cfg-input-weight" style="font-size:11px; padding:2px 6px; border-radius:4px; border:1px solid #cbd5e1; background:#ffffff;">';
+                    html += '<option value=""' + (curWeight === '' ? ' selected' : '') + '>Mặc định</option>';
+                    html += '<option value="bold"' + (curWeight === 'bold' ? ' selected' : '') + '>Đậm (Bold)</option>';
+                    html += '<option value="normal"' + (curWeight === 'normal' ? ' selected' : '') + '>Thường</option>';
+                    html += '</select>';
+                    html += '</div>';
+
+                    // Cỡ chữ
+                    html += '<div style="display:flex; align-items:center; gap:4px;">';
+                    html += '<span style="color:#64748b; font-weight:600;">Cỡ:</span>';
+                    html += '<select data-cfg-key="' + colKey + '" class="cfg-input-size" style="font-size:11px; padding:2px 6px; border-radius:4px; border:1px solid #cbd5e1; background:#ffffff;">';
+                    html += '<option value=""' + (curSize === '' ? ' selected' : '') + '>Mặc định</option>';
+                    html += '<option value="10px"' + (curSize === '10px' ? ' selected' : '') + '>10px</option>';
+                    html += '<option value="11px"' + (curSize === '11px' ? ' selected' : '') + '>11px</option>';
+                    html += '<option value="12px"' + (curSize === '12px' ? ' selected' : '') + '>12px</option>';
+                    html += '<option value="13px"' + (curSize === '13px' ? ' selected' : '') + '>13px</option>';
+                    html += '</select>';
+                    html += '</div>';
+
+                    // Màu chữ
+                    html += '<div style="display:flex; align-items:center; gap:4px;">';
+                    html += '<span style="color:#64748b; font-weight:600;">Màu:</span>';
+                    html += '<select data-cfg-key="' + colKey + '" class="cfg-input-color" style="font-size:11px; padding:2px 6px; border-radius:4px; border:1px solid #cbd5e1; background:#ffffff;">';
+                    html += '<option value=""' + (curColor === '' ? ' selected' : '') + '>Mặc định</option>';
+                    html += '<option value="#0f172a"' + (curColor === '#0f172a' ? ' selected' : '') + ' style="color:#0f172a; font-weight:bold;">Đen đậm</option>';
+                    html += '<option value="#1d4ed8"' + (curColor === '#1d4ed8' ? ' selected' : '') + ' style="color:#1d4ed8; font-weight:bold;">Xanh dương</option>';
+                    html += '<option value="#047857"' + (curColor === '#047857' ? ' selected' : '') + ' style="color:#047857; font-weight:bold;">Xanh lá</option>';
+                    html += '<option value="#6b21a8"' + (curColor === '#6b21a8' ? ' selected' : '') + ' style="color:#6b21a8; font-weight:bold;">Tím</option>';
+                    html += '<option value="#b91c1c"' + (curColor === '#b91c1c' ? ' selected' : '') + ' style="color:#b91c1c; font-weight:bold;">Đỏ</option>';
+                    html += '<option value="#c2410c"' + (curColor === '#c2410c' ? ' selected' : '') + ' style="color:#c2410c; font-weight:bold;">Cam</option>';
+                    html += '</select>';
+                    html += '</div>';
+
+                    html += '</div>';
 
                     html += '</div>';
                 });
@@ -90828,6 +90937,10 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 const cfg = this.getConfig(tableId);
                 const titleInputs = document.querySelectorAll('#modal-customizer-body .cfg-input-title');
                 const widthInputs = document.querySelectorAll('#modal-customizer-body .cfg-input-width');
+                const alignInputs = document.querySelectorAll('#modal-customizer-body .cfg-input-align');
+                const weightInputs = document.querySelectorAll('#modal-customizer-body .cfg-input-weight');
+                const sizeInputs = document.querySelectorAll('#modal-customizer-body .cfg-input-size');
+                const colorInputs = document.querySelectorAll('#modal-customizer-body .cfg-input-color');
 
                 titleInputs.forEach(inp => {
                     const k = inp.getAttribute('data-cfg-key');
@@ -90840,19 +90953,48 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     if (!cfg[k]) cfg[k] = {};
                     const w = parseInt(inp.value);
                     if (w > 30) cfg[k].width = w + 'px';
+                    else delete cfg[k].width;
+                });
+
+                alignInputs.forEach(inp => {
+                    const k = inp.getAttribute('data-cfg-key');
+                    if (!cfg[k]) cfg[k] = {};
+                    if (inp.value) cfg[k].align = inp.value;
+                    else delete cfg[k].align;
+                });
+
+                weightInputs.forEach(inp => {
+                    const k = inp.getAttribute('data-cfg-key');
+                    if (!cfg[k]) cfg[k] = {};
+                    if (inp.value) cfg[k].weight = inp.value;
+                    else delete cfg[k].weight;
+                });
+
+                sizeInputs.forEach(inp => {
+                    const k = inp.getAttribute('data-cfg-key');
+                    if (!cfg[k]) cfg[k] = {};
+                    if (inp.value) cfg[k].fontSize = inp.value;
+                    else delete cfg[k].fontSize;
+                });
+
+                colorInputs.forEach(inp => {
+                    const k = inp.getAttribute('data-cfg-key');
+                    if (!cfg[k]) cfg[k] = {};
+                    if (inp.value) cfg[k].color = inp.value;
+                    else delete cfg[k].color;
                 });
 
                 this.saveConfig(tableId, cfg);
                 this.init(tableId);
                 this.closeModal();
-                this.showToast('✅ Đã lưu và áp dụng cấu hình bảng thành công!');
+                this.showToast('✅ Đã lưu và áp dụng định dạng bảng thành công!');
             },
 
             resetCurrentTable() {
                 if (!isUserAdminRole()) return;
                 const tableId = this.currentTableId;
                 if (!tableId) return;
-                if (confirm('Khôi phục toàn bộ tiêu đề và độ rộng của bảng này về mặc định ban đầu?')) {
+                if (confirm('Khôi phục toàn bộ tiêu đề, định dạng và độ rộng của bảng này về mặc định ban đầu?')) {
                     try {
                         localStorage.removeItem(this.getStorageKey(tableId));
                     } catch (e) {}
@@ -90863,6 +91005,10 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                             th.style.width = '';
                             th.style.minWidth = '';
                             th.style.maxWidth = '';
+                            th.style.textAlign = '';
+                            th.style.fontWeight = '';
+                            th.style.fontSize = '';
+                            th.style.color = '';
                         });
                     }
                     this.closeModal();
@@ -90908,7 +91054,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     navigator.clipboard.writeText(jsonStr).catch(() => {});
                 }
 
-                alert('✅ ĐÃ XUẤT TỆP table_columns_config.json THÀNH CÔNG!\n\n👉 Hướng dẫn áp dụng cho toàn công ty:\n1. Hãy lưu tệp table_columns_config.json vừa tải vào thư mục dự án.\n2. Khi chạy cập nhật dữ liệu tự động, hệ thống sẽ nạp cấu hình này làm MẶC ĐỊNH CHUẨN cho tất cả người dùng trên toàn quốc!');
+                alert('✅ ĐÃ XUẤT TỆP table_columns_config.json THÀNH CÔNG!\\n\\n👉 Hướng dẫn áp dụng cho toàn công ty:\\n1. Hãy lưu tệp table_columns_config.json vừa tải vào thư mục dự án.\\n2. Khi chạy cập nhật dữ liệu tự động, hệ thống sẽ nạp cấu hình này làm MẶC ĐỊNH CHUẨN cho tất cả người dùng trên toàn quốc!');
             },
 
             createModalDOM() {
@@ -90923,14 +91069,14 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                 };
 
                 modal.innerHTML = `
-                <div class="bg-white rounded-2xl shadow-2xl border border-slate-200" style="width:100%; max-width:680px; max-height:86vh; height:86vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); z-index:1000000; background:#ffffff; border-radius:16px;" onclick="event.stopPropagation()">
+                <div class="bg-white rounded-2xl shadow-2xl border border-slate-200" style="width:100%; max-width:720px; max-height:86vh; height:86vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); z-index:1000000; background:#ffffff; border-radius:16px;" onclick="event.stopPropagation()">
                     <!-- Header (Sticky Top) -->
                     <div style="flex-shrink:0; background:linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color:#ffffff; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; border-top-left-radius:15px; border-top-right-radius:15px;">
                         <div style="display:flex; align-items:center; gap:10px;">
                             <span style="font-size:20px;">⚙️</span>
                             <div>
-                                <h3 style="margin:0; font-size:14px; font-weight:700; color:#ffffff;" id="modal-customizer-title">Tùy Biến Tiêu Đề & Độ Rộng Cột Bảng</h3>
-                                <p style="margin:2px 0 0 0; font-size:11px; color:#cbd5e1;">Admin có thể chỉnh sửa tiêu đề, độ rộng và xuất làm tiêu chuẩn cho toàn công ty</p>
+                                <h3 style="margin:0; font-size:14px; font-weight:700; color:#ffffff;" id="modal-customizer-title">Tùy Biến Định Dạng & Độ Rộng Cột Bảng</h3>
+                                <p style="margin:2px 0 0 0; font-size:11px; color:#cbd5e1;">Admin có thể chỉnh sửa tiêu đề, độ rộng, căn lề, kiểu chữ, màu sắc và xuất làm tiêu chuẩn toàn công ty</p>
                             </div>
                         </div>
                         <button type="button" onclick="TableCustomizer.closeModal()" title="Đóng bảng tùy biến (Esc)" style="width:34px; height:34px; border-radius:8px; background:rgba(255,255,255,0.18); color:#ffffff; font-size:24px; font-weight:bold; cursor:pointer; border:none; display:flex; align-items:center; justify-content:center; line-height:1; transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(255,255,255,0.18)'">&times;</button>
@@ -91020,6 +91166,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             });
             tableObserver.observe(document.body, { childList: true, subtree: true });
         } catch (e) {}
+
 
 
 
