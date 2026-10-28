@@ -194,6 +194,9 @@
     },
     "col_doanh_s__sell_in__b_m_": {
       "title": "Sell-in"
+    },
+    "col_t_ng_tr__ng_yoy": {
+      "title": "YoY"
     }
   },
   "table-gt-standee": {
