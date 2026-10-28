@@ -3,5 +3,273 @@
     "initialized": true,
     "system": "CJ Commercial Performance"
   },
-  "version": "1.0"
+  "version": "1.0",
+  "table-gt-freezer-detail": {
+    "col__": {
+      "title": "#",
+      "width": "36px"
+    },
+    "col_kh_ch_h_ng__outlet_": {
+      "title": "Khách Hàng (Outlet)",
+      "width": "140px"
+    },
+    "col___a_ch____gps": {
+      "title": "Địa Chỉ / GPS",
+      "width": "320px"
+    },
+    "col_k_nh_kh": {
+      "title": "Kênh KH",
+      "width": "67px"
+    },
+    "col_thi_t_b____dung_t_ch": {
+      "title": "Thiết Bị & Dung Tích",
+      "width": "135px"
+    },
+    "col_n_m_sx": {
+      "title": "Năm SX",
+      "width": "58px"
+    },
+    "col_qr___seri": {
+      "title": "QR / Seri",
+      "width": "111px"
+    },
+    "col_nvbh___npp": {
+      "title": "NVBH & NPP",
+      "width": "212px"
+    },
+    "col_tr_ng_th_i": {
+      "title": "Trạng Thái",
+      "width": "101px"
+    },
+    "col_m_c_doanh_s_": {
+      "title": "Mức Doanh Số",
+      "width": "96px"
+    },
+    "col_ds_t8": {
+      "title": "DS T8",
+      "width": "67px"
+    },
+    "col_ds_t9": {
+      "title": "DS T9",
+      "width": "66px"
+    },
+    "col_ds_t10__": {
+      "title": "DS T10 ⭐",
+      "width": "70px"
+    },
+    "col_tb_3t___ng": {
+      "title": "TB 3T Đông",
+      "width": "78px"
+    },
+    "col___tr_ng_s____ng": {
+      "title": "% Trọng Số Đông",
+      "width": "140px",
+      "align": "center"
+    },
+    "col_doanh_s____t_": {
+      "title": "Doanh Số / Tủ",
+      "width": "92px"
+    }
+  },
+  "table-tree-prod": {
+    "col_doanh_s__sell_in__b_m_": {
+      "title": "Sell-in",
+      "width": "138px",
+      "align": "center"
+    },
+    "col_c__c_u_s_n_ph_m": {
+      "title": "Cơ Cấu Sản Phẩm",
+      "width": "235px"
+    },
+    "col_target": {
+      "title": "Target",
+      "width": "116px",
+      "align": "center"
+    },
+    "col_____t": {
+      "title": "% Đạt",
+      "width": "87px",
+      "align": "center"
+    },
+    "col_t__tr_ng__": {
+      "title": "Tỷ Trọng %",
+      "width": "113px",
+      "align": "center"
+    },
+    "col_t_ng_tr__ng_yoy": {
+      "title": "Tăng Trưởng YoY",
+      "width": "161px",
+      "align": "center"
+    }
+  },
+  "table-gt-freezer": {
+    "org": {
+      "title": "Cấp Tổ Chức / Quản Lý",
+      "width": "266px"
+    },
+    "total": {
+      "title": "Tổng Tủ",
+      "width": "77px"
+    },
+    "m1": {
+      "title": "CHỈ SỐ THÁNG HIỆN TẠI (1 THÁNG)"
+    },
+    "l3m": {
+      "title": "CHỈ SỐ 3 THÁNG GẦN NHẤT (L3M)"
+    },
+    "tiers": {
+      "title": "SỐ LƯỢNG TỦ THEO TỪNG MỨC DOANH SỐ ĐÔNG"
+    },
+    "active": {
+      "title": "# Tủ có mua",
+      "width": "94px"
+    },
+    "zero": {
+      "title": "# Tủ chưa mua",
+      "width": "94px"
+    },
+    "act_pct": {
+      "title": "% Tủ Có Mua",
+      "width": "94px"
+    },
+    "cold_so": {
+      "title": "Doanh Số Đông",
+      "width": "105px"
+    },
+    "total_so": {
+      "title": "Tổng Sell-out",
+      "width": "105px"
+    },
+    "vpo": {
+      "title": "Sellout TB / Tủ",
+      "width": "116px"
+    },
+    "l3m_zero": {
+      "title": "Tủ 3T Ko Mua",
+      "width": "94px"
+    },
+    "l3m_zero_pct": {
+      "title": "% Tủ 3T Ko Mua",
+      "width": "94px"
+    },
+    "l3m_avg": {
+      "title": "TB 3T Đông",
+      "width": "105px"
+    },
+    "tier_0": {
+      "title": "= 0",
+      "width": "66px"
+    },
+    "tier_1": {
+      "title": "< 500k",
+      "width": "72px"
+    },
+    "tier_2": {
+      "title": "500k~1.5M",
+      "width": "83px"
+    },
+    "tier_3": {
+      "title": "1.5M~3M",
+      "width": "83px"
+    },
+    "tier_4": {
+      "title": "3M~5M",
+      "width": "77px"
+    },
+    "tier_5": {
+      "title": "5M~10M",
+      "width": "77px"
+    },
+    "tier_6": {
+      "title": "> 10M",
+      "width": "72px"
+    }
+  },
+  "table-tree-prod-gt": {
+    "col_target": {
+      "width": "80px"
+    },
+    "col_____t": {
+      "width": "60px"
+    }
+  },
+  "table-gt-standee": {
+    "org": {
+      "title": "Cấp Tổ Chức / Quản Lý",
+      "width": "277px"
+    },
+    "total": {
+      "title": "Tổng Kệ",
+      "width": "81px"
+    },
+    "m1": {
+      "title": "CHỈ SỐ THÁNG HIỆN TẠI (1 THÁNG)"
+    },
+    "l3m": {
+      "title": "CHỈ SỐ 3 THÁNG GẦN NHẤT (L3M)"
+    },
+    "tiers": {
+      "title": "SỐ LƯỢNG KỆ THEO TỪNG MỨC DOANH SỐ KHÔ"
+    },
+    "active": {
+      "title": "# Kệ Có Mua",
+      "width": "98px"
+    },
+    "zero": {
+      "title": "# Kệ 0 Mua",
+      "width": "98px"
+    },
+    "act_pct": {
+      "title": "% Kệ Có Mua",
+      "width": "98px"
+    },
+    "ambient_so": {
+      "title": "DS Hàng Khô",
+      "width": "110px"
+    },
+    "snack_so": {
+      "title": "DS 03. Snack",
+      "width": "110px"
+    },
+    "vpo": {
+      "title": "Sellout / Kệ",
+      "width": "121px"
+    },
+    "l3m_zero": {
+      "title": "Kệ 3T Ko Mua",
+      "width": "98px"
+    },
+    "l3m_zero_pct": {
+      "title": "% Kệ 3T Ko Mua",
+      "width": "98px"
+    },
+    "l3m_avg": {
+      "title": "TB 3T Khô",
+      "width": "90px"
+    },
+    "tier_0": {
+      "title": "= 0",
+      "width": "69px"
+    },
+    "tier_1": {
+      "title": "< 200k",
+      "width": "75px"
+    },
+    "tier_2": {
+      "title": "200k~500k",
+      "width": "86px"
+    },
+    "tier_3": {
+      "title": "500k~1M",
+      "width": "86px"
+    },
+    "tier_4": {
+      "title": "1M~2M",
+      "width": "86px"
+    },
+    "tier_5": {
+      "title": "> 2M",
+      "width": "75px"
+    }
+  }
 }
