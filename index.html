@@ -90548,9 +90548,9 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
                 let token = this.getCloudToken();
                 if (!token) {
-                    const promptToken = prompt('🔑 Để tự động lưu và đồng bộ cấu hình bảng lên GitHub/Google Drive cho toàn công ty, vui lòng dán mã GitHub Personal Access Token (PAT):
+                    const promptToken = prompt(`🔑 Để tự động lưu và đồng bộ cấu hình bảng lên GitHub/Google Drive cho toàn công ty, vui lòng dán mã GitHub Personal Access Token (PAT):
 
-(Lưu ý: Chỉ cần nhập 1 lần duy nhất, trình duyệt Admin sẽ tự động ghi nhớ và lưu an toàn)');
+(Lưu ý: Chỉ cần nhập 1 lần duy nhất, trình duyệt Admin sẽ tự động ghi nhớ và lưu an toàn)`);
                     if (promptToken && promptToken.trim()) {
                         token = promptToken.trim();
                         this.setCloudToken(token);
