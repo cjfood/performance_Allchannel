@@ -15,7 +15,8 @@
     },
     "col___a_ch____gps": {
       "title": "Địa Chỉ / GPS",
-      "width": "320px"
+      "width": "320px",
+      "align": "left"
     },
     "col_k_nh_kh": {
       "title": "Kênh KH",
