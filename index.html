@@ -20,6 +20,33 @@
 
     <title>SNS - Sales Network System</title>
 
+    <script>
+        (function() {
+            try {
+                if (window.location.protocol === 'file:') {
+                    var p = decodeURIComponent(window.location.pathname || '').replace(/\\/g, '/');
+                    if (p.indexOf('/dashboard_web/') === -1) {
+                        var hash = window.location.hash || '';
+                        var sIdx = p.indexOf('/Data_Share_SE/');
+                        if (sIdx !== -1) {
+                            var prefix = p.substring(0, sIdx + '/Data_Share_SE/'.length);
+                            window.location.replace(prefix + 'Data Web Performance/dashboard_web/index.html' + hash);
+                            return;
+                        }
+                        var dIdx = p.indexOf('/Data Web Performance/');
+                        if (dIdx !== -1) {
+                            var prefix = p.substring(0, dIdx + '/Data Web Performance/'.length);
+                            window.location.replace(prefix + 'dashboard_web/index.html' + hash);
+                            return;
+                        }
+                        window.location.replace('Data Web Performance/dashboard_web/index.html' + hash);
+                    }
+                }
+            } catch(e) {}
+        })();
+    </script>
+
+
 
 
     <link rel="stylesheet" href="tailwind.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';">
