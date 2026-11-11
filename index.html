@@ -43624,10 +43624,15 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-        // CẤU HÌNH NGÀY LÀM VIỆC CHUẨN THEO TỪNG THÁNG (Mặc định 26 ngày nếu không khai báo riêng)
+        // CẤU HÌNH NGÀY LÀM VIỆC CHUẨN & NGÀY NGHỈ LỄ / NGHỈ RIÊNG THEO TỪNG THÁNG
         const MONTHLY_STANDARD_WORKDAYS = {
             '11': 23
         };
+        const MONTHLY_OFF_DAYS = {
+            '11': [5, 24]
+        };
+        const REPORT_REFRESH_DATE_STR = "11/11/2026 10:47:27";
+
         function getStandardWorkDaysForMonth(monthStr, yearStr) {
             const mKey = String(monthStr || '').padStart(2, '0');
             const yr = String(yearStr || (typeof state !== 'undefined' && state.year ? state.year : '2026'));
@@ -43636,12 +43641,47 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
             if (MONTHLY_STANDARD_WORKDAYS[mKey]) return MONTHLY_STANDARD_WORKDAYS[mKey];
             return 26;
         }
+
+        function getOffDaysForMonth(monthStr, yearStr) {
+            const mKey = String(monthStr || '').padStart(2, '0');
+            const yr = String(yearStr || (typeof state !== 'undefined' && state.year ? state.year : '2026'));
+            const ymKey = yr + '-' + mKey;
+            if (Array.isArray(MONTHLY_OFF_DAYS[ymKey])) return MONTHLY_OFF_DAYS[ymKey];
+            if (Array.isArray(MONTHLY_OFF_DAYS[mKey])) return MONTHLY_OFF_DAYS[mKey];
+            return [];
+        }
+
+        function getReportRefreshDateInfo() {
+            let raw = (typeof REPORT_REFRESH_DATE_STR === 'string' && REPORT_REFRESH_DATE_STR.indexOf('__DATA_REFRESH_DATE') === -1) ? REPORT_REFRESH_DATE_STR : '';
+            if (!raw && typeof document !== 'undefined') {
+                const el = document.querySelector('[data-i18n="data_refresh_prefix"]');
+                if (el && el.nextElementSibling) raw = el.nextElementSibling.innerText || '';
+            }
+            const datePart = String(raw || '').trim().split(' ')[0];
+            const parts = datePart.split('/');
+            if (parts.length === 3) {
+                const dd = parseInt(parts[0], 10);
+                const mm = parseInt(parts[1], 10);
+                const yy = parseInt(parts[2], 10);
+                if (dd > 0 && mm >= 1 && mm <= 12 && yy >= 2020) {
+                    return { day: dd, month: mm, year: yy };
+                }
+            }
+            const now = new Date();
+            return {
+                day: now.getDate(),
+                month: now.getMonth() + 1,
+                year: now.getFullYear()
+            };
+        }
+
         function getActiveStandardWorkDays() {
             const selM = (typeof state !== 'undefined' && state.selectedMonths && state.selectedMonths.length === 1) ? state.selectedMonths[0] : '';
             if (!selM) return 26;
             const yr = (typeof state !== 'undefined' && state.year) ? state.year : '2026';
             return getStandardWorkDaysForMonth(selM, yr);
         }
+
         function getStandardWorkdayLabel() {
             const stdDays = getActiveStandardWorkDays();
             const rawLbl = (typeof t === 'function' ? t('lbl_standard_26d') : '') || 'Chuẩn 26N: ';
@@ -43649,174 +43689,40 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
         }
 
         // TÍNH TIẾN ĐỘ LÀM VIỆC CHUẨN THEO NGÀY LÀM VIỆC CỦA THÁNG
-
-
-
         function getWorkdayProgressPct() {
-
-
-
             try {
-
-
-
                 const selM = (state.selectedMonths && state.selectedMonths.length === 1) ? state.selectedMonths[0] : '09';
-
-
-
                 const workingDaysInMonth = getStandardWorkDaysForMonth(selM, state.year);
-
-
-
-                let maxDay = (typeof maxDayInMonth !== 'undefined' && maxDayInMonth > 0) ? maxDayInMonth : 0;
-
-
-
-                const curPrefix = (state.year || '2026') + '-' + selM;
-
-
-
-                if (maxDay === 0 && typeof DAILY_DATA !== 'undefined' && Array.isArray(DAILY_DATA)) {
-
-
-
-                    DAILY_DATA.forEach(d => {
-
-
-
-                        const dt = String(d.date_val || '');
-
-
-
-                        if (dt.startsWith(curPrefix) && (Number(d.daily_sellin) || 0) > 0) {
-
-
-
-                            const dayNum = parseInt(dt.substring(8, 10), 10);
-
-
-
-                            if (dayNum > maxDay) maxDay = dayNum;
-
-
-
-                        }
-
-
-
-                    });
-
-
-
-                }
-
-
-
-                if (maxDay === 0 && typeof GT_DAILY_SO !== 'undefined' && Array.isArray(GT_DAILY_SO)) {
-
-
-
-                    GT_DAILY_SO.forEach(d => {
-
-
-
-                        const dt = String(d.date_val || '');
-
-
-
-                        if (dt.startsWith(curPrefix) && (Number(d.daily_so) || 0) > 0) {
-
-
-
-                            const dayNum = parseInt(dt.substring(8, 10), 10);
-
-
-
-                            if (dayNum > maxDay) maxDay = dayNum;
-
-
-
-                        }
-
-
-
-                    });
-
-
-
-                }
-
-
-
-                if (maxDay === 0) {
-
-
-
-                    maxDay = (state.year === '2026' && selM === '09') ? 22 : 30;
-
-
-
-                }
-
-
-
-                
-
-
-
                 const curYearNum = parseInt(state.year, 10) || 2026;
-
-
-
                 const curMonthNum = parseInt(selM, 10) || 9;
+                const daysInSelectedMonth = new Date(curYearNum, curMonthNum, 0).getDate();
+                const refDate = getReportRefreshDateInfo();
 
-
-
-                
-
-
-
-                let passedWorkDays = 0;
-
-
-
-                for (let d = 1; d <= maxDay; d++) {
-
-
-
-                    const dt = new Date(curYearNum, curMonthNum - 1, d);
-
-
-
-                    if (dt.getDay() !== 0) passedWorkDays++; // Loại trừ Chủ Nhật
-
-
-
+                let cutoffDay = 0;
+                if (curYearNum < refDate.year || (curYearNum === refDate.year && curMonthNum < refDate.month)) {
+                    // Tháng đã qua -> tính trọn tháng
+                    cutoffDay = daysInSelectedMonth;
+                } else if (curYearNum === refDate.year && curMonthNum === refDate.month) {
+                    // Tháng hiện tại đang chạy báo cáo: chỉ tính ngày làm việc từ ngày 1 đến (ngày chạy báo cáo - 1)
+                    cutoffDay = Math.max(0, Math.min(daysInSelectedMonth, refDate.day - 1));
+                } else {
+                    // Tháng tương lai -> chưa thực hiện
+                    cutoffDay = 0;
                 }
 
-
-
+                const offDaysSet = new Set(getOffDaysForMonth(selM, state.year));
+                let passedWorkDays = 0;
+                for (let d = 1; d <= cutoffDay; d++) {
+                    const dt = new Date(curYearNum, curMonthNum - 1, d);
+                    if (dt.getDay() !== 0 && !offDaysSet.has(d)) {
+                        passedWorkDays++; // Loại trừ Chủ Nhật và ngày nghỉ lễ/nghỉ riêng trong tháng
+                    }
+                }
                 return Math.min(100, (passedWorkDays / workingDaysInMonth) * 100);
-
-
-
             } catch (e) {
-
-
-
-                return 61.5; // Dự phòng ~16/26 ngày
-
-
-
+                return 61.5;
             }
-
-
-
         }
-
-
-
-
 
 
 
