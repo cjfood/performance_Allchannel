@@ -12,6 +12,9 @@
   "table-gt-fund-tree": {
     "col_4____i_m_b_n": {
       "title": "% ASO"
+    },
+    "col_1_doanh_s__sell_out": {
+      "title": "Sell-out"
     }
   },
   "table-gt-nv-under-50m": {
