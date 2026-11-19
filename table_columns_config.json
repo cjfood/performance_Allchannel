@@ -54,5 +54,10 @@
     "vpo": {
       "width": "107px"
     }
+  },
+  "table-gt-prod-matrix": {
+    "col_16_lppc": {
+      "title": "Sku/Order"
+    }
   }
 }
