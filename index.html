@@ -30196,17 +30196,22 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
             if (geoGsbh && geoGsbh !== 'ALL') {
-
-
-
-                const item = GT_L3M.find(d => d.month === monthKey && (d.storage || 'ALL') === st && d.npp_code === 'ALL' && (d.gsbh === geoGsbh || d.gsbh_name === geoGsbh));
-
-
-
+                const item = GT_L3M.find(d => d.month === monthKey && (d.storage || 'ALL') === st && d.npp_code === 'ALL' && (d.office === geoGsbh || d.gsbh === geoGsbh || d.gsbh_name === geoGsbh));
                 if (item) return Number(item.l3m_aso) || 0;
-
-
-
+                const officeNpps = new Set();
+                if (typeof DIM_GEO_HIER !== 'undefined' && Array.isArray(DIM_GEO_HIER)) {
+                    DIM_GEO_HIER.forEach(g => {
+                        if (g.gsbh === geoGsbh || g.office === geoGsbh) officeNpps.add(String(g.npp_code));
+                    });
+                }
+                let sum = 0;
+                GT_L3M.filter(d => {
+                    if (d.month !== monthKey) return false;
+                    if ((d.storage || 'ALL') !== st) return false;
+                    if (d.npp_code === 'ALL') return false;
+                    return officeNpps.has(String(d.npp_code)) || d.office === geoGsbh || d.gsbh === geoGsbh || d.gsbh_name === geoGsbh;
+                }).forEach(d => sum += (Number(d.l3m_aso) || 0));
+                return sum;
             }
 
 
@@ -30279,7 +30284,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                if (geoGsbh && geoGsbh !== 'ALL' && (d.gsbh !== geoGsbh && d.gsbh_name !== geoGsbh)) return false;
+                if (geoGsbh && geoGsbh !== 'ALL' && (d.office !== geoGsbh && d.gsbh !== geoGsbh && d.gsbh_name !== geoGsbh && (typeof allowedNppCodes === 'undefined' || !allowedNppCodes.has(String(d.npp_code))))) return false;
 
 
 
@@ -30352,17 +30357,22 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
             if (geoGsbh && geoGsbh !== 'ALL') {
-
-
-
-                const item = GT_ASO_M.find(d => d.month === monthKey && (d.storage || 'ALL') === st && d.npp_code === 'ALL' && (d.gsbh === geoGsbh || d.gsbh_name === geoGsbh));
-
-
-
+                const item = GT_ASO_M.find(d => d.month === monthKey && (d.storage || 'ALL') === st && d.npp_code === 'ALL' && (d.office === geoGsbh || d.gsbh === geoGsbh || d.gsbh_name === geoGsbh));
                 if (item) return Number(item.aso_count) || 0;
-
-
-
+                const officeNpps = new Set();
+                if (typeof DIM_GEO_HIER !== 'undefined' && Array.isArray(DIM_GEO_HIER)) {
+                    DIM_GEO_HIER.forEach(g => {
+                        if (g.gsbh === geoGsbh || g.office === geoGsbh) officeNpps.add(String(g.npp_code));
+                    });
+                }
+                let sum = 0;
+                GT_ASO_M.filter(d => {
+                    if (d.month !== monthKey) return false;
+                    if ((d.storage || 'ALL') !== st) return false;
+                    if (d.npp_code === 'ALL') return false;
+                    return officeNpps.has(String(d.npp_code)) || d.office === geoGsbh || d.gsbh === geoGsbh || d.gsbh_name === geoGsbh;
+                }).forEach(d => sum += (Number(d.aso_count) || 0));
+                return sum;
             }
 
 
@@ -30435,7 +30445,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                if (geoGsbh && geoGsbh !== 'ALL' && (d.gsbh !== geoGsbh && d.gsbh_name !== geoGsbh)) return false;
+                if (geoGsbh && geoGsbh !== 'ALL' && (d.office !== geoGsbh && d.gsbh !== geoGsbh && d.gsbh_name !== geoGsbh && (typeof allowedNppCodes === 'undefined' || !allowedNppCodes.has(String(d.npp_code))))) return false;
 
 
 
@@ -53315,7 +53325,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                            if (state.geoGsbh !== 'ALL' && d.gsbh_name !== state.geoGsbh) return false;
+                            if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && (typeof allowedNppCodes === 'undefined' || !allowedNppCodes.has(String(d.npp_code))))) return false;
 
 
 
@@ -57904,7 +57914,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                     if (!matchProductRecord(d)) continue;
 
                     const _gsbhSelOk = (state.geoGsbh === 'ALL') || (d.office === state.geoGsbh || d.gsbh_name === state.geoGsbh || d.gsbh === state.geoGsbh);
-                    const _gsbhYtdOk = (state.geoGsbh === 'ALL') || (d.gsbh_name === state.geoGsbh || d.gsbh === state.geoGsbh);
+                    const _gsbhYtdOk = (state.geoGsbh === 'ALL') || (d.office === state.geoGsbh || d.gsbh_name === state.geoGsbh || d.gsbh === state.geoGsbh);
 
                     if (d.year === state.year) {
                         if (_inSel && _gsbhSelOk) data.push(d);
@@ -59727,7 +59737,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                                if (state.geoGsbh !== 'ALL' && (d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh)) return false;
+                                if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && !allowedNppCodes.has(String(d.npp_code)))) return false;
 
 
 
@@ -59807,7 +59817,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                                if (state.geoGsbh !== 'ALL' && (d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh)) return false;
+                                if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && !allowedNppCodes.has(String(d.npp_code)))) return false;
 
 
 
@@ -59867,7 +59877,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                            if (state.geoGsbh !== 'ALL' && (d.gsbh_name !== state.geoGsbh && d.gsbh !== state.geoGsbh)) return false;
+                            if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && d.gsbh !== state.geoGsbh && !allowedNppCodes.has(String(d.npp_code)))) return false;
 
 
 
@@ -60056,7 +60066,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                            if (state.geoGsbh !== 'ALL' && (d.office || d.gsbh) !== state.geoGsbh) return false;
+                            if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && !allowedNppCodes.has(String(d.npp_code)))) return false;
 
 
 
@@ -62092,7 +62102,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                        if (state.geoGsbh !== 'ALL' && (d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh)) return false;
+                        if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && !allowedNppCodes.has(String(d.npp_code)))) return false;
 
 
 
@@ -62132,7 +62142,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                        if (state.geoGsbh !== 'ALL' && (d.gsbh_name !== state.geoGsbh && d.gsbh !== state.geoGsbh)) return false;
+                        if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && d.gsbh !== state.geoGsbh && !allowedNppCodes.has(String(d.npp_code)))) return false;
 
 
 
@@ -63988,7 +63998,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                    if (state.geoGsbh !== 'ALL' && (d.gsbh_name !== state.geoGsbh && d.gsbh !== state.geoGsbh)) return false;
+                    if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && d.gsbh !== state.geoGsbh && !allowedNppCodes.has(String(d.npp_code)))) return false;
 
 
 
@@ -64108,7 +64118,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                        if (state.geoGsbh !== 'ALL' && d.gsbh !== state.geoGsbh) return false;
+                        if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && (typeof allowedNppCodes === 'undefined' || !allowedNppCodes.has(String(d.npp_code))))) return false;
 
 
 
@@ -64576,7 +64586,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                        if (state.geoGsbh !== 'ALL' && d.gsbh !== state.geoGsbh) return false;
+                        if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && (typeof allowedNppCodes === 'undefined' || !allowedNppCodes.has(String(d.npp_code))))) return false;
 
 
 
@@ -64952,7 +64962,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                        if (state.geoGsbh !== 'ALL' && (d.gsbh_name !== state.geoGsbh && d.gsbh !== state.geoGsbh)) return false;
+                        if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && d.gsbh !== state.geoGsbh && !allowedNppCodes.has(String(d.npp_code)))) return false;
 
 
 
@@ -65036,7 +65046,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                            if (state.geoGsbh !== 'ALL' && d.gsbh !== state.geoGsbh) return false;
+                            if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && (typeof allowedNppCodes === 'undefined' || !allowedNppCodes.has(String(d.npp_code))))) return false;
 
 
 
@@ -66480,7 +66490,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                            if (state.geoGsbh !== 'ALL' && (d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh)) return false;
+                            if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && !allowedNppCodes.has(String(d.npp_code)))) return false;
 
 
 
@@ -68308,7 +68318,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                        if (state.geoGsbh !== 'ALL' && d.gsbh !== state.geoGsbh) return false;
+                        if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && (typeof allowedNppCodes === 'undefined' || !allowedNppCodes.has(String(d.npp_code))))) return false;
 
 
 
@@ -68564,7 +68574,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                        if (state.geoGsbh !== 'ALL' && (d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh)) return false;
+                        if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && !allowedNppCodes.has(String(d.npp_code)))) return false;
 
 
 
@@ -68828,7 +68838,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                        if (state.geoGsbh !== 'ALL' && (d.gsbh_name !== state.geoGsbh && d.gsbh !== state.geoGsbh)) return false;
+                        if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && d.gsbh !== state.geoGsbh && !allowedNppCodes.has(String(d.npp_code)))) return false;
 
 
 
@@ -98816,7 +98826,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                        if (state.geoGsbh !== 'ALL' && d.gsbh_name !== state.geoGsbh) return false;
+                        if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && (typeof allowedNppCodes === 'undefined' || !allowedNppCodes.has(String(d.npp_code))))) return false;
 
 
 
@@ -100052,7 +100062,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                                if (state.geoGsbh !== 'ALL' && (d.gsbh_name !== state.geoGsbh && d.gsbh !== state.geoGsbh)) return false;
+                                if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && d.gsbh !== state.geoGsbh && !allowedNppCodes.has(String(d.npp_code)))) return false;
 
 
 
@@ -100276,7 +100286,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                            if (state.geoGsbh !== 'ALL' && d.gsbh !== state.geoGsbh) return false;
+                            if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && (typeof allowedNppCodes === 'undefined' || !allowedNppCodes.has(String(d.npp_code))))) return false;
 
 
 
@@ -101352,7 +101362,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                    if (state.geoGsbh !== 'ALL' && d.gsbh_name !== state.geoGsbh) return false;
+                    if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && (typeof allowedNppCodes === 'undefined' || !allowedNppCodes.has(String(d.npp_code))))) return false;
 
 
 
@@ -103841,7 +103851,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                                gsbh: d.gsbh_name || 'Chưa phân công GSBH'
+                                gsbh: d.office || d.gsbh || d.gsbh_name || 'Chưa phân công Office', office: d.office || d.gsbh || 'Chưa phân công Office'
 
 
 
@@ -103893,7 +103903,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                                gsbh: d.gsbh || 'Chưa phân công GSBH'
+                                gsbh: d.office || d.gsbh || d.gsbh_name || 'Chưa phân công Office', office: d.office || d.gsbh || 'Chưa phân công Office'
 
 
 
@@ -104055,7 +104065,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
                                 npp_name: d.npp_name || nppCode,
                                 mien: d.mien || 'Khác',
                                 vung: d.vung || 'Khác',
-                                gsbh: d.gsbh || 'Chưa phân công GSBH'
+                                gsbh: d.office || d.gsbh || d.gsbh_name || 'Chưa phân công Office', office: d.office || d.gsbh || 'Chưa phân công Office'
                             };
                         }
                     });
@@ -104902,7 +104912,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                if (state.geoGsbh !== 'ALL' && d.gsbh_name !== state.geoGsbh) return false;
+                if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && (typeof allowedNppCodes === 'undefined' || !allowedNppCodes.has(String(d.npp_code))))) return false;
 
 
 
@@ -117274,7 +117284,7 @@ body.mobile-mode tr.total-row-chan:hover td:first-child {
 
 
 
-                            if (state.geoGsbh !== 'ALL' && d.gsbh_name !== state.geoGsbh) return false;
+                            if (state.geoGsbh !== 'ALL' && (d.office !== state.geoGsbh && d.gsbh !== state.geoGsbh && d.gsbh_name !== state.geoGsbh && (typeof allowedNppCodes === 'undefined' || !allowedNppCodes.has(String(d.npp_code))))) return false;
 
 
 
