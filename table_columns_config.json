@@ -1,63 +1,63 @@
-{
-  "_meta": {
-    "initialized": true,
-    "system": "CJ Commercial Performance"
-  },
-  "version": "1.0",
-  "table-tree-prod": {
-    "col_0_c__c_u_s_n_ph_m": {
-      "width": "201px"
-    }
-  },
-  "table-gt-fund-tree": {
-    "col_4____i_m_b_n": {
-      "title": "% ASO"
-    },
-    "col_1_doanh_s__sell_out": {
-      "title": "Sell-out"
-    },
-    "col_3__i_m_b_n_aso": {
-      "title": "ASO"
-    }
-  },
-  "table-gt-nv-under-50m": {
-    "col_th_total_3m_short_t_ng_th": {
-      "width": "127px"
-    },
-    "col_3_office": {
-      "width": ""
-    },
-    "col_1_h__t_n_nvbh": {
-      "width": "163px"
-    }
-  },
-  "table-tree-prod-gt": {
-    "col_doanh_s__sell_in__b_m_": {
-      "width": "95px",
-      "title": "Sell-in"
-    }
-  },
-  "table-gt-freezer": {
-    "l3m_zero_pct": {
-      "width": "85px"
-    },
-    "l3m_zero": {
-      "width": "85px"
-    }
-  },
-  "table-tree-chan": {
-    "col_0_k_nh___kh_ch_h_ng": {
-      "width": "156px"
-    }
-  },
-  "table-gt-standee": {
-    "vpo": {
-      "width": "107px"
-    }
-  },
-  "table-gt-prod-matrix": {
-    "col_16_lppc": {
-      "title": "Sku/Order"
-    }
-  }
+{
+  "_meta": {
+    "initialized": true,
+    "system": "CJ Commercial Performance"
+  },
+  "version": "1.0",
+  "table-tree-prod": {
+    "col_0_c__c_u_s_n_ph_m": {
+      "width": "201px"
+    }
+  },
+  "table-gt-fund-tree": {
+    "col_4____i_m_b_n": {
+      "title": "% ASO"
+    },
+    "col_1_doanh_s__sell_out": {
+      "title": "Sell-out"
+    },
+    "col_3__i_m_b_n_aso": {
+      "title": "ASO"
+    }
+  },
+  "table-gt-nv-under-50m": {
+    "col_th_total_3m_short_t_ng_th": {
+      "width": "127px"
+    },
+    "col_3_office": {
+      "width": ""
+    },
+    "col_1_h__t_n_nvbh": {
+      "width": "163px"
+    }
+  },
+  "table-tree-prod-gt": {
+    "col_doanh_s__sell_in__b_m_": {
+      "width": "95px",
+      "title": "Sell-in"
+    }
+  },
+  "table-gt-freezer": {
+    "l3m_zero_pct": {
+      "width": "85px"
+    },
+    "l3m_zero": {
+      "width": "85px"
+    }
+  },
+  "table-tree-chan": {
+    "col_0_k_nh___kh_ch_h_ng": {
+      "width": "156px"
+    }
+  },
+  "table-gt-standee": {
+    "vpo": {
+      "width": "107px"
+    }
+  },
+  "table-gt-prod-matrix": {
+    "col_16_lppc": {
+      "title": "Sku/Order"
+    }
+  }
 }
