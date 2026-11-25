@@ -63,6 +63,9 @@
   "table-gt-cust-routes": {
     "col_7_kh__l__t_": {
       "title": "KH VT(Lượt)"
+    },
+    "col_8_th_c_t_": {
+      "title": "Đã VT"
     }
   }
 }
